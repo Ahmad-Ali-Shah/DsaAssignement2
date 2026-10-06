@@ -1,0 +1,7 @@
+# Local environment and caches
+.claude/
+
+# Compiled binaries and object files
+*.o
+*.out
+bin/
