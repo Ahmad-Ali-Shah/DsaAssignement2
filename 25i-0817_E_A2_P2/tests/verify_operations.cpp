@@ -89,11 +89,11 @@ int main() {
 
     // 8. Bucket Fill Stack (DFS)
     {
-        Pixel orig = img[100][100];
+        Pixel orig = img[60][60];
         Pixel target{255, 0, 255}; // Magenta
         Point* pts = new Point[w * h];
         int ptCount = 0;
-        MybucketFill::ReplaceNearOne(img, w, h, 100, 100, target.r, target.g, target.b);
+        MybucketFill::ReplaceNearOne(img, w, h, 60, 60, target.r, target.g, target.b);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 if (img[y][x] == target) pts[ptCount++] = {x, y};
@@ -108,11 +108,11 @@ int main() {
 
     // 9. Bucket Fill Queue (BFS)
     {
-        Pixel orig = img[200][200];
+        Pixel orig = img[260][260];
         Pixel target{0, 255, 255}; // Cyan
         Point* pts = new Point[w * h];
         int ptCount = 0;
-        MybucketFill::ReplaceNearOneQueue(img, w, h, 200, 200, target.r, target.g, target.b);
+        MybucketFill::ReplaceNearOneQueue(img, w, h, 260, 260, target.r, target.g, target.b);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 if (img[y][x] == target) pts[ptCount++] = {x, y};

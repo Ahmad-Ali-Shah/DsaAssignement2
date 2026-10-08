@@ -47,9 +47,118 @@ bool areImagesEqual(Pixel** a, Pixel** b, int w, int h) {
     return true;
 }
 
+// --------------------------------------------------------------------------
+// SUITE 1: CUSTOM STACK (SECTION 6.2 & 6.8)
+// --------------------------------------------------------------------------
+void testStack() {
+    cout << "\n========================================================\n";
+    cout << "           TEST SUITE 1: CUSTOM STACK (SECTION 6.2 & 6.8)\n";
+    cout << "========================================================\n";
+
+    // 1. Initial Empty State
+    stackType<int> s(10);
+    assertTest("Stack starts completely empty", (s.size() == 0) && s.isEmptyStack());
+
+    // 2. Pop and Top on Empty Stack (Underflow Protection)
+    int defVal = s.top();
+    s.pop();
+    assertTest("Pop and Top on empty stack handled safely without crash", (s.size() == 0) && (defVal == 0));
+
+    // 3. Repeated Push and Pop
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    bool checkLIFO = (s.top() == 30);
+    s.pop();
+    checkLIFO = checkLIFO && (s.top() == 20);
+    s.pop();
+    checkLIFO = checkLIFO && (s.top() == 10);
+    s.pop();
+    assertTest("Elements pop in strict LIFO order", checkLIFO && s.isEmptyStack());
+
+    // 4. Large number of pushes & Dynamic Resizing
+    stackType<int> sGrow(2);
+    for (int i = 0; i < 50; i++) sGrow.push(i);
+    assertTest("Stack dynamically resizes and holds 50 elements", sGrow.size() == 50 && sGrow.top() == 49);
+
+    // 5. initializeStack
+    sGrow.initializeStack();
+    assertTest("initializeStack() resets populated stack", sGrow.isEmptyStack() && (sGrow.size() == 0));
+
+    // 6. Copy constructor and Assignment Operator
+    stackType<int> orig(5);
+    orig.push(111);
+    orig.push(222);
+    stackType<int> copyStack(orig);
+    copyStack.pop();
+    assertTest("Copy constructor creates independent deep copy", (orig.size() == 2) && (copyStack.size() == 1));
+
+    stackType<int> assigned(5);
+    assigned = orig;
+    orig.pop();
+    assertTest("Assignment operator creates independent deep copy", (assigned.size() == 2) && (orig.size() == 1));
+}
+
+// --------------------------------------------------------------------------
+// SUITE 2: CUSTOM CIRCULAR QUEUE (SECTION 6.4 & 6.8)
+// --------------------------------------------------------------------------
+void testQueue() {
+    cout << "\n========================================================\n";
+    cout << "       TEST SUITE 2: CUSTOM CIRCULAR QUEUE (SECTION 6.4)\n";
+    cout << "========================================================\n";
+
+    queueType<int> q(5);
+    assertTest("Queue starts empty with correct capacity", q.isEmptyQueue() && (q.capacity() == 5));
+
+    // deleteQueue on empty
+    q.deleteQueue();
+    assertTest("deleteQueue on empty queue handled safely", q.isEmptyQueue());
+
+    // FIFO Order
+    q.addQueue(10);
+    q.addQueue(20);
+    q.addQueue(30);
+    bool fifoOk = (q.front() == 10);
+    q.deleteQueue();
+    fifoOk = fifoOk && (q.front() == 20);
+    q.deleteQueue();
+    fifoOk = fifoOk && (q.front() == 30);
+    q.deleteQueue();
+    assertTest("Jobs process in strict FIFO arrival order", fifoOk && q.isEmptyQueue());
+
+    // Full queue and Bounded Rejection
+    queueType<int> qBounded(3);
+    qBounded.addQueue(1);
+    qBounded.addQueue(2);
+    qBounded.addQueue(3);
+    assertTest("Full queue detected", qBounded.isFullQueue());
+    qBounded.addQueue(999); // Rejected
+    assertTest("Full queue gracefully rejects overflow", qBounded.size() == 3 && qBounded.front() == 1);
+
+    // Circular Wrap-around
+    queueType<int> qWrap(4);
+    qWrap.addQueue(100);
+    qWrap.addQueue(200);
+    qWrap.addQueue(300);
+    qWrap.addQueue(400);
+    qWrap.deleteQueue(); // delete 100
+    qWrap.deleteQueue(); // delete 200
+    qWrap.addQueue(500); // wraps to index 0
+    qWrap.addQueue(600); // wraps to index 1
+    assertTest("Circular wrap-around handles buffer wrap correctly", qWrap.front() == 300 && qWrap.back() == 600 && qWrap.isFullQueue());
+
+    // Copy constructor and Assignment
+    queueType<int> qCopy(qWrap);
+    qCopy.deleteQueue();
+    assertTest("Queue copy constructor deep copy", qWrap.size() == 4 && qCopy.size() == 3);
+}
+
+// --------------------------------------------------------------------------
+// SUITE 3: UNDO AND REDO (SECTION 6.3 & 6.8)
+// --------------------------------------------------------------------------
 void testUndoRedo() {
     cout << "\n========================================================\n";
-    cout << "           TEST SUITE 1: UNDO AND REDO (SECTION 6.3)    \n";
+    cout << "           TEST SUITE 3: UNDO AND REDO (SECTION 6.3)    \n";
     cout << "========================================================\n";
 
     HistoryManager hist(10);
@@ -60,49 +169,38 @@ void testUndoRedo() {
 
     Pixel** img = createTestGrid(w, h, white);
 
-    // Initial state: white
     hist.recordAction("Initial", img, w, h);
-
-    // Action 1: fill red
     img[0][0] = red;
     hist.recordAction("Paint Red", img, w, h);
-
-    // Action 2: fill blue
     img[0][0] = blue;
     hist.recordAction("Paint Blue", img, w, h);
 
-    // Test Several Undos
     bool undo1 = hist.undo(img, w, h);
-    bool checkUndo1 = undo1 && (img[0][0] == red);
-    assertTest("Undo 1 restores previous action", checkUndo1);
+    assertTest("Undo 1 restores previous action", undo1 && (img[0][0] == red));
 
     bool undo2 = hist.undo(img, w, h);
-    bool checkUndo2 = undo2 && (img[0][0] == white);
-    assertTest("Undo 2 restores original state", checkUndo2);
+    assertTest("Undo 2 restores original state", undo2 && (img[0][0] == white));
 
-    // Test Several Redos
     bool redo1 = hist.redo(img, w, h);
-    bool checkRedo1 = redo1 && (img[0][0] == red);
-    assertTest("Redo 1 reapplies action", checkRedo1);
+    assertTest("Redo 1 reapplies action", redo1 && (img[0][0] == red));
 
     bool redo2 = hist.redo(img, w, h);
-    bool checkRedo2 = redo2 && (img[0][0] == blue);
-    assertTest("Redo 2 reapplies latest action", checkRedo2);
+    assertTest("Redo 2 reapplies latest action", redo2 && (img[0][0] == blue));
 
-    // Test new action after undo clears redo stack
-    hist.undo(img, w, h); // back to red
-    img[1][1] = Pixel(0, 255, 0); // new action: green
+    hist.undo(img, w, h);
+    img[1][1] = Pixel(0, 255, 0);
     hist.recordAction("Paint Green", img, w, h);
-
-    bool checkRedoCleared = !hist.canRedo() && (hist.getRedoSize() == 0);
-    assertTest("New action performed after undo clears Redo stack", checkRedoCleared);
+    assertTest("New action performed after undo clears Redo stack", !hist.canRedo() && (hist.getRedoSize() == 0));
 
     freeTestGrid(img, h);
 }
 
+// --------------------------------------------------------------------------
+// SUITE 4: BUCKET FILL (SECTION 6.6 & 6.8)
+// --------------------------------------------------------------------------
 void testBucketFill() {
     cout << "\n========================================================\n";
-    cout << "           TEST SUITE 2: BUCKET FILL (SECTION 6.6)      \n";
+    cout << "           TEST SUITE 4: BUCKET FILL (SECTION 6.6)      \n";
     cout << "========================================================\n";
 
     int w = 20, h = 20;
@@ -110,15 +208,14 @@ void testBucketFill() {
     Pixel black(0, 0, 0);
     Pixel red(255, 0, 0);
 
-    // Case 1: Single-pixel region
+    // Single-pixel region
     Pixel** imgSingle = createTestGrid(3, 3, black);
     imgSingle[1][1] = white;
     MybucketFill::ReplaceNearOneQueue(imgSingle, 3, 3, 1, 1, 255, 0, 0);
-    bool checkSingle = (imgSingle[1][1] == red) && (imgSingle[0][0] == black);
-    assertTest("Bucket fill: Single-pixel region", checkSingle);
+    assertTest("Bucket fill: Single-pixel region", (imgSingle[1][1] == red) && (imgSingle[0][0] == black));
     freeTestGrid(imgSingle, 3);
 
-    // Case 2: Whole image fill
+    // Whole image fill
     Pixel** imgWhole = createTestGrid(10, 10, white);
     MybucketFill::ReplaceNearOneQueue(imgWhole, 10, 10, 0, 0, 0, 255, 0);
     bool checkWhole = true;
@@ -130,19 +227,16 @@ void testBucketFill() {
     assertTest("Bucket fill: Whole image fill", checkWhole);
     freeTestGrid(imgWhole, 10);
 
-    // Case 3: Region touching image border
+    // Region touching image border
     Pixel** imgBorder = createTestGrid(10, 10, white);
-    for (int y = 0; y < 10; y++) imgBorder[y][5] = black; // vertical wall
-    MybucketFill::ReplaceNearOneQueue(imgBorder, 10, 10, 0, 0, 255, 0, 0); // fill left half
-    bool checkBorder = (imgBorder[0][0] == red) && (imgBorder[0][4] == red) && (imgBorder[0][5] == black) && (imgBorder[0][6] == white);
-    assertTest("Bucket fill: Region touching image border", checkBorder);
+    for (int y = 0; y < 10; y++) imgBorder[y][5] = black;
+    MybucketFill::ReplaceNearOneQueue(imgBorder, 10, 10, 0, 0, 255, 0, 0);
+    assertTest("Bucket fill: Region touching image border", (imgBorder[0][0] == red) && (imgBorder[0][4] == red) && (imgBorder[0][5] == black) && (imgBorder[0][6] == white));
     freeTestGrid(imgBorder, 10);
 
-    // Case 4: Stack-based vs Queue-based fills produce IDENTICAL output
+    // Stack-based vs Queue-based fills produce IDENTICAL output
     Pixel** imgStack = createTestGrid(w, h, white);
     Pixel** imgQueue = createTestGrid(w, h, white);
-
-    // Make an irregular region
     for (int i = 3; i < 17; i++) {
         imgStack[i][10] = black;
         imgQueue[i][10] = black;
@@ -151,14 +245,11 @@ void testBucketFill() {
         imgStack[10][j] = black;
         imgQueue[10][j] = black;
     }
-
     MybucketFill::ReplaceNearOne(imgStack, w, h, 0, 0, 255, 0, 0);
     MybucketFill::ReplaceNearOneQueue(imgQueue, w, h, 0, 0, 255, 0, 0);
+    assertTest("Stack-based and Queue-based fills give identical output", areImagesEqual(imgStack, imgQueue, w, h));
 
-    bool checkIdentical = areImagesEqual(imgStack, imgQueue, w, h);
-    assertTest("Stack-based and Queue-based fills give identical output", checkIdentical);
-
-    // Case 5: Same color guard
+    // Same color guard
     MybucketFill::ReplaceNearOneQueue(imgQueue, w, h, 0, 0, 255, 0, 0);
     assertTest("Same-color fill finishes without looping forever", true);
 
@@ -166,9 +257,12 @@ void testBucketFill() {
     freeTestGrid(imgQueue, h);
 }
 
+// --------------------------------------------------------------------------
+// SUITE 5: PIPELINE QUEUE (SECTION 6.5)
+// --------------------------------------------------------------------------
 void testPipelineQueue() {
     cout << "\n========================================================\n";
-    cout << "           TEST SUITE 3: PIPELINE QUEUE (SECTION 6.5)   \n";
+    cout << "           TEST SUITE 5: PIPELINE QUEUE (SECTION 6.5)   \n";
     cout << "========================================================\n";
 
     ProcessingPipeline pipeline(3);
@@ -180,16 +274,14 @@ void testPipelineQueue() {
     bool add1 = pipeline.addJob(j1);
     bool add2 = pipeline.addJob(j2);
     bool add3 = pipeline.addJob(j3);
-    bool add4 = pipeline.addJob(j4); // Should be rejected by bounded capacity
+    bool add4 = pipeline.addJob(j4);
 
     assertTest("Pipeline accepts jobs within capacity", add1 && add2 && add3);
     assertTest("Pipeline gracefully rejects jobs when full", !add4 && (pipeline.getCurrentQueueSize() == 3));
 
-    // Cancel job
     bool cancelOk = pipeline.cancelJob(2);
     assertTest("Job can be cancelled without shifting queue", cancelOk);
 
-    // Clear jobs
     pipeline.clearJobs();
     assertTest("Clear pending jobs empties queue", pipeline.isEmpty());
 }
@@ -199,6 +291,8 @@ int main() {
     cout << "  DSA ASSIGNMENT 2: PHASE 1 COMPREHENSIVE TEST SUITE    \n";
     cout << "========================================================\n";
 
+    testStack();
+    testQueue();
     testUndoRedo();
     testBucketFill();
     testPipelineQueue();
