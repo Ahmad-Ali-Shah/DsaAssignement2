@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 using namespace std;
 
@@ -110,6 +111,24 @@ void pop(){
 
 int size() const{
     return this->stackTop;
+}
+
+Type getAt(int index) const{
+    if(index < 0 || index >= stackTop){
+        return Type();
+    }
+    return array[index];
+}
+
+void print() const{
+    if(isEmptyStack()){
+        cout<<"[Empty Stack]\n";
+        return;
+    }
+    for(int i = stackTop - 1; i >= 0; i--){
+        cout<<array[i]<<" ";
+    }
+    cout<<"\n";
 }
 
 stackType(int stackSize = 100){

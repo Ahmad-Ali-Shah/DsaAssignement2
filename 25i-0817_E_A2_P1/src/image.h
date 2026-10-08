@@ -27,6 +27,7 @@ struct Pixel {
     }
 };
 
-
-
-
+struct Point {
+    int coordinatesX;
+    int coordinatesY;
+};

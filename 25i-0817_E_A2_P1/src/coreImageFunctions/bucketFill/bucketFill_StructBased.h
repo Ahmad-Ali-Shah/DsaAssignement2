@@ -1,6 +1,6 @@
 #pragma once
-#include "../image.h"
-#include "../stack.h"
+#include "../../image.h"
+#include "../../stack.h"
 
 /////////////////////////////////////////
 
@@ -10,13 +10,6 @@
 
 //////////////////////////////////////////
 
-
-
-struct Point{
-
-    int coordinatesX;
-    int coordinatesY;
-};
 
 
 namespace MybucketFill{
