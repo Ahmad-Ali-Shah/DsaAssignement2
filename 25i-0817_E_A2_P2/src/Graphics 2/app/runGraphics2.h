@@ -58,7 +58,14 @@ namespace GraphicsApp2 {
         if (!win) return;
 
         sf::Font font;
-        font.loadFromFile("25i-0817_E_A2_P2/assets/fonts/Pixeboy.ttf");
+        if (!font.loadFromFile("25i-0817_E_A2_P2/assets/fonts/Awesome.ttf")) {
+            font.loadFromFile("25i-0817_E_A2_P2/assets/fonts/Pixeboy.ttf");
+        }
+
+        sf::Font sigFont;
+        if (!sigFont.loadFromFile("25i-0817_E_A2_P2/assets/fonts/CType.ttf")) {
+            sigFont = font;
+        }
 
         sf::Texture canvasTex;
         if (img && width > 0 && height > 0) {
@@ -117,7 +124,7 @@ namespace GraphicsApp2 {
 
             animFrame++;
             sf::Vector2i mPos = sf::Mouse::getPosition(*win);
-            renderApp2(*win, font, canvasTex, mPos.x, mPos.y, history, pipeline, showDualFill, showBenchmark, lastAction, animFrame);
+            renderApp2(*win, font, sigFont, canvasTex, mPos.x, mPos.y, history, pipeline, showDualFill, showBenchmark, lastAction, animFrame);
         }
 
         delete win;

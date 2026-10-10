@@ -11,7 +11,7 @@
 #include "../../pipeline/pipeline.h"
 
 namespace GraphicsApp2 {
-    void renderApp2(sf::RenderWindow& win, const sf::Font& font, const sf::Texture& canvasTex, int mouseX, int mouseY, HistoryManager& history, ProcessingPipeline& pipeline, bool showDualFill, bool showBenchmark, const std::string& lastAction, int animFrame) {
+    void renderApp2(sf::RenderWindow& win, const sf::Font& font, const sf::Font& sigFont, const sf::Texture& canvasTex, int mouseX, int mouseY, HistoryManager& history, ProcessingPipeline& pipeline, bool showDualFill, bool showBenchmark, const std::string& lastAction, int animFrame) {
         win.clear(sf::Color(12, 14, 18));
 
         // 1. Sidebar Toolbar
@@ -88,6 +88,15 @@ namespace GraphicsApp2 {
         curY += 6.0f;
         drawBtn("Toggle Benchmark Table", sf::Color(45, 70, 85));
         drawBtn("Toggle Dual Fill View", sf::Color(35, 65, 75));
+
+        // Author signature using C-Type font
+        sf::Text sig;
+        sig.setFont(sigFont);
+        sig.setString("Made by Ahmad");
+        sig.setCharacterSize(16);
+        sig.setFillColor(sf::Color(255, 204, 0));
+        sig.setPosition(25.0f, 765.0f);
+        win.draw(sig);
 
         // 2. Main Canvas Viewport
         sf::RectangleShape canvasBox(sf::Vector2f(750.0f, 540.0f));

@@ -11,11 +11,14 @@
 #include "../../pipeline/pipeline.h"
 
 namespace GraphicsApp {
-    void renderApp(sf::RenderWindow& win, const sf::Font& font, const sf::Texture& canvasTex, const sf::Texture& spriteTex, int mouseX, int mouseY, HistoryManager& history, ProcessingPipeline& pipeline, bool showInspector, const std::string& lastAction) {
+    void renderApp(sf::RenderWindow& win, const sf::Font& font, const sf::Font& sigFont, const sf::Texture& canvasTex, const sf::Texture& spriteTex, int mouseX, int mouseY, HistoryManager& history, ProcessingPipeline& pipeline, bool showInspector, const std::string& lastAction) {
         win.clear(sf::Color(12, 14, 18));
 
         // 1. Sidebar Toolbar
         GraphicsToolbar::renderToolPanel(win, font, 0.0f, 0.0f, 240.0f, 800.0f, mouseX, mouseY, history.getUndoSize(), history.getRedoSize());
+
+        // Signature using C-Type font
+        GraphicsTheme::drawText(win, sigFont, "Made by Ahmad", 25.0f, 765.0f, 18, sf::Color(255, 204, 0));
 
         // 2. Main Canvas Viewport
         GraphicsCanvas::renderCanvas(win, canvasTex, 245.0f, 10.0f, 750.0f, 640.0f);

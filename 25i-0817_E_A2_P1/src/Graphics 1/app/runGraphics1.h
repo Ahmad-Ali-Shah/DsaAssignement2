@@ -18,10 +18,19 @@ namespace GraphicsApp {
         if (!win) return;
 
         sf::Font font;
-        GraphicsTheme::loadFont(font, "25i-0817_E_A2_P1/assets/fonts/Pixeboy.ttf");
+        if (!GraphicsTheme::loadFont(font, "25i-0817_E_A2_P1/assets/fonts/Awesome.ttf")) {
+            GraphicsTheme::loadFont(font, "25i-0817_E_A2_P1/assets/fonts/Pixeboy.ttf");
+        }
+
+        sf::Font sigFont;
+        if (!GraphicsTheme::loadFont(sigFont, "25i-0817_E_A2_P1/assets/fonts/CType.ttf")) {
+            sigFont = font;
+        }
 
         sf::Texture spriteTex;
-        GraphicsAnimator::loadSpriteSheet(spriteTex, "25i-0817_E_A2_P1/assets/stack_queue_spritesheet.jpg");
+        if (!GraphicsAnimator::loadSpriteSheet(spriteTex, "25i-0817_E_A2_P1/assets/cube_spritesheet_transparent.png")) {
+            GraphicsAnimator::loadSpriteSheet(spriteTex, "25i-0817_E_A2_P1/assets/stack_queue_spritesheet.png");
+        }
 
         sf::Texture canvasTex;
         if (img && width > 0 && height > 0) {
@@ -51,7 +60,7 @@ namespace GraphicsApp {
             }
 
             sf::Vector2i mPos = sf::Mouse::getPosition(*win);
-            renderApp(*win, font, canvasTex, spriteTex, mPos.x, mPos.y, history, pipeline, showInspector, lastAction);
+            renderApp(*win, font, sigFont, canvasTex, spriteTex, mPos.x, mPos.y, history, pipeline, showInspector, lastAction);
         }
 
         delete win;
