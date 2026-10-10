@@ -425,6 +425,7 @@ public:
     int getRedoSize() const { return redoStack.size(); }
     int getPushCount() const { return pushCount; }
     int getPopCount() const { return popCount; }
+    int getDiscardedCount() const { return discardedRecordsCount; }
 
     std::string getUndoTopName() const {
         if (undoStack.isEmptyStack()) return "None";

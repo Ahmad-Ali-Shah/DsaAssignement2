@@ -14,6 +14,7 @@
 #include "history/history.h"
 #include "pipeline/pipeline.h"
 #include "inspector/inspector.h"
+#include "Graphics 1/app/runGraphics1.h"
 
 using namespace std;
 
@@ -42,12 +43,13 @@ void printMenu() {
     cout << " [16] Undo Last Action\n";
     cout << " [17] Redo Action\n";
     cout << " [18] View Data Structure Inspector\n";
+    cout << " [19] Launch Interactive Studio GUI (SFML)\n";
     cout << " [0]  Exit\n";
     cout << "========================================================\n";
     cout << "Enter your choice: ";
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     Pixel** activeImage = nullptr;
     int width = 0;
     int height = 0;
@@ -55,6 +57,13 @@ int main() {
 
     HistoryManager history(50);
     ProcessingPipeline pipeline(30);
+
+    if (argc > 1 && string(argv[1]) == "--gui") {
+        cout << "[ImageLab] Launching Graphical Studio GUI directly...\n";
+        GraphicsApp::runGraphics1(activeImage, width, height, history, pipeline);
+        if (activeImage) ReadPath::freeImage(activeImage, height);
+        return 0;
+    }
 
     cout << "\nWelcome to ImageLab (DSA Assignment 2 - Phase 1)\n";
 
@@ -265,6 +274,13 @@ int main() {
 
             case 18: { // Inspector
                 DataStructureInspector::display(history, pipeline);
+                break;
+            }
+
+            case 19: { // Interactive GUI
+                cout << "[ImageLab] Launching Graphical Studio GUI...\n";
+                GraphicsApp::runGraphics1(activeImage, width, height, history, pipeline);
+                cout << "[ImageLab] Returned to Console Menu.\n";
                 break;
             }
 

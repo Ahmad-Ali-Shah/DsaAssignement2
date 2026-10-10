@@ -150,6 +150,18 @@ public:
         }
     }
 
+    int size() const { return jobQueue.size(); }
+    int capacity() const { return jobQueue.capacity(); }
+    void clearQueue() { clearJobs(); }
+
+    int getPendingJobs(Job out[], int maxCount) const {
+        int cnt = jobQueue.size() < maxCount ? jobQueue.size() : maxCount;
+        for (int i = 0; i < cnt; i++) {
+            out[i] = jobQueue.getAt(i);
+        }
+        return cnt;
+    }
+
     int getCurrentQueueSize() const { return jobQueue.size(); }
     int getMaxRecordedQueueSize() const { return maxRecordedQueueSize; }
     int getAddCount() const { return addCount; }

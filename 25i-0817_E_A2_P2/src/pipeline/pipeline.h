@@ -80,6 +80,14 @@ public:
         return (mode == SchedulerMode::FIFO) ? fifoQueue.size() : prioQueue.size();
     }
 
+    int size() const { return getCurrentQueueSize(); }
+    void clearQueue() { clearJobs(); }
+
+    Job peekNextJob() const {
+        if (isEmpty()) return Job();
+        return (mode == SchedulerMode::FIFO) ? fifoQueue.front() : prioQueue.front();
+    }
+
     bool isEmpty() const {
         return (mode == SchedulerMode::FIFO) ? fifoQueue.isEmptyQueue() : prioQueue.isEmptyQueue();
     }

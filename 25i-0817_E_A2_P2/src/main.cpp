@@ -8,6 +8,7 @@
 #include "pipeline/pipeline.h"
 #include "inspector/inspector.h"
 #include "benchmarks.h"
+#include "Graphics 2/app/runGraphics2.h"
 
 // Modular Core Operations
 #include "coreImageFunctions/brightness/brightness.h"
@@ -55,12 +56,13 @@ void printMenu() {
     cout << " [20] Benchmark: Single vs Batched Operations (Section 7.4)\n";
     cout << " [21] Memory: Set Budget & Configure Eviction (Section 7.1)\n";
     cout << " [22] Inspector: Data Structure & Memory Status\n";
+    cout << " [23] Launch Interactive Studio GUI (SFML)\n";
     cout << " [0]  Exit\n";
     cout << "-------------------------------------------------------\n";
     cout << "Enter choice: ";
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     Pixel** currentImage = nullptr;
     int width = 0;
     int height = 0;
@@ -68,6 +70,13 @@ int main() {
     // Configurable 5 MB budget default
     HistoryManager history(5 * 1024 * 1024);
     ProcessingPipeline pipeline(100, SchedulerMode::PRIORITY);
+
+    if (argc > 1 && string(argv[1]) == "--gui") {
+        cout << "[ImageLab P2] Launching Graphical Studio GUI directly...\n";
+        GraphicsApp2::runGraphics2(currentImage, width, height, history, pipeline);
+        if (currentImage) ReadPath::freeImage(currentImage, height);
+        return 0;
+    }
 
     int choice = -1;
 
@@ -295,6 +304,12 @@ int main() {
             case 22:
                 DataStructureInspector::display(history, pipeline);
                 break;
+            case 23: {
+                cout << "[ImageLab P2] Launching Graphical Studio GUI...\n";
+                GraphicsApp2::runGraphics2(currentImage, width, height, history, pipeline);
+                cout << "[ImageLab P2] Returned to Console Menu.\n";
+                break;
+            }
             case 0:
                 cout << "Exiting ImageLab Phase 2. Goodbye!\n";
                 break;

@@ -15,16 +15,18 @@ README.txt : Build, run, and library instructions.
 Libraries Needed:
 -----------------
 - Standard C++17 Compiler (g++ or clang++)
-- Zero external libraries required. No STL containers used.
-- Pure C++ file stream I/O for binary PPM (P6) images.
+- Zero STL containers used (zero vector, list, queue, stack).
+- Native C++ image loader/saver (PPM, PNG, JPG).
+- SFML 2.6 (libsfml-graphics, libsfml-window, libsfml-system) for interactive Graphical User Interface & Sprite Animator.
 
 How to Build and Run:
 ---------------------
-1. Compile the main application:
-   g++ -std=c++17 -Wall -Wextra src/main.cpp -o src/main
+1. Compile the main application (with SFML GUI):
+   g++ -std=c++17 -Wall -Wextra src/main.cpp -lsfml-graphics -lsfml-window -lsfml-system -o src/main
 
-2. Run ImageLab interactive CLI:
-   ./src/main
+2. Run ImageLab:
+   ./src/main          # Interactive console menu (Option 19 launches GUI)
+   ./src/main --gui    # Launch Graphical User Interface directly
 
 3. Compile the automated test suite:
    g++ -std=c++17 -Wall -Wextra tests/test.cpp -o tests/test
