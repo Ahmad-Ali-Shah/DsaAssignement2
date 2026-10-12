@@ -2,19 +2,7 @@
 #include <iostream>
 #include <string>
 #include "../../image.h"
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-#ifndef STB_IMAGE_WRITE_STATIC
-#define STB_IMAGE_WRITE_STATIC
-#endif
-#ifndef CUSTOM_STB_IMAGE_WRITE_IMPLEMENTED
-#define CUSTOM_STB_IMAGE_WRITE_IMPLEMENTED
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#endif
-#include "../HELPER/stb_image_write.h"
-#pragma GCC diagnostic pop
+#include "../HELPER/stb_core.h"
 
 namespace ReadPath {
 

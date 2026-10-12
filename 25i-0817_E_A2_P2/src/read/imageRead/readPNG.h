@@ -2,18 +2,7 @@
 #include <iostream>
 #include <string>
 #include "../../image.h"
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-#ifndef STB_IMAGE_STATIC
-#define STB_IMAGE_STATIC
-#endif
-#ifndef CUSTOM_STB_IMAGE_IMPLEMENTED
-#define CUSTOM_STB_IMAGE_IMPLEMENTED
-#define STB_IMAGE_IMPLEMENTATION
-#endif
-#include "../HELPER/stb_image.h"
-#pragma GCC diagnostic pop
+#include "../HELPER/stb_core.h"
 
 namespace ReadPath {
 
