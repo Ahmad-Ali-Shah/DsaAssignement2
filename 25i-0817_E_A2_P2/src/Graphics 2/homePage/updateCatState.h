@@ -7,14 +7,14 @@ namespace HomePage {
         timer += dt;
 
         if (stage == HomeConstants::STAGE_SITTING) {
-            float frameDuration = 0.18f;
+            float frameDuration = 0.12f; // Snappier sit
             if (timer >= frameDuration) {
                 timer -= frameDuration;
                 frameIdx++;
                 if (frameIdx >= HomeConstants::SITTING_FRAMES) {
                     frameIdx = 0;
                     sitLoops++;
-                    if (sitLoops >= 2) {
+                    if (sitLoops >= 1) { // 1 sit loop instead of 2 to start moving fast
                         stage = HomeConstants::STAGE_STANDING;
                         frameIdx = 0;
                         timer = 0.0f;
@@ -23,7 +23,7 @@ namespace HomePage {
             }
         }
         else if (stage == HomeConstants::STAGE_STANDING) {
-            float frameDuration = 0.24f;
+            float frameDuration = 0.12f; // Quick stand
             if (timer >= frameDuration) {
                 timer -= frameDuration;
                 frameIdx++;
@@ -35,21 +35,21 @@ namespace HomePage {
             }
         }
         else if (stage == HomeConstants::STAGE_WALKING) {
-            float frameDuration = 0.14f;
-            catX += 75.0f * dt;
+            float frameDuration = 0.09f;
+            catX += 130.0f * dt; // Faster walk speed
             if (timer >= frameDuration) {
                 timer -= frameDuration;
                 frameIdx = (frameIdx + 1) % HomeConstants::WALKING_FRAMES;
             }
-            if (catX >= 300.0f) {
+            if (catX >= 260.0f) {
                 stage = HomeConstants::STAGE_RUNNING;
                 frameIdx = 0;
                 timer = 0.0f;
             }
         }
         else if (stage == HomeConstants::STAGE_RUNNING) {
-            float frameDuration = 0.085f;
-            catX += 260.0f * dt;
+            float frameDuration = 0.06f;
+            catX += 450.0f * dt; // Fast sprint across screen
             if (timer >= frameDuration) {
                 timer -= frameDuration;
                 frameIdx = (frameIdx + 1) % HomeConstants::RUNNING_FRAMES;
