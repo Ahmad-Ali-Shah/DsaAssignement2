@@ -13,30 +13,29 @@
 #define CUSTOM_STB_IMAGE_WRITE_IMPLEMENTED
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #endif
-#include "../stb_image_write.h"
+#include "../HELPER/stb_image_write.h"
 #pragma GCC diagnostic pop
 
 namespace ReadPath {
 
     bool writePNG(const std::string& path, Pixel** img, int width, int height) {
         if (!img || width <= 0 || height <= 0 || path.empty()) {
-            std::cout << "[Error] Invalid image data or output path.\n";
             return false;
         }
 
-        unsigned char* buffer = new unsigned char[width * height * 3];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int idx = (y * width + x) * 3;
-                buffer[idx] = static_cast<unsigned char>(img[y][x].r);
-                buffer[idx + 1] = static_cast<unsigned char>(img[y][x].g);
-                buffer[idx + 2] = static_cast<unsigned char>(img[y][x].b);
+        unsigned char* buf = new unsigned char[width * height * 3];
+        for (int r = 0; r < height; r++) {
+            for (int c = 0; c < width; c++) {
+                int pos = (r * width + c) * 3;
+                buf[pos] = static_cast<unsigned char>(img[r][c].r);
+                buf[pos + 1] = static_cast<unsigned char>(img[r][c].g);
+                buf[pos + 2] = static_cast<unsigned char>(img[r][c].b);
             }
         }
 
-        int res = stbi_write_png(path.c_str(), width, height, 3, buffer, width * 3);
-        delete[] buffer;
-        return res != 0;
+        int ok = stbi_write_png(path.c_str(), width, height, 3, buf, width * 3);
+        delete[] buf;
+        return ok != 0;
     }
 
 }

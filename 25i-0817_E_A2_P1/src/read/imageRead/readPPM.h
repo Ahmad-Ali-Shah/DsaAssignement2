@@ -7,49 +7,48 @@
 namespace ReadPath {
 
     Pixel** readPPM(const std::string& path, int& width, int& height) {
-        std::fstream input(path.c_str(), std::ios::in | std::ios::binary);
-        if (!input.is_open()) {
-            std::cout << "[Error] Could not open PPM file: " << path << "\n";
+        if (path.empty()) {
             return nullptr;
         }
 
-        char format[2];
-        input.read(format, 2);
-        if (format[0] == 'P' && format[1] == '6') {
-            int fileW = 0, fileH = 0, maxVal = 255;
-            input >> fileW >> fileH >> maxVal;
-            char whitespace;
-            input.read(&whitespace, 1);
-            if (fileW > 0 && fileH > 0) {
-                width = fileW;
-                height = fileH;
-            }
-        } else {
-            input.seekg(0, std::ios::beg);
-        }
-
-        if (width <= 0 || height <= 0) {
-            input.close();
+        std::ifstream file(path.c_str(), std::ios::binary);
+        if (!file.is_open()) {
             return nullptr;
         }
 
-        Pixel** img = new Pixel*[height];
-        for (int y = 0; y < height; y++) {
-            img[y] = new Pixel[width];
+        std::string magic;
+        file >> magic;
+        if (magic != "P6") {
+            file.close();
+            return nullptr;
         }
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        int maxVal = 255;
+        file >> width >> height >> maxVal;
+        file.get();
+
+        if (width <= 0 || height <= 0 || maxVal <= 0) {
+            file.close();
+            return nullptr;
+        }
+
+        Pixel** grid = new Pixel*[height];
+        for (int r = 0; r < height; r++) {
+            grid[r] = new Pixel[width];
+        }
+
+        for (int r = 0; r < height; r++) {
+            for (int c = 0; c < width; c++) {
                 unsigned char rgb[3];
-                input.read(reinterpret_cast<char*>(rgb), 3);
-                img[y][x].r = static_cast<unsigned int>(rgb[0]);
-                img[y][x].g = static_cast<unsigned int>(rgb[1]);
-                img[y][x].b = static_cast<unsigned int>(rgb[2]);
+                file.read(reinterpret_cast<char*>(rgb), 3);
+                grid[r][c].r = static_cast<unsigned int>(rgb[0]);
+                grid[r][c].g = static_cast<unsigned int>(rgb[1]);
+                grid[r][c].b = static_cast<unsigned int>(rgb[2]);
             }
         }
 
-        input.close();
-        return img;
+        file.close();
+        return grid;
     }
 
 }

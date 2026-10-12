@@ -12,43 +12,41 @@
 #define CUSTOM_STB_IMAGE_IMPLEMENTED
 #define STB_IMAGE_IMPLEMENTATION
 #endif
-#include "../stb_image.h"
+#include "../HELPER/stb_image.h"
 #pragma GCC diagnostic pop
 
 namespace ReadPath {
 
     Pixel** readJPEG(const std::string& path, int& width, int& height) {
         if (path.empty()) {
-            std::cout << "[Error] Input path is empty.\n";
             return nullptr;
         }
 
         int w = 0, h = 0, channels = 0;
-        unsigned char* data = stbi_load(path.c_str(), &w, &h, &channels, 3);
-        if (!data) {
-            std::cout << "[Error] Could not open JPEG image: " << path << "\n";
+        unsigned char* raw = stbi_load(path.c_str(), &w, &h, &channels, 3);
+        if (!raw) {
             return nullptr;
         }
 
         width = w;
         height = h;
 
-        Pixel** img = new Pixel*[height];
-        for (int y = 0; y < height; y++) {
-            img[y] = new Pixel[width];
+        Pixel** grid = new Pixel*[height];
+        for (int r = 0; r < height; r++) {
+            grid[r] = new Pixel[width];
         }
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int idx = (y * width + x) * 3;
-                img[y][x].r = static_cast<unsigned int>(data[idx]);
-                img[y][x].g = static_cast<unsigned int>(data[idx + 1]);
-                img[y][x].b = static_cast<unsigned int>(data[idx + 2]);
+        for (int r = 0; r < height; r++) {
+            for (int c = 0; c < width; c++) {
+                int pos = (r * width + c) * 3;
+                grid[r][c].r = static_cast<unsigned int>(raw[pos]);
+                grid[r][c].g = static_cast<unsigned int>(raw[pos + 1]);
+                grid[r][c].b = static_cast<unsigned int>(raw[pos + 2]);
             }
         }
 
-        stbi_image_free(data);
-        return img;
+        stbi_image_free(raw);
+        return grid;
     }
 
 }
