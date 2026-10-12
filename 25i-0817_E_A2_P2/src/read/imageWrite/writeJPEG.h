@@ -1,29 +1,33 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <SFML/Graphics/Image.hpp>
 #include "../../image.h"
-#include "../HELPER/stb_core.h"
 
 namespace ReadPath {
 
     bool writeJPEG(const std::string& path, Pixel** img, int width, int height, int quality = 95) {
+        (void)quality;
         if (!img || width <= 0 || height <= 0 || path.empty()) {
             return false;
         }
 
-        unsigned char* buf = new unsigned char[width * height * 3];
+        sf::Image sfImg;
+        sfImg.create(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
+
         for (int r = 0; r < height; r++) {
             for (int c = 0; c < width; c++) {
-                int pos = (r * width + c) * 3;
-                buf[pos] = static_cast<unsigned char>(img[r][c].r);
-                buf[pos + 1] = static_cast<unsigned char>(img[r][c].g);
-                buf[pos + 2] = static_cast<unsigned char>(img[r][c].b);
+                sf::Color clr(
+                    static_cast<sf::Uint8>(img[r][c].r),
+                    static_cast<sf::Uint8>(img[r][c].g),
+                    static_cast<sf::Uint8>(img[r][c].b),
+                    255
+                );
+                sfImg.setPixel(static_cast<unsigned int>(c), static_cast<unsigned int>(r), clr);
             }
         }
 
-        int ok = stbi_write_jpg(path.c_str(), width, height, 3, buf, quality);
-        delete[] buf;
-        return ok != 0;
+        return sfImg.saveToFile(path);
     }
 
 }

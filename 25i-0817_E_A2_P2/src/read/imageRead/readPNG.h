@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <SFML/Graphics/Image.hpp>
 #include "../../image.h"
-#include "../HELPER/stb_core.h"
 
 namespace ReadPath {
 
@@ -11,14 +11,14 @@ namespace ReadPath {
             return nullptr;
         }
 
-        int w = 0, h = 0, channels = 0;
-        unsigned char* raw = stbi_load(path.c_str(), &w, &h, &channels, 3);
-        if (!raw) {
+        sf::Image img;
+        if (!img.loadFromFile(path)) {
             return nullptr;
         }
 
-        width = w;
-        height = h;
+        width = static_cast<int>(img.getSize().x);
+        height = static_cast<int>(img.getSize().y);
+        const sf::Uint8* pixels = img.getPixelsPtr();
 
         Pixel** grid = new Pixel*[height];
         for (int r = 0; r < height; r++) {
@@ -27,14 +27,13 @@ namespace ReadPath {
 
         for (int r = 0; r < height; r++) {
             for (int c = 0; c < width; c++) {
-                int pos = (r * width + c) * 3;
-                grid[r][c].r = static_cast<unsigned int>(raw[pos]);
-                grid[r][c].g = static_cast<unsigned int>(raw[pos + 1]);
-                grid[r][c].b = static_cast<unsigned int>(raw[pos + 2]);
+                int pos = (r * width + c) * 4;
+                grid[r][c].r = static_cast<unsigned int>(pixels[pos]);
+                grid[r][c].g = static_cast<unsigned int>(pixels[pos + 1]);
+                grid[r][c].b = static_cast<unsigned int>(pixels[pos + 2]);
             }
         }
 
-        stbi_image_free(raw);
         return grid;
     }
 
