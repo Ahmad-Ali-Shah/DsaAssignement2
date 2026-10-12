@@ -13,6 +13,7 @@
 #include "../visPage/runVisPage.h"
 #include "handleToolExecution.h"
 #include "renderApp.h"
+#include "resolveAssetPath.h"
 #include "../../image.h"
 #include "../../history/history.h"
 #include "../../pipeline/pipeline.h"
@@ -22,13 +23,15 @@ namespace GraphicsApp {
         sf::RenderWindow* win = GraphicsWindow::initWindow(1280, 800, "ImageLab Studio (Phase 1) - Data Structures & Core Editor");
         if (!win) return;
 
-        bool proceed = HomePage::runHomePage(*win, "25i-0817_E_A2_P1/All Req Assests");
+        std::string assetDir = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P1/All Req Assests", ".");
+
+        bool proceed = HomePage::runHomePage(*win, assetDir);
         if (!proceed || !win->isOpen()) {
             delete win;
             return;
         }
 
-        int choice = SelectionPage::runSelectionPage(*win, "25i-0817_E_A2_P1/All Req Assests");
+        int choice = SelectionPage::runSelectionPage(*win, assetDir);
         if (choice == SelectionConstants::CHOICE_NONE || !win->isOpen()) {
             delete win;
             return;
@@ -36,30 +39,32 @@ namespace GraphicsApp {
 
         std::string loadedImagePath = "";
         if (choice == SelectionConstants::CHOICE_IMAGE_LAB) {
-            bool inputOk = InputPage::runInputPage(*win, "25i-0817_E_A2_P1/All Req Assests", img, width, height, loadedImagePath);
+            bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
             if (!inputOk || !win->isOpen()) {
                 delete win;
                 return;
             }
 
-            EditorPage::runEditorPage(*win, "25i-0817_E_A2_P1/All Req Assests", img, width, height, history, pipeline, loadedImagePath);
+            EditorPage::runEditorPage(*win, assetDir, img, width, height, history, pipeline, loadedImagePath);
             delete win;
             return;
         } else if (choice == SelectionConstants::CHOICE_VISUALIZATION_STACK) {
-            bool inputOk = InputPage::runInputPage(*win, "25i-0817_E_A2_P1/All Req Assests", img, width, height, loadedImagePath);
+            bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
             if (!inputOk || !win->isOpen()) {
                 delete win;
                 return;
             }
 
-            VisPage::runVisPage(*win, "25i-0817_E_A2_P1/All Req Assests", img, width, height, history, pipeline);
+            VisPage::runVisPage(*win, assetDir, img, width, height, history, pipeline);
             delete win;
             return;
         }
 
         sf::Font font;
-        if (!GraphicsTheme::loadFont(font, "25i-0817_E_A2_P1/assets/fonts/Awesome.ttf")) {
-            GraphicsTheme::loadFont(font, "25i-0817_E_A2_P1/assets/fonts/Pixeboy.ttf");
+        std::string fontPath1 = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P1/assets/fonts/Awesome.ttf", ".");
+        std::string fontPath2 = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P1/assets/fonts/Pixeboy.ttf", ".");
+        if (!GraphicsTheme::loadFont(font, fontPath1)) {
+            GraphicsTheme::loadFont(font, fontPath2);
         }
 
         sf::Font sigFont;

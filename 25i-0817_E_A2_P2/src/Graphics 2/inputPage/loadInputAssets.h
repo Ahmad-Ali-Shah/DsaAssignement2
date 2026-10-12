@@ -6,9 +6,7 @@ namespace InputPage {
 
     bool loadInputAssets(sf::Texture& bgTex, sf::Texture& catTex, sf::Font& font, sf::Font& titleFont, const std::string& assetPath) {
         if (!bgTex.loadFromFile(assetPath + "/background2.jpeg")) {
-            if (!bgTex.loadFromFile("25i-0817_E_A2_P1/background2.jpeg")) {
-                bgTex.loadFromFile(assetPath + "/background.png");
-            }
+            bgTex.loadFromFile(assetPath + "/background.png");
         }
         bgTex.setSmooth(true);
 
