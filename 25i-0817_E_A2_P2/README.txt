@@ -5,20 +5,241 @@
 
 Directory Structure:
 -------------------
-src/              : All C++ source and header files including priorityQueueType,
-                    memory-aware history, command coalescing, pipeline, benchmarks,
-                    native image I/O, and Graphics 2 GUI subsystems.
-  src/stack/      : Custom stack template with batch ops & removeBottom().
-  src/queue/      : Custom circular queue template with batch ops.
-  src/priority/   : Custom priority queue template (priorityQueueType).
-  src/history/    : Memory-budget history manager with automatic bottom eviction.
-  src/pipeline/   : Dual-mode scheduler (FIFO vs Priority with barrier rules).
-  src/inspector/  : Data Structure Inspector displaying memory budget and wait times.
-  src/Graphics 2/ : Interactive SFML GUI studio (Home, Selection, Input, Editor, VisPage, Cursor).
-tests/            : Comprehensive Phase 2 automated test suite and verification runners.
-images/           : Test images and before/after operation outputs.
-report/           : Phase 2 report PDF.
-README.txt        : Build, run, and library instructions.
+25i-0817_E_A2_P2
+├── All Req Assests
+│   ├── Adjustment.png
+│   ├── arrow.png
+│   ├── asteroids
+│   │   ├── asteroid-1.png
+│   │   ├── asteroid-2.png
+│   │   ├── asteroid-3.png
+│   │   ├── asteroid-4.png
+│   │   └── asteroid-5.png
+│   ├── background2.jpeg
+│   ├── background.png
+│   ├── banner.png
+│   ├── Bg3.jpg
+│   ├── Blocks.png
+│   ├── crop.png
+│   ├── fonts
+│   │   ├── Awesome.ttf
+│   │   ├── Cintarini.ttf
+│   │   ├── CType.ttf
+│   │   ├── KarmaticArcade.ttf
+│   │   ├── MetalSlug.ttf
+│   │   ├── Pixeboy.ttf
+│   │   └── RasterForge.ttf
+│   ├── imageLoad.png
+│   ├── Rotations.png
+│   ├── ship.png
+│   ├── tools.png
+│   └── white_0.png
+├── assets
+│   ├── cube_spritesheet_transparent.png
+│   ├── fonts
+│   │   ├── Awesome.ttf
+│   │   ├── Cintarini.ttf
+│   │   ├── CType.ttf
+│   │   ├── KarmaticArcade.ttf
+│   │   ├── MetalSlug.ttf
+│   │   ├── Pixeboy.ttf
+│   │   └── RasterForge.ttf
+│   ├── imagelab_tools_spritesheet.jpg
+│   ├── imagelab_tools_spritesheet.png
+│   ├── stack_isolated_push_pop.jpg
+│   ├── stack_isolated_push_pop.png
+│   ├── stack_push_pop_error_sheet.jpg
+│   ├── stack_push_pop_error_sheet.png
+│   ├── stack_queue_spritesheet.jpg
+│   └── stack_queue_spritesheet.png
+├── background2.jpeg
+├── images
+│   ├── out_blur.png
+│   ├── out_blur.ppm
+│   ├── out_brightness.png
+│   ├── out_brightness.ppm
+│   ├── out_bucket_queue.png
+│   ├── out_bucket_queue.ppm
+│   ├── out_bucket_stack.png
+│   ├── out_bucket_stack.ppm
+│   ├── out_crop.png
+│   ├── out_crop.ppm
+│   ├── out_flip_h.png
+│   ├── out_flip_h.ppm
+│   ├── out_grayscale.png
+│   ├── out_grayscale.ppm
+│   ├── out_resize.png
+│   ├── out_resize.ppm
+│   ├── out_rotate90.png
+│   ├── out_rotate90.ppm
+│   ├── sample.jpg
+│   ├── sample.png
+│   └── sample.ppm
+├── README.txt
+├── report
+│   ├── fast_logo.png
+│   ├── report_phase2.pdf
+│   └── report_phase2.tex
+├── src
+│   ├── benchmarks.h
+│   ├── CircularQueue.h
+│   ├── coreImageFunctions
+│   │   ├── APPLYopperations
+│   │   │   ├── applyBlur.h
+│   │   │   ├── applyBrightness.h
+│   │   │   ├── applyCrop.h
+│   │   │   ├── applyFlip.h
+│   │   │   ├── applyGreyScale.h
+│   │   │   ├── applyResize.h
+│   │   │   └── applyRotation.h
+│   │   ├── blur
+│   │   │   ├── applyBlur.h
+│   │   │   └── blur.h
+│   │   ├── blur.h
+│   │   ├── brightness
+│   │   │   ├── applyBrightness.h
+│   │   │   └── brightness.h
+│   │   ├── brightness.h
+│   │   ├── bucketFill
+│   │   │   ├── bucketFill_QueueBased.h
+│   │   │   └── bucketFill_StructBased.h
+│   │   ├── bucketFill_QueueBased.h
+│   │   ├── bucketFill_StructBased.h
+│   │   ├── Crop
+│   │   │   ├── applyCrop.h
+│   │   │   └── Crop.h
+│   │   ├── Crop.h
+│   │   ├── flip
+│   │   │   ├── applyFlip.h
+│   │   │   └── flip.h
+│   │   ├── flip.h
+│   │   ├── greyScale
+│   │   │   ├── applyGreyScale.h
+│   │   │   └── greyScale.h
+│   │   ├── greyScale.h
+│   │   ├── resize
+│   │   │   ├── applyResize.h
+│   │   │   └── resize.h
+│   │   ├── resize.h
+│   │   ├── rotation
+│   │   │   ├── applyRotation.h
+│   │   │   └── rotation.h
+│   │   └── rotation.h
+│   ├── Graphics 2
+│   │   ├── app
+│   │   │   ├── handleToolExecution2.h
+│   │   │   ├── renderApp2.h
+│   │   │   ├── resolveAssetPath.h
+│   │   │   └── runGraphics2.h
+│   │   ├── benchmarkView
+│   │   │   └── renderSchedulerComparisonTable.h
+│   │   ├── canvas
+│   │   │   └── createTextureFromPixels.h
+│   │   ├── coalescingView
+│   │   │   └── renderCoalescingBadge.h
+│   │   ├── cursor
+│   │   │   └── cursor.h
+│   │   ├── dualFill
+│   │   │   └── renderDualFillComparison.h
+│   │   ├── editorPage
+│   │   │   ├── editorConstants.h
+│   │   │   ├── executeEditorAction.h
+│   │   │   ├── loadEditorAssets.h
+│   │   │   ├── renderEditorBanner.h
+│   │   │   ├── renderLeftToolbar.h
+│   │   │   ├── renderMiddleCanvas.h
+│   │   │   ├── renderParameterModal.h
+│   │   │   ├── renderRightPanel.h
+│   │   │   └── runEditorPage.h
+│   │   ├── homePage
+│   │   │   ├── homeConstants.h
+│   │   │   ├── loadAsteroidTextures.h
+│   │   │   ├── loadCatTexture.h
+│   │   │   ├── loadHomeFonts.h
+│   │   │   ├── renderAsteroidCorner.h
+│   │   │   ├── renderCatSprite.h
+│   │   │   ├── renderHomePage.h
+│   │   │   ├── renderHomeTitle.h
+│   │   │   ├── runHomePage.h
+│   │   │   └── updateCatState.h
+│   │   ├── inputPage
+│   │   │   ├── inputConstants.h
+│   │   │   ├── loadInputAssets.h
+│   │   │   ├── renderInputBackground.h
+│   │   │   ├── renderInputPrompt.h
+│   │   │   ├── renderLoadingScreen.h
+│   │   │   ├── runInputPage.h
+│   │   │   └── validateAndLoadImage.h
+│   │   ├── memoryGauge
+│   │   │   └── renderMemoryBudgetMeter.h
+│   │   ├── scheduler
+│   │   │   ├── renderBarrierIndicator.h
+│   │   │   ├── renderPriorityCard.h
+│   │   │   └── renderPriorityQueueBar.h
+│   │   ├── selectionPage
+│   │   │   ├── loadSelectionAssets.h
+│   │   │   ├── renderSelectionBackground.h
+│   │   │   ├── renderSelectionOptions.h
+│   │   │   ├── renderSelectionPage.h
+│   │   │   ├── renderSelectionTitle.h
+│   │   │   ├── renderShipCursor.h
+│   │   │   ├── runSelectionPage.h
+│   │   │   ├── selectionConstants.h
+│   │   │   └── updateShipSpeed.h
+│   │   ├── theme
+│   │   │   ├── drawBadge.h
+│   │   │   └── drawMeter.h
+│   │   ├── types
+│   │   │   └── priorityConstants.h
+│   │   ├── visPage
+│   │   │   ├── loadVisAssets.h
+│   │   │   ├── renderDataWindow.h
+│   │   │   ├── renderVisControls.h
+│   │   │   ├── runVisPage.h
+│   │   │   ├── updateVisAnimation.h
+│   │   │   └── visConstants.h
+│   │   └── window
+│   │       └── initWindow2.h
+│   ├── history
+│   │   ├── command.h
+│   │   ├── history.h
+│   │   └── historyRecord.h
+│   ├── image.h
+│   ├── inspector
+│   │   └── inspector.h
+│   ├── loadPts.h
+│   ├── main
+│   ├── main.cpp
+│   ├── pipeline
+│   │   ├── job.h
+│   │   └── pipeline.h
+│   ├── priorityQueue.h
+│   ├── read
+│   │   ├── delete.h
+│   │   ├── imageRead
+│   │   │   ├── readJPEG.h
+│   │   │   ├── readPNG.h
+│   │   │   └── readPPM.h
+│   │   ├── imageWrite
+│   │   │   ├── writeJPEG.h
+│   │   │   ├── writePNG.h
+│   │   │   └── writePPM.h
+│   │   ├── mainLogic
+│   │   │   ├── deleter.h
+│   │   │   ├── reader.h
+│   │   │   └── writer.h
+│   │   ├── read.h
+│   │   ├── readImage.h
+│   │   ├── write.h
+│   │   └── writeImage.h
+│   └── stack.h
+└── tests
+    ├── test
+    ├── test.cpp
+    ├── verify_operations
+    └── verify_operations.cpp
+
+44 directories, 189 files
 
 Libraries Needed:
 -----------------

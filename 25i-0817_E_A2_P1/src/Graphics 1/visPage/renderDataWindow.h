@@ -60,8 +60,8 @@ namespace VisPage {
         window.draw(tText);
 
         // Minimize Button: [-]
-        minBtnRect = sf::FloatRect(subWin.x + subWin.w - 74.0f, subWin.y + 6.0f, 30.0f, 28.0f);
-        sf::RectangleShape minBox(sf::Vector2f(30.0f, 28.0f));
+        minBtnRect = sf::FloatRect(subWin.x + subWin.w - 76.0f, subWin.y + 7.0f, 28.0f, 26.0f);
+        sf::RectangleShape minBox(sf::Vector2f(28.0f, 26.0f));
         minBox.setPosition(minBtnRect.left, minBtnRect.top);
         minBox.setFillColor(sf::Color(35, 75, 135));
         minBox.setOutlineColor(sf::Color(90, 175, 255));
@@ -71,14 +71,16 @@ namespace VisPage {
         sf::Text minText;
         minText.setFont(font);
         minText.setString(subWin.minimized ? "+" : "-");
-        minText.setCharacterSize(22);
+        minText.setCharacterSize(20);
         minText.setFillColor(sf::Color::White);
-        minText.setPosition(minBtnRect.left + (subWin.minimized ? 8.0f : 10.0f), minBtnRect.top);
+        sf::FloatRect mtb = minText.getLocalBounds();
+        minText.setOrigin(mtb.left + mtb.width / 2.0f, mtb.top + mtb.height / 2.0f);
+        minText.setPosition(minBtnRect.left + 14.0f, minBtnRect.top + 13.0f);
         window.draw(minText);
 
-        // Close Button: [X]
-        closeBtnRect = sf::FloatRect(subWin.x + subWin.w - 38.0f, subWin.y + 6.0f, 30.0f, 28.0f);
-        sf::RectangleShape closeBox(sf::Vector2f(30.0f, 28.0f));
+        // Close Button: [X] - inset properly away from right border
+        closeBtnRect = sf::FloatRect(subWin.x + subWin.w - 42.0f, subWin.y + 7.0f, 28.0f, 26.0f);
+        sf::RectangleShape closeBox(sf::Vector2f(28.0f, 26.0f));
         closeBox.setPosition(closeBtnRect.left, closeBtnRect.top);
         closeBox.setFillColor(sf::Color(185, 42, 42));
         closeBox.setOutlineColor(sf::Color(255, 110, 110));
@@ -88,9 +90,11 @@ namespace VisPage {
         sf::Text closeText;
         closeText.setFont(font);
         closeText.setString("X");
-        closeText.setCharacterSize(18);
+        closeText.setCharacterSize(16);
         closeText.setFillColor(sf::Color::White);
-        closeText.setPosition(closeBtnRect.left + 8.0f, closeBtnRect.top + 3.0f);
+        sf::FloatRect ctb = closeText.getLocalBounds();
+        closeText.setOrigin(ctb.left + ctb.width / 2.0f, ctb.top + ctb.height / 2.0f);
+        closeText.setPosition(closeBtnRect.left + 14.0f, closeBtnRect.top + 13.0f);
         window.draw(closeText);
 
         if (subWin.minimized) return;
