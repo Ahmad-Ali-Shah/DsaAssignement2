@@ -30,7 +30,7 @@ namespace FrobeniusMatrixInnerProductForBlurr{
 
     // first calculating the product
 
-    inline double frobeniusInnerProduct(const double P[3][3], const double K[3][3]) {
+    static double frobeniusInnerProduct(const double P[3][3], const double K[3][3]) {
         double sum = 0.0;
 
         for (int i = 0; i < 3; ++i) {
@@ -48,7 +48,7 @@ namespace FrobeniusMatrixInnerProductForBlurr{
 
     // clamping the result for thee smooth output 
 
-    inline int clampCoord(int pos, int maxLimit) {
+    static int clampCoord(int pos, int maxLimit) {
 
         if (maxLimit <= 0)
             return 0;
@@ -60,7 +60,7 @@ namespace FrobeniusMatrixInnerProductForBlurr{
         return pos;
     }
 
-    inline void blurPixel(const double patchR[3][3],  const double patchG[3][3],  const double patchB[3][3],   unsigned int &outR,  unsigned int &outG,   unsigned int &outB) 
+    static void blurPixel(const double patchR[3][3],  const double patchG[3][3],  const double patchB[3][3],   unsigned int &outR,  unsigned int &outG,   unsigned int &outB) 
     {
         // its not the same kernal btw iie k=Ax=0
         //in calculus when you blur or transform a function f(t) you use an integral transform
