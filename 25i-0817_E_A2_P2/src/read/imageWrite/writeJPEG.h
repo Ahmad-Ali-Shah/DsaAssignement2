@@ -6,8 +6,7 @@
 
 namespace ReadPath {
 
-    bool writeJPEG(const std::string& path, Pixel** img, int width, int height, int quality = 95) {
-        (void)quality;
+    bool writeJPEG(const std::string& path, Pixel** img, int width, int height) {
         if (!img || width <= 0 || height <= 0 || path.empty()) {
             return false;
         }
