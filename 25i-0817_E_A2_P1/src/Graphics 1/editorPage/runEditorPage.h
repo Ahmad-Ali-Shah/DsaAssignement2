@@ -15,6 +15,8 @@
 #include "../../read/mainLogic/reader.h"
 #include "../../read/mainLogic/deleter.h"
 #include "../canvas/createTextureFromPixels.h"
+#include "../cursor/cursor.h"
+#include <cmath>
 
 namespace EditorPage {
 
@@ -27,6 +29,14 @@ namespace EditorPage {
         if (!loadEditorAssets(tex, font, titleFont, assetPath)) {
             return;
         }
+
+        sf::Texture shipTex;
+        shipTex.loadFromFile(assetPath + "/ship.png");
+        window.setMouseCursorVisible(false);
+
+        float prevMouseX = 0.0f;
+        float prevMouseY = 0.0f;
+        bool isFastCursor = false;
 
         sf::Texture canvasTex;
         if (img && width > 0 && height > 0) {
@@ -53,6 +63,13 @@ namespace EditorPage {
             sf::Vector2i mPos = sf::Mouse::getPosition(window);
             float mouseX = static_cast<float>(mPos.x);
             float mouseY = static_cast<float>(mPos.y);
+
+            float dx = mouseX - prevMouseX;
+            float dy = mouseY - prevMouseY;
+            float dist = std::sqrt(dx * dx + dy * dy);
+            isFastCursor = (dist / (dt > 0.0001f ? dt : 0.016f) >= 350.0f);
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
 
             sf::Event event;
             while (window.pollEvent(event)) {
@@ -226,8 +243,12 @@ namespace EditorPage {
                 renderParameterModal(window, font, titleFont, modal, modalOkRect, modalCancelRect);
             }
 
+            GraphicsCursor::renderCustomCursor(window, shipTex, mouseX, mouseY, isFastCursor);
+
             window.display();
         }
+
+        window.setMouseCursorVisible(true);
     }
 
 }

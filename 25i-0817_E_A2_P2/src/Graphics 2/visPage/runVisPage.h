@@ -14,6 +14,8 @@
 #include "../editorPage/renderParameterModal.h"
 #include "../editorPage/executeEditorAction.h"
 #include "../canvas/createTextureFromPixels.h"
+#include "../cursor/cursor.h"
+#include <cmath>
 #include "../../image.h"
 #include "../../history/history.h"
 #include "../../pipeline/pipeline.h"
@@ -29,6 +31,14 @@ namespace VisPage {
 
         if (!loadVisAssets(vTex, font, titleFont, assetPath)) return;
         EditorPage::loadEditorAssets(eTex, font, titleFont, assetPath);
+
+        sf::Texture shipTex;
+        shipTex.loadFromFile(assetPath + "/ship.png");
+        window.setMouseCursorVisible(false);
+
+        float prevMouseX = 0.0f;
+        float prevMouseY = 0.0f;
+        bool isFastCursor = false;
 
         sf::Texture canvasTex;
         if (img && width > 0 && height > 0) {
@@ -93,6 +103,13 @@ namespace VisPage {
             sf::Vector2i mPos = sf::Mouse::getPosition(window);
             float mouseX = static_cast<float>(mPos.x);
             float mouseY = static_cast<float>(mPos.y);
+
+            float dx = mouseX - prevMouseX;
+            float dy = mouseY - prevMouseY;
+            float dist = std::sqrt(dx * dx + dy * dy);
+            isFastCursor = (dist / (dt > 0.0001f ? dt : 0.016f) >= 350.0f);
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
 
             // Step active animations
             updateVisAnimation(anim, dt, img, width, height, canvasTex, mainStack, mainTop, auxStack, auxTop, queueArr, queueFront, queueRear, queueCount, currentOp, statusMsg);
@@ -278,8 +295,12 @@ namespace VisPage {
                 EditorPage::renderParameterModal(window, font, titleFont, modal, modalOkRect, modalCancelRect);
             }
 
+            GraphicsCursor::renderCustomCursor(window, shipTex, mouseX, mouseY, isFastCursor);
+
             window.display();
         }
+
+        window.setMouseCursorVisible(true);
     }
 
 }

@@ -36,8 +36,8 @@ namespace EditorPage {
         curY += 32.0f;
 
         // Helper to draw an icon button
-        auto drawButton = [&](sf::FloatRect& btnRect, const sf::Texture& t, sf::IntRect uv, const std::string& label, float scale) {
-            float bw = 130.0f;
+        auto drawButton = [&](sf::FloatRect& btnRect, const sf::Texture& t, sf::IntRect uv, const std::string& label, float scale, float yOffset = 0.0f) {
+            float bw = 138.0f;
             float bh = 42.0f;
             btnRect = sf::FloatRect(startX, curY, bw, bh);
 
@@ -52,7 +52,7 @@ namespace EditorPage {
             sf::Sprite icon(t);
             icon.setTextureRect(uv);
             icon.setScale(scale, scale);
-            icon.setPosition(startX + 6.0f, curY + (bh - uv.height * scale) / 2.0f);
+            icon.setPosition(startX + 8.0f, curY + (bh - uv.height * scale) / 2.0f + yOffset);
             window.draw(icon);
 
             sf::Text txt;
@@ -60,17 +60,17 @@ namespace EditorPage {
             txt.setString(label);
             txt.setCharacterSize(16);
             txt.setFillColor(hovered ? sf::Color(255, 235, 80) : sf::Color(220, 230, 240));
-            txt.setPosition(startX + 48.0f, curY + 11.0f);
+            txt.setPosition(startX + 52.0f, curY + 11.0f);
             window.draw(txt);
 
             curY += bh + 8.0f;
         };
 
-        // 1) Load Image (frame 143, 31, 232, 138)
-        drawButton(rects.loadBtn, tex.imageLoad, sf::IntRect(143, 31, 232, 138), "Load", 0.22f);
+        // 1) Load Image (compact camera icon separated cleanly from label)
+        drawButton(rects.loadBtn, tex.imageLoad, sf::IntRect(143, 31, 232, 138), "Load", 0.16f);
 
         // 2) Crop
-        drawButton(rects.cropBtn, tex.crop, sf::IntRect(0, 0, tex.crop.getSize().x, tex.crop.getSize().y), "Crop", 0.22f);
+        drawButton(rects.cropBtn, tex.crop, sf::IntRect(0, 0, tex.crop.getSize().x, tex.crop.getSize().y), "Crop", 0.18f);
 
         // 3) Rotations: 90, 180, 270, 360
         drawButton(rects.rot90Btn, tex.rotations, sf::IntRect(EditorConstants::ROT_90_X, EditorConstants::ROT_90_Y, EditorConstants::ROT_90_W, EditorConstants::ROT_90_H), "Rot 90", 0.24f);
@@ -78,9 +78,9 @@ namespace EditorPage {
         drawButton(rects.rot270Btn, tex.rotations, sf::IntRect(EditorConstants::ROT_270_X, EditorConstants::ROT_270_Y, EditorConstants::ROT_270_W, EditorConstants::ROT_270_H), "Rot 270", 0.24f);
         drawButton(rects.rot360Btn, tex.rotations, sf::IntRect(EditorConstants::ROT_360_X, EditorConstants::ROT_360_Y, EditorConstants::ROT_360_W, EditorConstants::ROT_360_H), "Rot 360", 0.28f);
 
-        // 4) Flip Horizontal and Vertical using arrow.png
+        // 4) Flip Horizontal and Vertical using arrow.png (Flip V shifted up slightly)
         drawButton(rects.flipHBtn, tex.arrow, sf::IntRect(0, 0, tex.arrow.getSize().x, tex.arrow.getSize().y), "Flip H", 0.18f);
-        drawButton(rects.flipVBtn, tex.arrow, sf::IntRect(0, 0, tex.arrow.getSize().x, tex.arrow.getSize().y), "Flip V", 0.18f);
+        drawButton(rects.flipVBtn, tex.arrow, sf::IntRect(0, 0, tex.arrow.getSize().x, tex.arrow.getSize().y), "Flip V", 0.18f, -4.0f);
 
         // 5) Adjustment: Grayscale & Brightness
         drawButton(rects.grayBtn, tex.adjustment, sf::IntRect(EditorConstants::ADJ_GRAY_X, EditorConstants::ADJ_GRAY_Y, EditorConstants::ADJ_GRAY_W, EditorConstants::ADJ_GRAY_H), "Grayscale", 0.28f);
