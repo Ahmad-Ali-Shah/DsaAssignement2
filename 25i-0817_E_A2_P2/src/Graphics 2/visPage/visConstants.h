@@ -40,6 +40,7 @@ namespace VisConstants {
         sf::FloatRect showQueueBtn;
         sf::FloatRect animDataBtn;
         sf::FloatRect animImageBtn;
+        sf::FloatRect backBtn;
     };
 
     struct VisAnimController {

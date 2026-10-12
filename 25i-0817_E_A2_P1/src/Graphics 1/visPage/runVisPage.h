@@ -215,6 +215,8 @@ namespace VisPage {
                         anim.animType = VisConstants::ANIM_IMAGE_STEPS;
                         anim.currentStep = 0;
                         anim.timer = 0.0f;
+                    } else if (visRects.backBtn.contains(mouseX, mouseY)) {
+                        return; // Move back to main menu
                     }
 
                     // Left toolbar operations: apply transformation and push to stack

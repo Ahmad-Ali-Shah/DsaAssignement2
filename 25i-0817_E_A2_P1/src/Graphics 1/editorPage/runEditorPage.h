@@ -140,7 +140,9 @@ namespace EditorPage {
                         isTypingSave = false;
                     }
 
-                    if (rightRects.saveBtn.contains(mouseX, mouseY)) {
+                    if (rightRects.backBtn.contains(mouseX, mouseY)) {
+                        return; // Move back to main menu / mode selection
+                    } else if (rightRects.saveBtn.contains(mouseX, mouseY)) {
                         executeEditorAction(EditorConstants::OP_SAVE, img, width, height, history, savePath, "", currentOp);
                     } else if (rightRects.reloadBtn.contains(mouseX, mouseY)) {
                         int rw = 0, rh = 0;

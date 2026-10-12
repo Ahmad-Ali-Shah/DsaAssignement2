@@ -55,6 +55,9 @@ namespace VisPage {
 
         // 4. Animate Image Transitions (Full Conversion animation)
         drawVisBtn(rects.animImageBtn, "ANIMATE PIPELINE", sf::Color(25, 80, 45, 235), sf::Color(40, 130, 75, 255));
+
+        // 5. Back to Main Menu Button (Burgundy)
+        drawVisBtn(rects.backBtn, "<-- BACK TO MAIN MENU", sf::Color(105, 30, 40, 235), sf::Color(155, 45, 60, 255));
     }
 
 }

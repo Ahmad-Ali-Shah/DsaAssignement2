@@ -31,34 +31,34 @@ namespace GraphicsApp {
             return;
         }
 
-        int choice = SelectionPage::runSelectionPage(*win, assetDir);
-        if (choice == SelectionConstants::CHOICE_NONE || !win->isOpen()) {
-            delete win;
-            return;
-        }
-
-        std::string loadedImagePath = "";
-        if (choice == SelectionConstants::CHOICE_IMAGE_LAB) {
-            bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
-            if (!inputOk || !win->isOpen()) {
-                delete win;
-                return;
+        while (win->isOpen()) {
+            int choice = SelectionPage::runSelectionPage(*win, assetDir);
+            if (choice == SelectionConstants::CHOICE_NONE || !win->isOpen()) {
+                break;
             }
 
-            EditorPage::runEditorPage(*win, assetDir, img, width, height, history, pipeline, loadedImagePath);
-            delete win;
-            return;
-        } else if (choice == SelectionConstants::CHOICE_VISUALIZATION_STACK) {
-            bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
-            if (!inputOk || !win->isOpen()) {
-                delete win;
-                return;
-            }
+            std::string loadedImagePath = "";
+            if (choice == SelectionConstants::CHOICE_IMAGE_LAB) {
+                bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
+                if (!inputOk || !win->isOpen()) {
+                    continue; // Back to selection page
+                }
 
-            VisPage::runVisPage(*win, assetDir, img, width, height, history, pipeline);
-            delete win;
-            return;
+                EditorPage::runEditorPage(*win, assetDir, img, width, height, history, pipeline, loadedImagePath);
+                continue; // Back to selection page when editor finishes / back clicked
+            } else if (choice == SelectionConstants::CHOICE_VISUALIZATION_STACK) {
+                bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
+                if (!inputOk || !win->isOpen()) {
+                    continue; // Back to selection page
+                }
+
+                VisPage::runVisPage(*win, assetDir, img, width, height, history, pipeline);
+                continue; // Back to selection page when vis finishes / back clicked
+            }
         }
+
+        delete win;
+        return;
 
         sf::Font font;
         std::string fontPath1 = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P1/assets/fonts/Awesome.ttf", ".");
