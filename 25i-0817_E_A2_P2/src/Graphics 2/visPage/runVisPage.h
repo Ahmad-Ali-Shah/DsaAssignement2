@@ -23,7 +23,6 @@
 namespace VisPage {
 
     void runVisPage(sf::RenderWindow& window, const std::string& assetPath, Pixel**& img, int& width, int& height, HistoryManager& history, ProcessingPipeline& pipeline) {
-        (void)pipeline;
         VisConstants::VisTextures vTex;
         EditorPage::EditorTextures eTex;
         sf::Font font;
@@ -64,11 +63,26 @@ namespace VisPage {
         // Circular Queue array representation items
         std::string queueArr[VisConstants::MAX_QUEUE_ITEMS];
         int queueFront = 0;
-        int queueRear = 2;
-        int queueCount = 3;
-        queueArr[0] = "Task #1: Blur";
-        queueArr[1] = "Task #2: Gray";
-        queueArr[2] = "Task #3: Bucket";
+        int queueRear = -1;
+        int queueCount = 0;
+
+        Job pendingJobs[VisConstants::MAX_QUEUE_ITEMS];
+        int foundJobs = pipeline.getPendingJobs(pendingJobs, VisConstants::MAX_QUEUE_ITEMS);
+        if (foundJobs > 0) {
+            for (int qIdx = 0; qIdx < foundJobs; qIdx++) {
+                queueArr[qIdx] = pendingJobs[qIdx].name;
+            }
+            queueFront = 0;
+            queueRear = foundJobs - 1;
+            queueCount = foundJobs;
+        } else {
+            queueArr[0] = "Task #1: Blur";
+            queueArr[1] = "Task #2: Gray";
+            queueArr[2] = "Task #3: Bucket";
+            queueFront = 0;
+            queueRear = 2;
+            queueCount = 3;
+        }
 
         VisConstants::SubWindow stackWin;
         stackWin.visible = true;

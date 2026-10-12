@@ -19,13 +19,40 @@ namespace EditorPage {
         box.setOutlineThickness(3.0f);
         window.draw(box);
 
-        // Header tag for canvas
+        // Header tag for canvas with high-contrast badge background
+        std::string headerStr = "CANVAS VIEW (" + std::to_string(origW) + "x" + std::to_string(origH) + ")";
+        
         sf::Text header;
         header.setFont(font);
-        header.setString("CANVAS VIEW (" + std::to_string(origW) + "x" + std::to_string(origH) + ")");
-        header.setCharacterSize(18);
-        header.setFillColor(sf::Color(200, 220, 240));
-        header.setPosition(boxX + 16.0f, boxY - 24.0f);
+        header.setString(headerStr);
+        header.setCharacterSize(15);
+        sf::FloatRect hb = header.getLocalBounds();
+
+        float badgeW = hb.width + 24.0f;
+        float badgeH = 26.0f;
+        float badgeX = boxX + 14.0f;
+        float badgeY = boxY - 30.0f;
+
+        // Dark arcade badge plate
+        sf::RectangleShape badge(sf::Vector2f(badgeW, badgeH));
+        badge.setPosition(badgeX, badgeY);
+        badge.setFillColor(sf::Color(12, 20, 32, 240));
+        badge.setOutlineColor(sf::Color(75, 140, 220, 240));
+        badge.setOutlineThickness(1.5f);
+        window.draw(badge);
+
+        // Text shadow for extra contrast
+        sf::Text headerShadow;
+        headerShadow.setFont(font);
+        headerShadow.setString(headerStr);
+        headerShadow.setCharacterSize(15);
+        headerShadow.setFillColor(sf::Color(0, 0, 0, 230));
+        headerShadow.setPosition(badgeX + 13.0f, badgeY + 4.5f);
+        window.draw(headerShadow);
+
+        // Vibrant yellow arcade text
+        header.setFillColor(sf::Color(255, 228, 65));
+        header.setPosition(badgeX + 12.0f, badgeY + 3.5f);
         window.draw(header);
 
         // Draw image sprite centered inside the box

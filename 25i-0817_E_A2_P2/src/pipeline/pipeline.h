@@ -110,6 +110,15 @@ public:
         std::cout << "------------------------------------\n";
     }
 
+    int getPendingJobs(Job out[], int maxCount) const {
+        int sz = getCurrentQueueSize();
+        int cnt = (sz < maxCount) ? sz : maxCount;
+        for (int i = 0; i < cnt; i++) {
+            out[i] = (mode == SchedulerMode::FIFO) ? fifoQueue.getAt(i) : prioQueue.getAt(i);
+        }
+        return cnt;
+    }
+
     void clearJobs() {
         if (mode == SchedulerMode::FIFO) {
             while (!fifoQueue.isEmptyQueue()) { fifoQueue.deleteQueue(); deleteCount++; }

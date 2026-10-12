@@ -21,7 +21,9 @@
 namespace EditorPage {
 
     void runEditorPage(sf::RenderWindow& window, const std::string& assetPath, Pixel**& img, int& width, int& height, HistoryManager& history, ProcessingPipeline& pipeline, const std::string& initialImagePath) {
-        (void)pipeline;
+        if (!pipeline.isEmpty()) {
+            pipeline.processAllJobs(img, width, height, history);
+        }
         EditorTextures tex;
         sf::Font font;
         sf::Font titleFont;

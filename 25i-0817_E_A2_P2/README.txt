@@ -34,8 +34,9 @@ How to Build and Run (From 25i-0817_E_A2_P2 folder):
    g++ -std=c++17 -Wall -Wextra -Isrc src/main.cpp -lsfml-graphics -lsfml-window -lsfml-system -o src/main
 
 2. Run ImageLab Phase 2:
-   ./src/main          # Interactive console menu (Option 23 launches GUI)
+   ./src/main          # Interactive mode prompt: [1] Console Menu  [2] SFML GUI Studio
    ./src/main --gui    # Launch Graphical User Interface directly
+   ./src/main --cli    # Launch Terminal / Console Menu Mode directly
 
 3. Compile the Phase 2 test suite:
    g++ -std=c++17 -Wall -Wextra -Isrc tests/test.cpp -lsfml-graphics -lsfml-system -o tests/test
