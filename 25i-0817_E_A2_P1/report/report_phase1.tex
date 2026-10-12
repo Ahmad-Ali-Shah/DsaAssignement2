@@ -1,6 +1,5 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[margin=1.8cm,headheight=1.5cm,headsep=10pt]{geometry}
+\documentclass[9.5pt,a4paper]{article}
+\usepackage[margin=1.2cm,headheight=1.2cm,headsep=6pt,footskip=14pt]{geometry}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{booktabs}
@@ -17,12 +16,13 @@
     citecolor=black
 }
 
+% Header / Footer
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{%
-  \begin{tabular}{@{}c@{\hspace{7pt}}l@{}}
-    \includegraphics[width=1.05cm]{fast_logo.png} & \textbf{FAST NUCES, Islamabad Campus}\\
-    & {\small Department of Computer Science -- Fall 2026}
+  \begin{tabular}{@{}c@{\hspace{5pt}}l@{}}
+    \includegraphics[width=0.9cm]{fast_logo.png} & \textbf{FAST NUCES, Islamabad Campus}\\
+    & {\scriptsize Department of Computer Science -- Fall 2026}
   \end{tabular}%
 }
 \fancyhead[R]{%
@@ -32,96 +32,160 @@
     Ahmad Ali \textbar{} 25-i0817 \textbar{} Section E
   \end{tabular}%
 }
-\fancyfoot[L]{\small FAST NUCES Islamabad}
-\fancyfoot[C]{\small CS2001 Data Structures}
-\fancyfoot[R]{\small Page \thepage\ of 3}
-\renewcommand{\headrulewidth}{0.5pt}
+\fancyfoot[L]{\scriptsize FAST NUCES Islamabad}
+\fancyfoot[C]{\scriptsize CS2001 Data Structures}
+\fancyfoot[R]{\scriptsize Page \thepage\ of 3}
+\renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
 \begin{document}
 
+% =========================================================================
+% PAGE 1: COVER / LANDING PAGE
+% =========================================================================
+\thispagestyle{empty}
+\vspace*{1.2cm}
+
 \begin{center}
-  {\LARGE \textbf{ImageLab: Phase 1 Technical Report}}\\[4pt]
-  {\large \textbf{Custom Dynamic Memory Representations, Core Complexity, and Pipeline Specification}}\\[6pt]
-  \textbf{Author:} Ahmad Ali \quad \textbf{Roll Number:} 25-i0817 \quad \textbf{Section:} BS CS-E \quad \textbf{Course:} CS-2001 Data Structures
+    \includegraphics[width=3.2cm]{fast_logo.png}\\[14pt]
+    {\LARGE \textbf{National University of Computer and Emerging Sciences}}\\[4pt]
+    {\large \textbf{Islamabad Campus \textbar{} Department of Computer Science}}\\[14pt]
+    \rule{0.88\textwidth}{0.8pt}\\[12pt]
+    {\huge \textbf{CS-2001: Data Structures}}\\[6pt]
+    {\Large \textbf{Assignment 2: ImageLab (Phase 1 Technical Report)}}\\[12pt]
+    \rule{0.88\textwidth}{0.8pt}\\[24pt]
+
+    \vspace{0.8cm}
+    \begin{tabular}{|p{0.78\textwidth}|}
+        \hline
+        \centering
+        \vspace{6pt}
+        {\Large \textbf{Student Information}}\\[8pt]
+        \begin{tabular}{ll}
+            \textbf{Student Name:} & Ahmad Ali \\[6pt]
+            \textbf{Roll Number:}  & 25-i0817 \\[6pt]
+            \textbf{Section:}      & BS CS-E \\[6pt]
+            \textbf{Course:}       & CS-2001 Data Structures \\[6pt]
+            \textbf{Submission:}   & Phase 1 Deliverables (16/10/2026) \\[6pt]
+        \end{tabular}
+        \vspace{6pt}
+        \tabularnewline
+        \hline
+    \end{tabular}
 \end{center}
-\vspace{-4pt}
-\hrule
-\vspace{10pt}
 
-\section{Introduction and Architecture Overview}
-The ImageLab system is an interactive image processing studio engineered entirely from first principles without using standard template library (STL) containers, the \texttt{inline} keyword, or C++ \texttt{enum} constructs. Phase 1 establishes the bedrock architecture: raw two-dimensional pointer-based RGB image structures, Malik-compliant templated abstract data types (\texttt{stackType} and \texttt{queueType}), a dual-stack transaction history manager for infinite Undo and Redo, a bounded circular queue execution pipeline, and a dedicated Data Structure Inspector.
-
-\section{Underlying Representations and Justification}
-
-\subsection{Image Memory Representation: 2D Pointer Matrix vs. 1D Flattened Array}
-\textbf{Design Decision:} Two-dimensional dynamic array of pixel structs, declared as \texttt{Pixel** imageMatrix}, where each row is independently allocated on the heap as \texttt{new Pixel[width]}.
-
-\begin{itemize}
-  \item \textbf{Direct Matrix Correspondence:} Image operations such as 90-degree orthogonal rotations, vertical reflections, and neighborhood kernel convolutions naturally map to Cartesian coordinate pairs $(y, x)$. A 2D pointer structure provides immediate row-level indexing via \texttt{img[y][x]} without requiring repeated multiplications and striding offsets ($\text{index} = y \times \text{width} + x$) inside inner convolution loops.
-  \item \textbf{Pointer Swapping in Structural Transformations:} Vertical flipping (\texttt{flipV}) completes in $\mathcal{O}(H)$ time rather than $\mathcal{O}(W \times H)$ because entire horizontal row pointers are swapped (\texttt{std::swap(img[y], img[H - 1 - y])}) without moving or copying individual bytes.
-  \item \textbf{Heap Fragmentation Mitigation:} While a contiguous 1D buffer offers marginally better cache spatial locality, a large monolithic allocation frequently fails under memory pressure when heap space is fragmented. Structuring the image as $H$ independent row vectors guarantees reliable dynamic allocation across large canvas buffers.
-\end{itemize}
-
-\subsection{History Stacks: Array-Based \texttt{stackType} vs. Linked List Stack}
-\textbf{Design Decision:} Bounded array-based dynamic stack (\texttt{stackType<T>}) following Section 5 (Malik interface), using contiguous heap backing and an integer index pointer \texttt{stackTop}.
-
-\begin{itemize}
-  \item \textbf{Constant Time Guarantees:} \texttt{push()}, \texttt{pop()}, and \texttt{top()} execute in strict $\mathcal{O}(1)$ worst-case time without heap allocator overhead or pointer dereference stalls.
-  \item \textbf{Cache Coherence and Memory Overhead:} An array-based stack avoids 8-byte pointer overhead per node required by linked-list implementations, maximizing L1/L2 cache hit ratios during rapid undo/redo cycles.
-\end{itemize}
-
-\subsection{Processing Pipeline: Bounded Circular Array Queue}
-\textbf{Design Decision:} Bounded circular array queue with modular arithmetic indexing:
-$$\text{qRear} = (\text{qRear} + 1) \pmod{\text{maxQueueSize}}, \quad \text{count} = \text{count} + 1$$
-
-\begin{itemize}
-  \item \textbf{Zero Element Shifting:} Unlike naive array queues requiring $\mathcal{O}(N)$ shifting on every dequeue, the circular buffer achieves strict $\mathcal{O}(1)$ enqueue and dequeue operations.
-  \item \textbf{Full Queue Handling Policy:} When the circular queue reaches maximum capacity (\texttt{count == maxQueueSize}), new jobs are rejected gracefully with a status code and diagnostic console notification (\texttt{"Pipeline Full: Cannot add job"}). The pipeline does not crash, overwrite unserved tasks, or corrupt memory.
-  \item \textbf{Cancellation Without Element Shifting:} Jobs can be cancelled in-place by setting an internal boolean flag \texttt{isCancelled = true}. During execution, the pipeline pops the cancelled job, detects the flag in $\mathcal{O}(1)$, and skips execution without perturbing existing queue indices.
-\end{itemize}
-
-\section{Time and Space Complexity Analysis}
-Table 1 outlines the formal time and auxiliary space complexities across all core image manipulation algorithms implemented in Phase 1. Let $W$ represent image width, $H$ represent image height, $N = W \times H$ represent total pixel count, and $S$ represent the maximum capacity of history stacks.
-
-\begin{table}[h!]
-\centering
-\small
-\begin{tabularx}{\textwidth}{l c c X}
-\toprule
-\textbf{Operation} & \textbf{Time Complexity} & \textbf{Auxiliary Space} & \textbf{Engineering Mechanism} \\
-\midrule
-Load / Save Image & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & Pure binary/ASCII stream parsing with dynamic 2D row allocation. \\
-Crop $(x_1, y_1, x_2, y_2)$ & $\mathcal{O}(W' \times H')$ & $\mathcal{O}(W' \times H')$ & Allocates exact sub-matrix dimensions; copies bounded bounding box. \\
-Rotate $90^\circ / 270^\circ$ & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Dimension transposition matrix $(H \times W)$; direct coordinate mapping. \\
-Rotate $180^\circ$ & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In-place double coordinate symmetry swap without extra buffer. \\
-Horizontal Flip & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In-place swapping of symmetric pixel columns across horizontal rows. \\
-Vertical Flip & $\mathcal{O}(H)$ & $\mathcal{O}(1)$ & In-place row pointer swapping without pixel iteration. \\
-Brightness Adjustment & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & Direct linear pixel transform clamped to $[0, 255]$ dynamic range. \\
-Grayscale Conversion & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & NTSC luminance transform: $Y = 0.299R + 0.587G + 0.114B$. \\
-Bilinear Resize & $\mathcal{O}(W' \times H')$ & $\mathcal{O}(W' \times H')$ & Bilinear four-point interpolation for aliasing-free down/upscaling. \\
-Box Blur ($3 \times 3$) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Frobenius matrix inner product across 8-connected neighborhoods. \\
-Bucket Fill (Stack DFS) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Bounded array stack traversal with boolean visited mask. \\
-Bucket Fill (Queue BFS) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Bounded circular queue level-order traversal with visited mask. \\
-Undo / Redo Dispatch & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H \times S)$ & Full snapshot stack push/pop; deep matrix cloning. \\
-Pipeline Enqueue/Dequeue & $\mathcal{O}(1)$ & $\mathcal{O}(1)$ & Modular ring-buffer pointer advancement. \\
-\bottomrule
-\end{tabularx}
-\caption{Algorithmic Time and Space Complexity for Phase 1 Core Operations.}
-\end{table}
-
-\section{Empirical Testing and Verification Results}
-The implementation has been verified through a dedicated 5-part automated regression testing suite (\texttt{tests/test.cpp}) and interactive graphical inspection:
+\vspace{1.8cm}
+\noindent \textbf{Project Abstract \& Phase 1 Scope:}\\
+This report presents the complete architectural design, data structure representations, algorithmic complexities, and empirical test results for \textbf{Phase 1 of the ImageLab Studio}. ImageLab is implemented from foundational principles without the use of C++ Standard Template Library (STL) containers, \texttt{enum} constructs, or \texttt{inline} functions. Phase 1 provides:
 \begin{enumerate}
-  \item \textbf{Stack Primitive Integrity:} Verified LIFO ordering across arbitrary dynamic data types, boundary exception throwing on empty pops, and expansion behavior.
-  \item \textbf{Circular Queue Verification:} Verified FIFO order across cyclic wrap-around scenarios, boundary exception handling, and full-queue rejection.
-  \item \textbf{Deep Image Operations:} Verified exact mathematical invariants across image transformations:
-  $$\text{Rotate}_{90} \circ \text{Rotate}_{90} \circ \text{Rotate}_{90} \circ \text{Rotate}_{90}(I) \equiv I, \quad \text{Flip}_H \circ \text{Flip}_H(I) \equiv I$$
-  \item \textbf{Flood Fill Equivalence:} Proved that Stack-based DFS and Queue-based BFS flood fills yield bit-for-bit identical visual output masks while terminating cleanly when source color matches target fill color.
-  \item \textbf{Pipeline Concurrency and Cancellation:} Validated bounded job rejection upon reaching maximum capacity (30 items) and verified non-shifting cancellation of jobs.
+    \item Pure 2D pointer-based pixel matrices (\texttt{Pixel**}) for row-level manipulation and vertical reflection swapping.
+    \item Custom template bounded dynamic array Stack (\texttt{stackType<T>}) for transaction history.
+    \item Custom template circular ring buffer Queue (\texttt{queueType<T>}) for execution pipeline dispatch.
+    \item A dual-stack undo/redo engine and dual flood-fill algorithms (Stack DFS and Queue BFS).
+    \item Automated regression testing adhering strictly to all minimum criteria outlined in Section 6.8.
 \end{enumerate}
 
-\section{Summary}
-Phase 1 provides an industrial-grade foundation complying with all assignment constraints. All custom Malik template classes, image matrices, and GUI visualizers compile with zero errors and zero warnings, establishing full readiness for Phase 2 memory budgeting and priority scheduling.
+\clearpage
+
+% =========================================================================
+% PAGE 2: REPRESENTATIONS, JUSTIFICATIONS & COMPLEXITIES
+% =========================================================================
+
+\section{Data Structure Representations and Justifications}
+
+\subsection{Stack Representation: Bounded Dynamic Array (\texttt{stackType<T>})}
+I selected a \textbf{bounded dynamic array representation} allocated on the heap using an integer index pointer (\texttt{stackTop}):
+\begin{itemize}
+    \item \textbf{Strict $\mathcal{O}(1)$ Efficiency:} Push, pop, and top operations access memory via direct index offset without traversing links or invoking heap allocators during runtime.
+    \item \textbf{High Cache Locality:} Elements reside contiguously in memory, eliminating cache-miss penalties during rapid sequential undos and redos.
+    \item \textbf{Zero Per-Node Pointer Overhead:} Avoids allocating 8 bytes of forward pointer memory per item, minimizing overall RAM footprint.
+\end{itemize}
+
+\subsection{Queue Representation: Bounded Circular Array (\texttt{queueType<T>})}
+I selected a \textbf{bounded circular array buffer} with modular arithmetic indexing:
+\begin{itemize}
+    \item \textbf{Zero Element Shifting:} Traditional dynamic arrays require $\mathcal{O}(N)$ shifting on every dequeue. Modular advancement ($\text{qFront} = (\text{qFront} + 1) \pmod{\text{maxQueueSize}}$) guarantees strict $\mathcal{O}(1)$ execution.
+    \item \textbf{Predictable Memory Bounding:} Prevents memory runaway in batch pipelines by fixing capacity at runtime.
+\end{itemize}
+
+\subsection{Full-Queue Policy (Section 6.8)}
+\begin{itemize}
+    \item \textbf{Bounded Graceful Rejection:} When \texttt{count == maxQueueSize}, incoming jobs are safely rejected with an explicit notification (\texttt{"Pipeline Full: Cannot add job"}). Active tasks are never overwritten, preserving FIFO ordering.
+    \item \textbf{In-Place Cancellation:} Jobs can be cancelled via an internal boolean flag (\texttt{isCancelled = true}), allowing cancelled tasks to be discarded upon dequeue in $\mathcal{O}(1)$ without shifting remaining jobs.
+\end{itemize}
+
+\begin{center}
+    \includegraphics[width=0.82\textwidth,height=3.6cm,keepaspectratio]{data_structures_code.png}
+\end{center}
+\vspace{-4pt}
+
+\section{Algorithmic Time and Space Complexity Analysis}
+\begin{table}[h!]
+\centering
+\fontsize{7.5pt}{9.2pt}\selectfont
+\begin{tabularx}{\textwidth}{l c c X}
+\toprule
+\textbf{Operation} & \textbf{Time} & \textbf{Aux Space} & \textbf{One-Line Reason} \\
+\midrule
+Stack Push / Pop / Top & $\mathcal{O}(1)$ & $\mathcal{O}(1)$ & Direct array indexing at \texttt{stackTop} without pointer traversal. \\
+Queue Add / Delete / Front & $\mathcal{O}(1)$ & $\mathcal{O}(1)$ & Modular ring buffer pointer advancement without shifting elements. \\
+Load / Save PPM Image & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & Linear sequential scan over binary raster data. \\
+Horizontal Flip & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In-place symmetric column swapping within each row. \\
+Vertical Flip & $\mathcal{O}(H)$ & $\mathcal{O}(1)$ & Swaps row pointers directly without iterating through individual pixels. \\
+Rotate $90^\circ / 270^\circ$ & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Transposes dimensions and maps coordinates into a newly allocated buffer. \\
+Rotate $180^\circ$ & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In-place dual-axis symmetric swapping across the image center. \\
+Crop $(x_1, y_1, x_2, y_2)$ & $\mathcal{O}(W' \times H')$ & $\mathcal{O}(W' \times H')$ & Allocates and copies only the bounded rectangular subregion. \\
+Brightness Adjustment & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In-place point-wise linear intensity transform clamped to $[0, 255]$. \\
+Grayscale Conversion & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In-place NTSC luminance formula computation ($0.299R + 0.587G + 0.114B$). \\
+Bilinear Resize & $\mathcal{O}(W' \times H')$ & $\mathcal{O}(W' \times H')$ & Calculates 4-point weighted interpolation for each target grid coordinate. \\
+Box Blur ($3 \times 3$) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Evaluates 8-neighbor local window averages into a separate scratch buffer. \\
+Bucket Fill (Stack DFS) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Visits each contiguous target pixel once using an explicit array stack. \\
+Bucket Fill (Queue BFS) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Level-order expansion visiting each target pixel once via a circular queue. \\
+Undo / Redo Dispatch & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H \times S)$ & Pushes and restores deep copies of snapshot image buffers to/from stack. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\clearpage
+
+% =========================================================================
+% PAGE 3: TEST RESULTS & EMPIRICAL VERIFICATION
+% =========================================================================
+
+\section{Empirical Testing and Deliverables (Section 6.8)}
+All data structures and algorithms were independently validated using a standalone test program (\texttt{tests/test.cpp}) that exercises every requirement specified in the assignment rubric.
+
+\subsection{Section 6.8 Minimum Test Coverage Matrix}
+\begin{table}[h!]
+\centering
+\fontsize{7.5pt}{9.2pt}\selectfont
+\begin{tabularx}{\textwidth}{l X c}
+\toprule
+\textbf{Component} & \textbf{Evaluated Minimum Cases} & \textbf{Status} \\
+\midrule
+\textbf{Stack} & Pop and top on empty stack throw safely; 1000 item push capacity; repeated push/pop cycles; \texttt{initializeStack} resets top; deep copy constructor and assignment. & \textbf{PASS} \\
+\midrule
+\textbf{Circular Queue} & \texttt{deleteQueue} on empty queue throws safely; full queue rejection; circular wrap-around indexing; repeated enqueue/dequeue cycles; overflow and underflow intercept. & \textbf{PASS} \\
+\midrule
+\textbf{Undo / Redo} & Multiple consecutive undos restore history states; multiple redos re-apply forward operations; pushing a new action after an undo clears the redo stack. & \textbf{PASS} \\
+\midrule
+\textbf{Bucket Fill} & Single-pixel fill; whole canvas fill; irregular region fill; border-touching region fill; disconnected multiple regions; Stack DFS and Queue BFS produce bit-for-bit identical outputs; same-color fill terminates immediately. & \textbf{PASS} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vspace{-4pt}
+\subsection{Bucket Fill Visual Proof: Stack DFS vs. Queue BFS}
+Figure 1 confirms that both Stack DFS (depth-first exploration) and Queue BFS (breadth-first concentric expansion) yield bit-for-bit identical filled outputs on target regions.
+\begin{center}
+\includegraphics[width=0.68\textwidth,height=2.8cm,keepaspectratio]{bucket_fill_comparison.png}
+\end{center}
+
+\vspace{-6pt}
+\subsection{Automated Terminal Test Execution Output}
+Figure 2 shows the live terminal execution of the comprehensive test harness:
+\begin{center}
+\includegraphics[width=0.68\textwidth,height=6.2cm,keepaspectratio]{test_results.png}
+\end{center}
 
 \end{document}
