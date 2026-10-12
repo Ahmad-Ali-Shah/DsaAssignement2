@@ -2,6 +2,11 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "../window/initWindow2.h"
+#include "../homePage/runHomePage.h"
+#include "../selectionPage/runSelectionPage.h"
+#include "../inputPage/runInputPage.h"
+#include "../editorPage/runEditorPage.h"
+#include "../visPage/runVisPage.h"
 #include "handleToolExecution2.h"
 #include "renderApp2.h"
 #include "../../image.h"
@@ -56,6 +61,41 @@ namespace GraphicsApp2 {
     void runGraphics2(Pixel**& img, int& width, int& height, HistoryManager& history, ProcessingPipeline& pipeline) {
         sf::RenderWindow* win = GraphicsWindow2::initWindow2(1280, 800, "ImageLab Studio (Phase 2) - Priority Scheduler & Memory-Aware History");
         if (!win) return;
+
+        bool proceed = HomePage::runHomePage(*win, "25i-0817_E_A2_P2/All Req Assests");
+        if (!proceed || !win->isOpen()) {
+            delete win;
+            return;
+        }
+
+        int choice = SelectionPage::runSelectionPage(*win, "25i-0817_E_A2_P2/All Req Assests");
+        if (choice == SelectionConstants::CHOICE_NONE || !win->isOpen()) {
+            delete win;
+            return;
+        }
+
+        std::string loadedImagePath = "";
+        if (choice == SelectionConstants::CHOICE_IMAGE_LAB) {
+            bool inputOk = InputPage::runInputPage(*win, "25i-0817_E_A2_P2/All Req Assests", img, width, height, loadedImagePath);
+            if (!inputOk || !win->isOpen()) {
+                delete win;
+                return;
+            }
+
+            EditorPage::runEditorPage(*win, "25i-0817_E_A2_P2/All Req Assests", img, width, height, history, pipeline, loadedImagePath);
+            delete win;
+            return;
+        } else if (choice == SelectionConstants::CHOICE_VISUALIZATION_STACK) {
+            bool inputOk = InputPage::runInputPage(*win, "25i-0817_E_A2_P2/All Req Assests", img, width, height, loadedImagePath);
+            if (!inputOk || !win->isOpen()) {
+                delete win;
+                return;
+            }
+
+            VisPage::runVisPage(*win, "25i-0817_E_A2_P2/All Req Assests", img, width, height, history, pipeline);
+            delete win;
+            return;
+        }
 
         sf::Font font;
         if (!font.loadFromFile("25i-0817_E_A2_P2/assets/fonts/Awesome.ttf")) {

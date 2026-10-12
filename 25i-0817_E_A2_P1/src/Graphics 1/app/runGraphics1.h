@@ -6,6 +6,11 @@
 #include "../canvas/createTextureFromPixels.h"
 #include "../toolbar/detectToolClick.h"
 #include "../animator/loadSpriteSheet.h"
+#include "../homePage/runHomePage.h"
+#include "../selectionPage/runSelectionPage.h"
+#include "../inputPage/runInputPage.h"
+#include "../editorPage/runEditorPage.h"
+#include "../visPage/runVisPage.h"
 #include "handleToolExecution.h"
 #include "renderApp.h"
 #include "../../image.h"
@@ -16,6 +21,41 @@ namespace GraphicsApp {
     void runGraphics1(Pixel**& img, int& width, int& height, HistoryManager& history, ProcessingPipeline& pipeline) {
         sf::RenderWindow* win = GraphicsWindow::initWindow(1280, 800, "ImageLab Studio (Phase 1) - Data Structures & Core Editor");
         if (!win) return;
+
+        bool proceed = HomePage::runHomePage(*win, "25i-0817_E_A2_P1/All Req Assests");
+        if (!proceed || !win->isOpen()) {
+            delete win;
+            return;
+        }
+
+        int choice = SelectionPage::runSelectionPage(*win, "25i-0817_E_A2_P1/All Req Assests");
+        if (choice == SelectionConstants::CHOICE_NONE || !win->isOpen()) {
+            delete win;
+            return;
+        }
+
+        std::string loadedImagePath = "";
+        if (choice == SelectionConstants::CHOICE_IMAGE_LAB) {
+            bool inputOk = InputPage::runInputPage(*win, "25i-0817_E_A2_P1/All Req Assests", img, width, height, loadedImagePath);
+            if (!inputOk || !win->isOpen()) {
+                delete win;
+                return;
+            }
+
+            EditorPage::runEditorPage(*win, "25i-0817_E_A2_P1/All Req Assests", img, width, height, history, pipeline, loadedImagePath);
+            delete win;
+            return;
+        } else if (choice == SelectionConstants::CHOICE_VISUALIZATION_STACK) {
+            bool inputOk = InputPage::runInputPage(*win, "25i-0817_E_A2_P1/All Req Assests", img, width, height, loadedImagePath);
+            if (!inputOk || !win->isOpen()) {
+                delete win;
+                return;
+            }
+
+            VisPage::runVisPage(*win, "25i-0817_E_A2_P1/All Req Assests", img, width, height, history, pipeline);
+            delete win;
+            return;
+        }
 
         sf::Font font;
         if (!GraphicsTheme::loadFont(font, "25i-0817_E_A2_P1/assets/fonts/Awesome.ttf")) {
