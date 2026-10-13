@@ -4,194 +4,372 @@
 
 #include "pipeline/job.h"
 
-// Overloaded helper functions to extract priority, arrival, and barrier properties across types
+// overloaded function to find out the priorities
+
 template <typename T>
+
 int extractJobPriority(const T& item) {
+
     return (int)item;
+
 }
 
 static int extractJobPriority(const Job& item) {
+
     return item.priority;
+
 }
 
+
 template <typename T>
+
 long long extractJobArrival(const T&) {
+
     return 0;
+
 }
 
 static long long extractJobArrival(const Job& item) {
+
     return item.arrivalTime;
+
 }
 
 template <typename T>
-bool extractJobBarrier(const T&) {
+
+bool extractJobBarrier(const T&) { 
+
     return false;
+
 }
 
 static bool extractJobBarrier(const Job& item) {
-    return item.isBarrier();
+
+    return item.isBarrier();// functiionality of job 
+
 }
+
 
 template <class Type>
 class priorityQueueType {
 private:
+
     Type* array;
+
     int maxSize;
+
     int count;
 
+
     int itemPriority(const Type& item) const {
+
         return extractJobPriority(item);
+
     }
 
     long long itemArrival(const Type& item) const {
+
         return extractJobArrival(item);
+
     }
 
     bool itemBarrier(const Type& item) const {
+
         return extractJobBarrier(item);
+
     }
 
 public:
+
+    /////////////////////////////
+
+    // constructor 
+
+    ////////////////////////////
+
+
     priorityQueueType(int queueSize = 100) {
-        if (queueSize <= 0) queueSize = 100;
+       
+        if (queueSize <= 0) 
+        queueSize = 100;
+
         maxSize = queueSize;
+
         count = 0;
+
         array = new Type[maxSize];
+
     }
+
+    /////////////////////////////////////////
+
+
+    // Destructor 
+
+    //////////////////////////////
+
+
 
     ~priorityQueueType() {
+
         delete[] array;
+
         array = nullptr;
+
     }
+
+
+    ///////////////////////////////
+
+
+    // copy constructor 
+
+    ////////////////////////
+
 
     priorityQueueType(const priorityQueueType<Type>& other) {
+
         maxSize = other.maxSize;
+
         count = other.count;
+
         array = new Type[maxSize];
+
         for (int i = 0; i < count; i++) {
+
             array[i] = other.array[i];
+
         }
+
     }
 
+    ///////////////////////////////////////////
+
+    // Equal Opeator 
+
+
+    ///////////////////////////////////
+
+
+
     priorityQueueType<Type>& operator=(const priorityQueueType<Type>& other) {
+
         if (this != &other) {
+
             delete[] array;
+
             maxSize = other.maxSize;
+
             count = other.count;
+
             array = new Type[maxSize];
+
             for (int i = 0; i < count; i++) {
+
                 array[i] = other.array[i];
+
             }
+
         }
+
         return *this;
+
     }
 
     void initializeQueue() {
+
         count = 0;
+
     }
 
     bool isEmptyQueue() const {
+
         return count == 0;
+
     }
 
     bool isFullQueue() const {
+
         return count == maxSize;
+
     }
 
     int size() const {
+
         return count;
+
     }
 
     int capacity() const {
+
         return maxSize;
+
     }
 
     Type getAt(int index) const {
-        if (index < 0 || index >= count) return Type();
+
+        if (index < 0 || index >= count) 
+        return Type();
+
         return array[index];
+
     }
 
-    // Unordered Array enqueue: O(1) amortized
+    ///////////////////////////////////////
+
+    // I chose unordered queue 
+
+    /////////////////////////////
+    
+    //
     void addQueue(const Type& item) {
+
         if (isFullQueue()) {
+
+            // just resize as you mentioned that it can be dynamic 
+
             int newSize = maxSize * 2;
+
             Type* newArray = new Type[newSize];
+
             for (int i = 0; i < count; i++) {
+
                 newArray[i] = array[i];
+
             }
+
             delete[] array;
+
             array = newArray;
+
             maxSize = newSize;
+            
         }
+
         array[count++] = item;
+
     }
 
-    // Finalization Barrier-aware priority selection: O(N)
-    int findBestIndex() const {
-        if (count == 0) return -1;
+    // for deleteto helping to find best index having same value 
 
-        // Step 1: Locate first barrier in queue
+    int findBestIndex() const {
+
+        if (count == 0) 
+        return -1;
+
+        
         int firstBarrierIdx = -1;
+
         for (int i = 0; i < count; i++) {
+
             if (itemBarrier(array[i])) {
+
                 firstBarrierIdx = i;
+
                 break;
-            }
+
+            }// since we need to remove the barieer aas mentioned in phase 2 
+
         }
 
-        // If barrier is at head of queue (all preceding jobs done), run barrier
+        // edge case if at first 
+
         if (firstBarrierIdx == 0) {
             return 0;
         }
 
-        // Priority candidate search space is strictly before first barrier
-        int limit = (firstBarrierIdx > 0) ? firstBarrierIdx : count;
+    
+        int limit = (firstBarrierIdx > 0) ? firstBarrierIdx : count; // iif head then whole array else start 
 
         int bestIdx = 0;
+
         for (int i = 1; i < limit; i++) {
+
             int pI = itemPriority(array[i]);
+
             int pBest = itemPriority(array[bestIdx]);
+
             if (pI < pBest) {
+
                 bestIdx = i;
-            } else if (pI == pBest) {
-                // Ties broken by earliest arrival
+
+            } 
+            else if (pI == pBest) {
+
+              
                 if (itemArrival(array[i]) < itemArrival(array[bestIdx])) {
+
                     bestIdx = i;
+
                 }
+
             }
+
         }
+
         return bestIdx;
+
     }
 
     Type front() const {
+
         if (isEmptyQueue()) {
-            std::cout << "[Empty Priority Queue]\n";
+
+            std::cout << "[Empty Queue]\n";
+
             return Type();
+
         }
-        int bestIdx = findBestIndex();
+        int bestIdx = findBestIndex(); // front always return the max value or the best value 
+
         return array[bestIdx];
+
+
     }
 
     void deleteQueue() {
+
+
         if (isEmptyQueue()) {
-            std::cout << "[Priority Queue Underflow]\n";
+
+            std::cout << "[Already Deleted]\n";
+
             return;
+
         }
+
         int bestIdx = findBestIndex();
+
         for (int i = bestIdx + 1; i < count; i++) {
+
             array[i - 1] = array[i];
+
         }
+
         count--;
+        // just swap next with prev 
+
     }
 
     void print() const {
+
         if (isEmptyQueue()) {
-            std::cout << "[Empty Priority Queue]\n";
+
+            std::cout << "[Empty Queue]\n";
+
             return;
+
         }
+
+
         for (int i = 0; i < count; i++) {
+
             std::cout << "[Job Pri: " << itemPriority(array[i]) << "] ";
+
         }
+
         std::cout << "\n";
+
     }
+    
 };
