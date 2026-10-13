@@ -2,36 +2,35 @@
 #include <iostream>
 #include <string>
 
-// Traits helper to detect priority, arrival, and barrier properties across types
+#include "pipeline/job.h"
+
+// Overloaded helper functions to extract priority, arrival, and barrier properties across types
 template <typename T>
-struct PriorityTraits {
-    template <typename U>
-    static auto getPriority(const U& item, int) -> decltype(item.priority) {
-        return item.priority;
-    }
-    template <typename U>
-    static int getPriority(const U& item, ...) {
-        return item;
-    }
+int extractJobPriority(const T& item) {
+    return (int)item;
+}
 
-    template <typename U>
-    static auto getArrival(const U& item, int) -> decltype(item.arrivalTime) {
-        return item.arrivalTime;
-    }
-    template <typename U>
-    static long long getArrival(const U&, ...) {
-        return 0;
-    }
+static int extractJobPriority(const Job& item) {
+    return item.priority;
+}
 
-    template <typename U>
-    static auto isBarrier(const U& item, int) -> decltype(item.isBarrier()) {
-        return item.isBarrier();
-    }
-    template <typename U>
-    static bool isBarrier(const U& item, ...) {
-        return false;
-    }
-};
+template <typename T>
+long long extractJobArrival(const T&) {
+    return 0;
+}
+
+static long long extractJobArrival(const Job& item) {
+    return item.arrivalTime;
+}
+
+template <typename T>
+bool extractJobBarrier(const T&) {
+    return false;
+}
+
+static bool extractJobBarrier(const Job& item) {
+    return item.isBarrier();
+}
 
 template <class Type>
 class priorityQueueType {
@@ -41,15 +40,15 @@ private:
     int count;
 
     int itemPriority(const Type& item) const {
-        return PriorityTraits<Type>::getPriority(item, 0);
+        return extractJobPriority(item);
     }
 
     long long itemArrival(const Type& item) const {
-        return PriorityTraits<Type>::getArrival(item, 0);
+        return extractJobArrival(item);
     }
 
     bool itemBarrier(const Type& item) const {
-        return PriorityTraits<Type>::isBarrier(item, 0);
+        return extractJobBarrier(item);
     }
 
 public:

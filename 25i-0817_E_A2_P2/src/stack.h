@@ -11,11 +11,15 @@ class stackType
 
 
 Type* array;
+
 int maxStackSize;
+
 int stackTop;
 
 public:
+
 void initializeStack(){
+
     stackTop = 0;
     // you just put the starting index as 0
 
@@ -26,20 +30,31 @@ bool isEmptyStack() const{
     if(stackTop<=0){
 
         cout<<"[empty]\n";
+
         return true;
+
     }
     return false;
+
 }
 
 bool isFullStack() const{
 
     if(stackTop>= maxStackSize){
+
         cout<<"[Stack is Full]\n";
-        return true;   
+
+        return true;  
+
     }
-    else{
+
+    else
+    {
+       
         cout<<"[There is Space]\n";
+
         return false;
+
     }
 }
 
@@ -132,54 +147,95 @@ void print() const{
 }
 
 
-    // Phase 2: Memory-Aware History bottom eviction (Section 7.1)
+    
     Type removeBottom() {
+
         if (stackTop <= 0) {
-            return Type();
+
+            return Type();// return the generic type 
+
         }
+
         Type bottomVal = array[0];
+
         for (int i = 1; i < stackTop; i++) {
+
             array[i - 1] = array[i];
-        }
+
+        } // swap the array 
+
         stackTop--;
         return bottomVal;
     }
 
-    // Phase 2: Batched Push Operation (Section 7.4)
+    
     void pushBatch(const Type items[], int n) {
-        if (n <= 0 || !items) return;
+
+        if (n <= 0 || !items) 
+        return;
+
         if (stackTop + n > maxStackSize) {
+
+            //re sizee 
+
             int newSize = maxStackSize * 2;
+
             if (newSize < stackTop + n) {
+
                 newSize = stackTop + n + 10;
+
             }
+
             Type* newArray = new Type[newSize];
+
             for (int i = 0; i < stackTop; i++) {
+
                 newArray[i] = array[i];
+
             }
+
             delete[] array;
+
             array = newArray;
+
             maxStackSize = newSize;
+
         }
+
         for (int i = 0; i < n; i++) {
-            array[stackTop + i] = items[i];
+
+            array[stackTop + i] = items[i];//populate the next ones 
+
         }
+
         stackTop += n;
+
     }
 
-    // Phase 2: Batched Pop Operation (Section 7.4)
+   
     void popBatch(int n) {
-        if (n <= 0) return;
+
+        if (n <= 0)
+         return;
+
         if (n >= stackTop) {
+
             stackTop = 0;
-        } else {
-            stackTop -= n;
+
         }
+         else {
+
+            stackTop -= n;
+
+        }
+
     }
 
-stackType(int stackSize = 100){
+stackType(int stackSize = 100){ // constructor 
+
     if (stackSize <= 0)
-        stackSize = 100; // for 0 its default 100
+
+        stackSize = 100; 
 
     this->maxStackSize = stackSize;
 
@@ -190,9 +246,13 @@ stackType(int stackSize = 100){
 }
 
 ~stackType(){
+
     delete[] array;
+
     array = nullptr;
+
 }
+// copy constructor 
 
 stackType(const stackType<Type>& otherStack){ 
 
@@ -209,6 +269,9 @@ stackType(const stackType<Type>& otherStack){
     }
 
 }
+
+
+//= operator 
 
 const stackType<Type>& operator=(const stackType<Type>& otherStack){
     
@@ -232,7 +295,7 @@ const stackType<Type>& operator=(const stackType<Type>& otherStack){
 
     return *this;
 
-    // copy constructor by = value 
+    
 }
 
 };
