@@ -10,7 +10,11 @@ tests/verify_operations
 tests/verifyOperations
 25i-0817_E_A2_P1/src/main
 25i-0817_E_A2_P1/tests/test
+25i-0817_E_A2_P1/tests/stackTest
+25i-0817_E_A2_P1/tests/queueTest
 25i-0817_E_A2_P2/src/main
 25i-0817_E_A2_P2/tests/test
 25i-0817_E_A2_P2/tests/verify_operations
 25i-0817_E_A2_P2/tests/verifyOperations
+*/images/out_*.ppm
+images/out_*.ppm

@@ -49,7 +49,7 @@ void printMenu() {
     cout << "Enter your choice: ";
 }
 
-int main(int argc, char* argv[]) {
+int main() {
     Pixel** activeImage = nullptr;
     int width = 0;
     int height = 0;
@@ -58,28 +58,19 @@ int main(int argc, char* argv[]) {
     HistoryManager history(50);
     ProcessingPipeline pipeline(30);
 
-    if (argc > 1 && string(argv[1]) == "--gui") {
-        cout << "[ImageLab] Launching Graphical Studio GUI directly...\n";
+    cout << "========================================================\n";
+    cout << "             IMAGELAB STUDIO: MODE SELECTION            \n";
+    cout << "========================================================\n";
+    cout << " [1] Terminal / Console Menu Mode\n";
+    cout << " [2] Interactive Graphical Studio Mode (SFML)\n";
+    cout << "========================================================\n";
+    cout << "Enter interface choice: ";
+    int startMode = 1;
+    if (cin >> startMode && startMode == 2) {
+        cout << "[ImageLab] Launching Interactive Graphical Studio...\n";
         GraphicsApp::runGraphics1(activeImage, width, height, history, pipeline);
         if (activeImage) ReadPath::freeImage(activeImage, height);
         return 0;
-    }
-
-    if (argc <= 1 || (string(argv[1]) != "--cli" && string(argv[1]) != "-c")) {
-        cout << "========================================================\n";
-        cout << "             IMAGELAB STUDIO: MODE SELECTION            \n";
-        cout << "========================================================\n";
-        cout << " [1] Terminal / Console Menu Mode\n";
-        cout << " [2] Interactive Graphical Studio Mode (SFML)\n";
-        cout << "========================================================\n";
-        cout << "Enter interface choice: ";
-        int startMode = 1;
-        if (cin >> startMode && startMode == 2) {
-            cout << "[ImageLab] Launching Interactive Graphical Studio...\n";
-            GraphicsApp::runGraphics1(activeImage, width, height, history, pipeline);
-            if (activeImage) ReadPath::freeImage(activeImage, height);
-            return 0;
-        }
     }
 
     cout << "\nWelcome to ImageLab (DSA Assignment 2 - Phase 1)\n";

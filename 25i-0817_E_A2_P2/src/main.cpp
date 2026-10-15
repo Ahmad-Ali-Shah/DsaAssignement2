@@ -62,7 +62,7 @@ void printMenu() {
     cout << "Enter choice: ";
 }
 
-int main(int argc, char* argv[]) {
+int main() {
     Pixel** currentImage = nullptr;
     int width = 0;
     int height = 0;
@@ -71,28 +71,19 @@ int main(int argc, char* argv[]) {
     HistoryManager history(5 * 1024 * 1024);
     ProcessingPipeline pipeline(100, SchedulerMode::PRIORITY);
 
-    if (argc > 1 && string(argv[1]) == "--gui") {
-        cout << "[ImageLab P2] Launching Graphical Studio GUI directly...\n";
+    cout << "========================================================\n";
+    cout << "           IMAGELAB STUDIO P2: MODE SELECTION           \n";
+    cout << "========================================================\n";
+    cout << " [1] Terminal / Console Menu Mode\n";
+    cout << " [2] Interactive Graphical Studio Mode (SFML)\n";
+    cout << "========================================================\n";
+    cout << "Enter interface choice: ";
+    int startMode = 1;
+    if (cin >> startMode && startMode == 2) {
+        cout << "[ImageLab P2] Launching Interactive Graphical Studio...\n";
         GraphicsApp2::runGraphics2(currentImage, width, height, history, pipeline);
         if (currentImage) ReadPath::freeImage(currentImage, height);
         return 0;
-    }
-
-    if (argc <= 1 || (string(argv[1]) != "--cli" && string(argv[1]) != "-c")) {
-        cout << "========================================================\n";
-        cout << "           IMAGELAB STUDIO P2: MODE SELECTION           \n";
-        cout << "========================================================\n";
-        cout << " [1] Terminal / Console Menu Mode\n";
-        cout << " [2] Interactive Graphical Studio Mode (SFML)\n";
-        cout << "========================================================\n";
-        cout << "Enter interface choice: ";
-        int startMode = 1;
-        if (cin >> startMode && startMode == 2) {
-            cout << "[ImageLab P2] Launching Interactive Graphical Studio...\n";
-            GraphicsApp2::runGraphics2(currentImage, width, height, history, pipeline);
-            if (currentImage) ReadPath::freeImage(currentImage, height);
-            return 0;
-        }
     }
 
     int choice = -1;
