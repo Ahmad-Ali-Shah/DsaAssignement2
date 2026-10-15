@@ -10,14 +10,6 @@ Directory Structure (C++ Headers & Source Files):
 │   ├── benchmarks.h
 │   ├── CircularQueue.h
 │   ├── coreImageFunctions
-│   │   ├── APPLYopperations
-│   │   │   ├── applyBlur.h
-│   │   │   ├── applyBrightness.h
-│   │   │   ├── applyCrop.h
-│   │   │   ├── applyFlip.h
-│   │   │   ├── applyGreyScale.h
-│   │   │   ├── applyResize.h
-│   │   │   └── applyRotation.h
 │   │   ├── blur
 │   │   │   ├── applyBlur.h
 │   │   │   └── blur.h
@@ -29,6 +21,7 @@ Directory Structure (C++ Headers & Source Files):
 │   │   ├── bucketFill
 │   │   │   ├── bucketFill_QueueBased.h
 │   │   │   └── bucketFill_StructBased.h
+│   │   ├── bucketFill.h
 │   │   ├── bucketFill_QueueBased.h
 │   │   ├── bucketFill_StructBased.h
 │   │   ├── Crop
