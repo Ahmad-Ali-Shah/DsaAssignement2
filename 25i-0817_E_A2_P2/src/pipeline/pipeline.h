@@ -13,101 +13,167 @@
 #include "../read/write.h"
 #include "job.h"
 
-// Scheduler Mode constants (no enum)
 namespace SchedulerMode {
+
     const int FIFO = 0;
+
     const int PRIORITY = 1;
+
 }
 
 struct ExecutionStats {
+
     int totalJobs;
+
     double avgWaitTime;
+
     double avgCompletionTime;
+
     double avgP1WaitTime;
+
 };
 
 class ProcessingPipeline {
+
 private:
-    int mode; // SchedulerMode::FIFO or PRIORITY
+
+    int mode; 
     queueType<Job> fifoQueue;
+
     priorityQueueType<Job> prioQueue;
+    
     int nextJobId;
+
     int addCount;
+
     int deleteCount;
+
     int maxRecordedQueueSize;
+
     long long globalArrivalSeq;
 
+
 public:
-    ProcessingPipeline(int queueCapacity = 100, int m = SchedulerMode::PRIORITY)
-        : mode(m), fifoQueue(queueCapacity), prioQueue(queueCapacity),
-          nextJobId(1), addCount(0), deleteCount(0), maxRecordedQueueSize(0), globalArrivalSeq(0) {}
+    ProcessingPipeline(int queueCapacity = 100, int m = SchedulerMode::PRIORITY): mode(m), fifoQueue(queueCapacity), prioQueue(queueCapacity), nextJobId(1), addCount(0), deleteCount(0), maxRecordedQueueSize(0), globalArrivalSeq(0) {}
 
     void setMode(int m) {
         mode = m;
-        std::cout << "[Pipeline] Scheduler mode set to: "
-                  << (mode == SchedulerMode::FIFO ? "FIFO (Phase 1)" : "PRIORITY (Phase 2)") << "\n";
+        std::cout << "[Pipeline] Scheduler mode set to: " << (mode == SchedulerMode::FIFO ? "FIFO (Phase 1)" : "PRIORITY (Phase 2)") << "\n";
     }
 
-    int getMode() const { return mode; }
+    int getMode() const {
+         return mode;
+         }
 
     bool addJob(Job job) {
+
         job.id = nextJobId++;
+
         job.arrivalTime = ++globalArrivalSeq;
 
+
         if (mode == SchedulerMode::FIFO) {
+
             if (fifoQueue.isFullQueue()) {
+
                 std::cout << "[Pipeline Full] Cannot add job: " << job.name << "\n";
+
                 return false;
+
             }
+
             fifoQueue.addQueue(job);
-            if (fifoQueue.size() > maxRecordedQueueSize) maxRecordedQueueSize = fifoQueue.size();
-        } else {
+
+            if (fifoQueue.size() > maxRecordedQueueSize)
+             maxRecordedQueueSize = fifoQueue.size();
+            
+        } 
+        else {
+
             if (prioQueue.isFullQueue()) {
+                
                 std::cout << "[Pipeline Full] Cannot add job: " << job.name << "\n";
+
                 return false;
+
             }
+
             prioQueue.addQueue(job);
-            if (prioQueue.size() > maxRecordedQueueSize) maxRecordedQueueSize = prioQueue.size();
+
+            if (prioQueue.size() > maxRecordedQueueSize)
+             maxRecordedQueueSize = prioQueue.size();
+
         }
 
         addCount++;
-        std::cout << "[Pipeline] Added Job #" << job.id << " [" << job.name
-                  << " | Pri: " << job.priority << " | Seq: " << job.arrivalTime << "]\n";
+
+
+        std::cout << "[Pipeline] Added Job #" << job.id << " [" << job.name  << " | Pri: " << job.priority << " | Seq: " << job.arrivalTime << "]\n";
+
         return true;
+
     }
 
     int getCurrentQueueSize() const {
+
         return (mode == SchedulerMode::FIFO) ? fifoQueue.size() : prioQueue.size();
+
     }
 
-    int size() const { return getCurrentQueueSize(); }
-    void clearQueue() { clearJobs(); }
+    int size() const { 
+        return getCurrentQueueSize(); 
+    }
+    void clearQueue() {
+         clearJobs(); 
+        }
 
     Job peekNextJob() const {
-        if (isEmpty()) return Job();
+
+        if (isEmpty()) 
+        return Job();
+
         return (mode == SchedulerMode::FIFO) ? fifoQueue.front() : prioQueue.front();
+
     }
 
     bool isEmpty() const {
+
         return (mode == SchedulerMode::FIFO) ? fifoQueue.isEmptyQueue() : prioQueue.isEmptyQueue();
+
     }
 
     void listPendingJobs() const {
+
         if (isEmpty()) {
+
             std::cout << "[Pipeline] No pending jobs.\n";
+
             return;
+
         }
+
         std::cout << "\n--- Pending Jobs (" << (mode == SchedulerMode::FIFO ? "FIFO" : "PRIORITY") << ") ---\n";
+
         int sz = getCurrentQueueSize();
+
         for (int i = 0; i < sz; i++) {
+
             Job j = (mode == SchedulerMode::FIFO) ? fifoQueue.getAt(i) : prioQueue.getAt(i);
-            std::cout << "  [" << (i + 1) << "] Job #" << j.id << ": " << j.name
-                      << " (Priority: " << j.priority << ", Arr: " << j.arrivalTime << ")";
-            if (j.isBarrier()) std::cout << " [BARRIER]";
-            if (j.isCancelled) std::cout << " (CANCELLED)";
+
+
+            std::cout << "  [" << (i + 1) << "] Job #" << j.id << ": " << j.name << " (Priority: " << j.priority << ", Arr: " << j.arrivalTime << ")";
+
+            if (j.isBarrier()) 
+            std::cout << " [BARRIER]";
+
+            if (j.isCancelled) 
+            std::cout << " (CANCELLED)";
+
             std::cout << "\n";
         }
+
         std::cout << "------------------------------------\n";
+        
     }
 
     int getPendingJobs(Job out[], int maxCount) const {

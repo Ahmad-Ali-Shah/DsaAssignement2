@@ -5,6 +5,21 @@
 
 namespace VisPage {
 
+    struct CellTextDrawer {
+        sf::RenderWindow& window;
+        const sf::Font& font;
+
+        void operator()(const std::string& str, float tx, float ty, sf::Color clr, int sz = 14) const {
+            sf::Text t;
+            t.setFont(font);
+            t.setString(str);
+            t.setCharacterSize(sz);
+            t.setFillColor(clr);
+            t.setPosition(tx, ty);
+            window.draw(t);
+        }
+    };
+
     void renderDataWindow(sf::RenderWindow& window,
                           const sf::Font& font,
                           const sf::Font& titleFont,
@@ -247,15 +262,7 @@ namespace VisPage {
             thBox.setFillColor(sf::Color(18, 45, 88));
             window.draw(thBox);
 
-            auto drawText = [&](const std::string& str, float tx, float ty, sf::Color clr, int sz = 14) {
-                sf::Text t;
-                t.setFont(font);
-                t.setString(str);
-                t.setCharacterSize(sz);
-                t.setFillColor(clr);
-                t.setPosition(tx, ty);
-                window.draw(t);
-            };
+            CellTextDrawer drawText{window, font};
 
             drawText("VARIABLE", startX + 16.0f, tblY + 5.0f, sf::Color(255, 225, 70), 14);
             drawText("CURRENT VALUE", startX + 210.0f, tblY + 5.0f, sf::Color(255, 225, 70), 14);
@@ -390,15 +397,7 @@ namespace VisPage {
             thBox.setFillColor(sf::Color(14, 52, 55));
             window.draw(thBox);
 
-            auto drawText = [&](const std::string& str, float tx, float ty, sf::Color clr, int sz = 14) {
-                sf::Text t;
-                t.setFont(font);
-                t.setString(str);
-                t.setCharacterSize(sz);
-                t.setFillColor(clr);
-                t.setPosition(tx, ty);
-                window.draw(t);
-            };
+            CellTextDrawer drawText{window, font};
 
             drawText("VARIABLE", startX + 16.0f, tblY + 6.0f, sf::Color(255, 225, 70), 14);
             drawText("CURRENT VALUE", startX + 210.0f, tblY + 6.0f, sf::Color(255, 225, 70), 14);
