@@ -14,10 +14,14 @@
 
 namespace MybucketFill{
 
-    static void ReplaceNearOne(Pixel** InputImage , double width , double height  , int startxCoor , int startyCoor,  unsigned int newR, unsigned int newG, unsigned int newB ){
+    inline void ReplaceNearOne(Pixel** InputImage , double width , double height  , int startxCoor , int startyCoor,  unsigned int newR, unsigned int newG, unsigned int newB ){
 
         int w = static_cast<int>(width);
         int h = static_cast<int>(height);
+
+        if (w <= 0 || h <= 0) {
+            return;
+        }
 
         // Boundary check for starting coordinate
         if (startxCoor < 0 || startxCoor >= w || startyCoor < 0 || startyCoor >= h) {
