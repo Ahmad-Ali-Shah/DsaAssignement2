@@ -7,7 +7,7 @@
 #include "../../coreImageFunctions/brightness.h"
 #include "../../coreImageFunctions/greyScale.h"
 #include "../../coreImageFunctions/blur.h"
-#include "../../coreImageFunctions/Crop.h"
+#include "../../coreImageFunctions/crop.h"
 #include "../../coreImageFunctions/resize.h"
 #include "../../coreImageFunctions/bucketFill/bucketFillQueueBased.h"
 #include "../../read/mainLogic/writer.h"

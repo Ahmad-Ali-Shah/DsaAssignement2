@@ -6,7 +6,7 @@
 #include "coreImageFunctions/greyScale.h"
 #include "coreImageFunctions/flip.h"
 #include "coreImageFunctions/rotation.h"
-#include "coreImageFunctions/Crop.h"
+#include "coreImageFunctions/crop.h"
 #include "coreImageFunctions/resize.h"
 #include "coreImageFunctions/blur.h"
 #include "coreImageFunctions/bucketFillStructBased.h"

@@ -304,10 +304,10 @@ namespace VisPage {
             EditorPage::renderEditorBanner(window, vTex.banner, font, currentOp);
 
             if (stackWin.visible) {
-                renderDataWindow(window, font, titleFont, stackWin, mainStack, mainTop, auxStack, auxTop, queueArr, queueFront, queueRear, queueCount, statusMsg, stackCloseRect, stackMinRect);
+                renderDataWindow(window, font, titleFont, stackWin, mainStack, mainTop, auxStack, auxTop, queueArr, queueFront, queueRear, queueCount, stackCloseRect, stackMinRect);
             }
             if (queueWin.visible) {
-                renderDataWindow(window, font, titleFont, queueWin, mainStack, mainTop, auxStack, auxTop, queueArr, queueFront, queueRear, queueCount, statusMsg, queueCloseRect, queueMinRect);
+                renderDataWindow(window, font, titleFont, queueWin, mainStack, mainTop, auxStack, auxTop, queueArr, queueFront, queueRear, queueCount, queueCloseRect, queueMinRect);
             }
             if (modal.active) {
                 EditorPage::renderParameterModal(window, font, titleFont, modal, modalOkRect, modalCancelRect);

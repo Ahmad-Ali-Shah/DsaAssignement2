@@ -29,10 +29,6 @@ namespace VisPage {
                             int& queueCount,
                             std::string& currentOp,
                             std::string& statusMsg) {
-        (void)queueArr;
-        (void)queueFront;
-        (void)queueRear;
-        (void)queueCount;
         if (anim.animType == VisConstants::ANIM_IDLE) return;
 
         anim.timer += dt;

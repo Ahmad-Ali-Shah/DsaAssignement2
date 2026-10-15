@@ -10,8 +10,7 @@
 #pragma once
 #include <cmath> // for sine cosine and other functions 
 #include "../../image.h"
-#include "../Crop.h"
-
+#include "../crop.h"
 
 namespace rotateObject{
     

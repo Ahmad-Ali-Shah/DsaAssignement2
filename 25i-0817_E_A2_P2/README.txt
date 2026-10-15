@@ -150,9 +150,7 @@ Directory Structure (C++ Headers & Source Files):
 │   │   │   ├── reader.h
 │   │   │   └── writer.h
 │   │   ├── read.h
-│   │   ├── readImage.h
-│   │   ├── write.h
-│   │   └── writeImage.h
+│   │   └── write.h
 │   └── stack.h
 └── tests
     ├── test.cpp

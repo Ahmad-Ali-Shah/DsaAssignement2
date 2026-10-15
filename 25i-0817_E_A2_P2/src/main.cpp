@@ -19,7 +19,7 @@
 #include "coreImageFunctions/flip/applyFlip.h"
 #include "coreImageFunctions/rotation/rotation.h"
 #include "coreImageFunctions/rotation/applyRotation.h"
-#include "coreImageFunctions/Crop/Crop.h"
+#include "coreImageFunctions/Crop/crop.h"
 #include "coreImageFunctions/Crop/applyCrop.h"
 #include "coreImageFunctions/resize/resize.h"
 #include "coreImageFunctions/resize/applyResize.h"

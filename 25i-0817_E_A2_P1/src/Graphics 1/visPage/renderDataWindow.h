@@ -32,10 +32,8 @@ namespace VisPage {
                           int queueFront,
                           int queueRear,
                           int queueCount,
-                          const std::string& statusMsg,
                           sf::FloatRect& closeBtnRect,
                           sf::FloatRect& minBtnRect) {
-        (void)statusMsg;
         if (!subWin.visible) return;
 
         float winW = static_cast<float>(window.getSize().x);

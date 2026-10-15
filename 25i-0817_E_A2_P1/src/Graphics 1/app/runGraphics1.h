@@ -20,7 +20,7 @@
 
 namespace GraphicsApp {
     void runGraphics1(Pixel**& img, int& width, int& height, HistoryManager& history, ProcessingPipeline& pipeline) {
-        sf::RenderWindow* win = GraphicsWindow::initWindow(1280, 800, "ImageLab Studio (Phase 1) - Data Structures & Core Editor");
+        sf::RenderWindow* win = GraphicsWindow::initWindow(1280, 800, "ImageLab Studio (Phase 1)");
         if (!win) return;
 
         std::string assetDir = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P1/All Req Assests", ".");

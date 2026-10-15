@@ -1,6 +1,6 @@
 #pragma once
 #include "../../image.h"
-#include "../Crop.h"
+#include "../crop.h"
 
 namespace flipAxis{
 

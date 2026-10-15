@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "../image.h"
-#include "readImage.h"
+#include "mainLogic/reader.h"
 
 namespace ReadPath {
 

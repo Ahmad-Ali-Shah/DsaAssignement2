@@ -1,6 +1,6 @@
 #pragma once
 #include "../../image.h"
-#include "Crop.h"
+#include "crop.h"
 
 namespace myCrop {
     Pixel** applyCrop(Pixel** img, int& width, int& height, int startX, int startY, int cropW, int cropH) {

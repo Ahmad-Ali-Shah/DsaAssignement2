@@ -7,7 +7,7 @@
 #include "../../coreImageFunctions/flip.h"
 #include "../../coreImageFunctions/brightness.h"
 #include "../../coreImageFunctions/greyScale.h"
-#include "../../coreImageFunctions/Crop.h"
+#include "../../coreImageFunctions/crop.h"
 #include "../../history/history.h"
 #include "../../pipeline/pipeline.h"
 #include "../../read/read.h"
