@@ -8,7 +8,7 @@ Directory Structure (C++ Headers & Source Files):
 25i-0817_E_A2_P2
 ├── src
 │   ├── benchmarks.h
-│   ├── CircularQueue.h
+│   ├── circularQueue.h
 │   ├── coreImageFunctions
 │   │   ├── blur
 │   │   │   ├── applyBlur.h
@@ -19,15 +19,15 @@ Directory Structure (C++ Headers & Source Files):
 │   │   │   └── brightness.h
 │   │   ├── brightness.h
 │   │   ├── bucketFill
-│   │   │   ├── bucketFill_QueueBased.h
-│   │   │   └── bucketFill_StructBased.h
+│   │   │   ├── bucketFillQueueBased.h
+│   │   │   └── bucketFillStructBased.h
 │   │   ├── bucketFill.h
-│   │   ├── bucketFill_QueueBased.h
-│   │   ├── bucketFill_StructBased.h
-│   │   ├── Crop
+│   │   ├── bucketFillQueueBased.h
+│   │   ├── bucketFillStructBased.h
+│   │   ├── crop
 │   │   │   ├── applyCrop.h
-│   │   │   └── Crop.h
-│   │   ├── Crop.h
+│   │   │   └── crop.h
+│   │   ├── crop.h
 │   │   ├── flip
 │   │   │   ├── applyFlip.h
 │   │   │   └── flip.h
@@ -122,6 +122,8 @@ Directory Structure (C++ Headers & Source Files):
 │   ├── history
 │   │   ├── command.h
 │   │   ├── history.h
+│   │   ├── historyCoalescing.h
+│   │   ├── historyGridHelper.h
 │   │   └── historyRecord.h
 │   ├── image.h
 │   ├── inspector
@@ -130,7 +132,8 @@ Directory Structure (C++ Headers & Source Files):
 │   ├── main.cpp
 │   ├── pipeline
 │   │   ├── job.h
-│   │   └── pipeline.h
+│   │   ├── pipeline.h
+│   │   └── workloadBenchmark.h
 │   ├── priorityQueue.h
 │   ├── read
 │   │   ├── delete.h
@@ -153,7 +156,7 @@ Directory Structure (C++ Headers & Source Files):
 │   └── stack.h
 └── tests
     ├── test.cpp
-    └── verify_operations.cpp
+    └── verifyOperations.cpp
 
 37 directories, 119 files (C++ Source and Header Files)
 
@@ -182,8 +185,8 @@ How to Build and Run (From 25i-0817_E_A2_P2 folder):
    ./tests/test
 
 5. Compile and run the image verification runner:
-   g++ -std=c++17 -Wall -Wextra -Isrc tests/verify_operations.cpp -lsfml-graphics -lsfml-system -o tests/verify_operations
-   ./tests/verify_operations
+   g++ -std=c++17 -Wall -Wextra -Isrc tests/verifyOperations.cpp -lsfml-graphics -lsfml-system -o tests/verifyOperations
+   ./tests/verifyOperations
 
 Key Architectural Namespaces:
 -----------------------------

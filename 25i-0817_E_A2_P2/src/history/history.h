@@ -3,6 +3,8 @@
 #include <string>
 #include "../stack.h"
 #include "historyRecord.h"
+#include "historyGridHelper.h"
+#include "historyCoalescing.h"
 #include "../coreImageFunctions/rotation/applyRotation.h"
 #include "../coreImageFunctions/flip/applyFlip.h"
 #include "../coreImageFunctions/brightness/applyBrightness.h"
@@ -11,34 +13,22 @@ class HistoryManager {
 private:
     stackType<HistoryRecord> undoStack;
     stackType<HistoryRecord> redoStack;
-    size_t memoryBudgetBytes;
-    size_t currentMemoryUsageBytes;
+    unsigned int memoryBudgetBytes;
+    unsigned int currentMemoryUsageBytes;
     int discardedRecordsCount;
     int pushCount;
     int popCount;
     long long sequenceCounter;
 
     Pixel** cloneGrid(Pixel** src, int w, int h) {
-        if (!src || w <= 0 || h <= 0) return nullptr;
-        Pixel** copy = new Pixel*[h];
-        for (int y = 0; y < h; y++) {
-            copy[y] = new Pixel[w];
-            for (int x = 0; x < w; x++) {
-                copy[y][x] = src[y][x];
-            }
-        }
-        return copy;
+        return HistoryGridHelper::cloneGrid(src, w, h);
     }
 
     void freeGrid(Pixel** grid, int h) {
-        if (!grid || h <= 0) return;
-        for (int y = 0; y < h; y++) {
-            delete[] grid[y];
-        }
-        delete[] grid;
+        HistoryGridHelper::freeGrid(grid, h);
     }
 
-    void evictOldestRecords(size_t neededBytes) {
+    void evictOldestRecords(unsigned int neededBytes) {
         while (currentMemoryUsageBytes + neededBytes > memoryBudgetBytes && !undoStack.isEmptyStack()) {
             HistoryRecord oldest = undoStack.removeBottom();
             currentMemoryUsageBytes = (currentMemoryUsageBytes >= oldest.estimatedMemoryBytes)
@@ -62,7 +52,7 @@ private:
     }
 
 public:
-    HistoryManager(size_t budgetBytes = 50 * 1024 * 1024, int stackCap = 100)
+    HistoryManager(unsigned int budgetBytes = 50 * 1024 * 1024, int stackCap = 100)
         : undoStack(stackCap), redoStack(stackCap),
           memoryBudgetBytes(budgetBytes), currentMemoryUsageBytes(0),
           discardedRecordsCount(0), pushCount(0), popCount(0), sequenceCounter(0) {}
@@ -76,13 +66,13 @@ public:
         clearRedoStack();
     }
 
-    void setMemoryBudget(size_t budgetBytes) {
+    void setMemoryBudget(unsigned int budgetBytes) {
         memoryBudgetBytes = budgetBytes;
         evictOldestRecords(0);
     }
 
-    size_t getMemoryBudget() const { return memoryBudgetBytes; }
-    size_t getCurrentMemoryUsage() const { return currentMemoryUsageBytes; }
+    unsigned int getMemoryBudget() const { return memoryBudgetBytes; }
+    unsigned int getCurrentMemoryUsage() const { return currentMemoryUsageBytes; }
     int getDiscardedRecordsCount() const { return discardedRecordsCount; }
 
     // --- Record Compact Operations ---
@@ -158,22 +148,10 @@ public:
             topRec.opName = "Coalesced Brightness (" + std::to_string((int)topRec.brightnessDelta) + ")";
 
             // Merge clipped pixels without overwriting earlier original values
-            for (int i = 0; i < tempCount; i++) {
-                bool alreadyTracked = false;
-                for (int j = 0; j < topRec.clippedCount; j++) {
-                    if (topRec.clippedPixels[j].x == currentClipped[i].x &&
-                        topRec.clippedPixels[j].y == currentClipped[i].y) {
-                        alreadyTracked = true;
-                        break;
-                    }
-                }
-                if (!alreadyTracked) {
-                    topRec.addClippedPixel(currentClipped[i]);
-                }
-            }
+            HistoryCoalescing::mergeClippedPixels(topRec, currentClipped, tempCount);
             delete[] currentClipped;
 
-            size_t oldMem = topRec.estimatedMemoryBytes;
+            unsigned int oldMem = topRec.estimatedMemoryBytes;
             topRec.calculateMemory();
             currentMemoryUsageBytes = (currentMemoryUsageBytes >= oldMem) ? (currentMemoryUsageBytes - oldMem) : 0;
 

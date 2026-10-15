@@ -1,12 +1,12 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "../CircularQueue.h"
+#include "../circularQueue.h"
 #include "../history/history.h"
 #include "../coreImageFunctions/resize.h"
 #include "../coreImageFunctions/blur.h"
-#include "../coreImageFunctions/bucketFill_StructBased.h"
-#include "../coreImageFunctions/bucketFill_QueueBased.h"
+#include "../coreImageFunctions/bucketFillStructBased.h"
+#include "../coreImageFunctions/bucketFillQueueBased.h"
 #include "../read/write.h"
 #include "job.h"
 

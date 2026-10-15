@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../src/CircularQueue.h"
+#include "../src/circularQueue.h"
 
 using namespace std;
 

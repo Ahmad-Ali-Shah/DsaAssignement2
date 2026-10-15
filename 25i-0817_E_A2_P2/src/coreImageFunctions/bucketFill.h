@@ -1,3 +1,3 @@
 #pragma once
-#include "bucketFill/bucketFill_StructBased.h"
-#include "bucketFill/bucketFill_QueueBased.h"
+#include "bucketFill/bucketFillStructBased.h"
+#include "bucketFill/bucketFillQueueBased.h"

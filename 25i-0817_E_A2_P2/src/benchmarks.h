@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <chrono>
 #include "stack.h"
-#include "CircularQueue.h"
+#include "circularQueue.h"
 
 class BenchmarkRunner {
 public:

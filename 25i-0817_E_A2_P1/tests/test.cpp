@@ -3,9 +3,9 @@
 #include <cassert>
 #include "../src/image.h"
 #include "../src/stack.h"
-#include "../src/CircularQueue.h"
-#include "../src/coreImageFunctions/bucketFill_StructBased.h"
-#include "../src/coreImageFunctions/bucketFill_QueueBased.h"
+#include "../src/circularQueue.h"
+#include "../src/coreImageFunctions/bucketFillStructBased.h"
+#include "../src/coreImageFunctions/bucketFillQueueBased.h"
 #include "../src/history/history.h"
 #include "../src/pipeline/pipeline.h"
 

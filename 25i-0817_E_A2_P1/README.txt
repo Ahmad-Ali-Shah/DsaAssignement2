@@ -7,7 +7,7 @@ Directory Structure (C++ Headers & Source Files):
 -------------------------------------------------
 25i-0817_E_A2_P1
 ├── src
-│   ├── CircularQueue.h
+│   ├── circularQueue.h
 │   ├── coreImageFunctions
 │   │   ├── blur
 │   │   │   ├── applyBlur.h
@@ -18,15 +18,15 @@ Directory Structure (C++ Headers & Source Files):
 │   │   │   └── brightness.h
 │   │   ├── brightness.h
 │   │   ├── bucketFill
-│   │   │   ├── bucketFill_QueueBased.h
-│   │   │   └── bucketFill_StructBased.h
+│   │   │   ├── bucketFillQueueBased.h
+│   │   │   └── bucketFillStructBased.h
 │   │   ├── bucketFill.h
-│   │   ├── bucketFill_QueueBased.h
-│   │   ├── bucketFill_StructBased.h
-│   │   ├── Crop
+│   │   ├── bucketFillQueueBased.h
+│   │   ├── bucketFillStructBased.h
+│   │   ├── crop
 │   │   │   ├── applyCrop.h
-│   │   │   └── Crop.h
-│   │   ├── Crop.h
+│   │   │   └── crop.h
+│   │   ├── crop.h
 │   │   ├── flip
 │   │   │   ├── applyFlip.h
 │   │   │   └── flip.h

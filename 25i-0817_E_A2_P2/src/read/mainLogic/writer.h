@@ -15,7 +15,7 @@ namespace ReadPath {
         std::string ext = "";
         if (OutputPath.length() >= 4) {
             ext = OutputPath.substr(OutputPath.length() - 4);
-            for (size_t i = 0; i < ext.length(); i++) {
+            for (int i = 0; i < (int)ext.length(); i++) {
                 if (ext[i] >= 'A' && ext[i] <= 'Z') {
                     ext[i] = static_cast<char>(ext[i] + 32);
                 }
@@ -24,7 +24,7 @@ namespace ReadPath {
         std::string ext5 = "";
         if (OutputPath.length() >= 5) {
             ext5 = OutputPath.substr(OutputPath.length() - 5);
-            for (size_t i = 0; i < ext5.length(); i++) {
+            for (int i = 0; i < (int)ext5.length(); i++) {
                 if (ext5[i] >= 'A' && ext5[i] <= 'Z') {
                     ext5[i] = static_cast<char>(ext5[i] + 32);
                 }

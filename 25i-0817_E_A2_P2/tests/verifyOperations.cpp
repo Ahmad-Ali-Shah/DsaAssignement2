@@ -17,8 +17,8 @@
 #include "../src/coreImageFunctions/Crop/applyCrop.h"
 #include "../src/coreImageFunctions/resize/applyResize.h"
 #include "../src/coreImageFunctions/blur/applyBlur.h"
-#include "../src/coreImageFunctions/bucketFill/bucketFill_StructBased.h"
-#include "../src/coreImageFunctions/bucketFill/bucketFill_QueueBased.h"
+#include "../src/coreImageFunctions/bucketFill/bucketFillStructBased.h"
+#include "../src/coreImageFunctions/bucketFill/bucketFillQueueBased.h"
 
 using namespace std;
 

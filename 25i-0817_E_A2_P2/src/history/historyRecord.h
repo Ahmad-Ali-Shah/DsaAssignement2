@@ -24,7 +24,7 @@ struct HistoryRecord {
     std::string opName;
     int opType;
     long long sequenceNumber;
-    size_t estimatedMemoryBytes;
+    unsigned int estimatedMemoryBytes;
 
     // Affected region bounding box
     int startX, startY;
@@ -95,14 +95,14 @@ struct HistoryRecord {
     void calculateMemory() {
         estimatedMemoryBytes = sizeof(HistoryRecord);
         if (clippedCapacity > 0) {
-            estimatedMemoryBytes += (size_t)clippedCapacity * sizeof(ClippedPixel);
+            estimatedMemoryBytes += (unsigned int)clippedCapacity * sizeof(ClippedPixel);
         }
         if (changedCapacity > 0) {
-            estimatedMemoryBytes += (size_t)changedCapacity * sizeof(Point);
+            estimatedMemoryBytes += (unsigned int)changedCapacity * sizeof(Point);
         }
         if (savedGrid && savedW > 0 && savedH > 0) {
-            estimatedMemoryBytes += (size_t)savedW * savedH * sizeof(Pixel);
-            estimatedMemoryBytes += (size_t)savedH * sizeof(Pixel*);
+            estimatedMemoryBytes += (unsigned int)savedW * savedH * sizeof(Pixel);
+            estimatedMemoryBytes += (unsigned int)savedH * sizeof(Pixel*);
         }
     }
 

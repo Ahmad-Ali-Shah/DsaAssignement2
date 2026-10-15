@@ -14,8 +14,8 @@ namespace GraphicsMemory {
         box.setOutlineThickness(1.0f);
         win.draw(box);
 
-        size_t used = history.getCurrentMemoryUsage();
-        size_t budget = history.getMemoryBudget();
+        unsigned int used = history.getCurrentMemoryUsage();
+        unsigned int budget = history.getMemoryBudget();
         float ratio = (budget > 0) ? (static_cast<float>(used) / static_cast<float>(budget)) : 0.0f;
 
         sf::Color barCol = (ratio > 0.85f) ? sf::Color(255, 60, 60) : sf::Color(0, 204, 255);

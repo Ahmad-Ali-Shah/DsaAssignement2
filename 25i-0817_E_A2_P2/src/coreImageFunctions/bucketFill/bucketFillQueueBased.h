@@ -1,6 +1,6 @@
 #pragma once
 #include "../../image.h"
-#include "../../CircularQueue.h"
+#include "../../circularQueue.h"
 
 /////////////////////////////////////////
 

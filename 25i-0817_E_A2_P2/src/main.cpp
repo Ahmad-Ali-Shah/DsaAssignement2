@@ -25,8 +25,8 @@
 #include "coreImageFunctions/resize/applyResize.h"
 #include "coreImageFunctions/blur/blur.h"
 #include "coreImageFunctions/blur/applyBlur.h"
-#include "coreImageFunctions/bucketFill/bucketFill_StructBased.h"
-#include "coreImageFunctions/bucketFill/bucketFill_QueueBased.h"
+#include "coreImageFunctions/bucketFill/bucketFillStructBased.h"
+#include "coreImageFunctions/bucketFill/bucketFillQueueBased.h"
 
 using namespace std;
 
@@ -316,7 +316,7 @@ int main(int argc, char* argv[]) {
                 break;
             case 21: {
                 cout << "Enter new memory budget in KB (e.g., 5120 for 5MB, 50 for 50KB to test eviction): ";
-                size_t kb; cin >> kb;
+                unsigned int kb; cin >> kb;
                 history.setMemoryBudget(kb * 1024);
                 cout << "[Success] Memory budget updated to " << kb << " KB\n";
                 break;

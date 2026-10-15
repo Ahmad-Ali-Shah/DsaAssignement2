@@ -3,7 +3,7 @@
 #include <string>
 #include "../src/image.h"
 #include "../src/stack.h"
-#include "../src/CircularQueue.h"
+#include "../src/circularQueue.h"
 #include "../src/priorityQueue.h"
 #include "../src/history/history.h"
 #include "../src/pipeline/job.h"

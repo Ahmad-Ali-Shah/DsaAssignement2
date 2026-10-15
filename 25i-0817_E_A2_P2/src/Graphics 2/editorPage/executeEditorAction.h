@@ -9,7 +9,7 @@
 #include "../../coreImageFunctions/blur.h"
 #include "../../coreImageFunctions/Crop.h"
 #include "../../coreImageFunctions/resize.h"
-#include "../../coreImageFunctions/bucketFill/bucketFill_QueueBased.h"
+#include "../../coreImageFunctions/bucketFill/bucketFillQueueBased.h"
 #include "../../read/mainLogic/writer.h"
 #include "editorConstants.h"
 

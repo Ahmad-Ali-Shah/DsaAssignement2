@@ -60,14 +60,8 @@ namespace FrobeniusMatrixInnerProductForBlurr{
         return pos;
     }
 
-    void blurPixel(const double patchR[3][3],  const double patchG[3][3],  const double patchB[3][3],   unsigned int &outR,  unsigned int &outG,   unsigned int &outB) 
-    {
-        // Note: This filter kernel is distinct from the null space kernel (Ax = 0) in linear algebra.
-        // In continuous analysis, transforming a function f(t) uses an integral transform:
-        // g(x,y) = integral( K(x,y) * f(y) dy )
-        // In discrete digital filtering, the weighting function K is the filter mask (weight matrix).
-        // Dividing by 9 normalizes the weights so overall image luminosity is preserved without overflow.
-
+    void blurPixel(const double patchR[3][3],  const double patchG[3][3],  const double patchB[3][3],   unsigned int &outR,  unsigned int &outG,   unsigned int &outB) {
+        // 3x3 box blur filter kernel (normalized averaging)
         const double K[3][3] = {
 
             { 1.0 / 9.0, 1.0 / 9.0, 1.0 / 9.0 },
