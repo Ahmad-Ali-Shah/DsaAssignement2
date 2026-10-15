@@ -107,7 +107,7 @@ public:
 
     if(isEmptyQueue()){
 
-        cout<<"[QUEUE IS EMPTY GNG]\n";
+        cout<<"[Queue is Empty]\n";
 
         return;
 

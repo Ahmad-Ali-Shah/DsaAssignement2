@@ -1,26 +1,13 @@
 /*
 
-brightness hold for all the points
-so we shall change the pioints coordinatyes
+Brightness adjustment applied across all points:
+Translating color coordinates in the RGB cube.
 
+Color as a Vector in a 3D Vector Space:
+Every pixel is represented as a 3D color vector.
+The set of all possible displayable colors forms a bounded geometric 3D cube called the RGB Color Cube.
 
-Color as a Vector in a 3D Vector Space
-
-
-every pixel is not just a point its a 3d colour 
-
-
-The set of all possible displayable colors 
-forms a bounded geometric 3D cube
- called the RGB Color Cube
-
- now the brightness adjusment is nothing but a 
- Affine Vector Translation along the Gray Diagonal Vector 
-
-
- so its like translation but for the 3x3 we shall take the rgb colours 
- and then apply translations 
-
+Brightness adjustment is an Affine Vector Translation along the Gray Diagonal Vector.
 */
 
 #pragma once
@@ -50,12 +37,7 @@ namespace MyBrightness{
         b = static_cast<unsigned int>(clampValue(b , delta));
 
 
-        /////////////////////////////////////
-
-        // i am treatijng each as coordinates and on the basis of that i shall update later on 
-
-
-        //////////////////////////////////////
+        // Color channels treated as spatial coordinates in the RGB color cube
 
     }
 }

@@ -4,7 +4,7 @@
 /////////////////////////
 
 
-// scaling for the scaling use scaling standered atrix
+// Image scaling using backward affine transformation matrix
 
 
 
@@ -15,7 +15,7 @@
 namespace scaling
 {
 
-    static void scale(double targetWidth, double targetHeight, double actualWidth, double actualHeight, int &x, int &y){
+    void scale(double targetWidth, double targetHeight, double actualWidth, double actualHeight, int &x, int &y){
 
         if (targetWidth <= 0 || targetHeight <= 0 || actualWidth <= 0 || actualHeight <= 0)
 

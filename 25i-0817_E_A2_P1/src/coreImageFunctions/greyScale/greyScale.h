@@ -27,23 +27,19 @@ into a single Black & White channel
 
 The Global International Standards
 
-There are two classical standereds of taking vectors 
+There are two classical standards for luminance vectors:
 
-1)ITU-R Recommendation BT.601 (1982) (old)
+1) ITU-R Recommendation BT.601 (1982) (Legacy CRT)
+w = [0.299, 0.587, 0.114]^T
 
-w = [0.299 , 0.587 , 0.114]t
-
-2) The Modern HDTV Standar
-
+2) The Modern HDTV Standard (ITU-R BT.709 / sRGB)
 When modern computer monitors and HDTVs 
 replaced old CRT phosphors with sRGB primaries, 
-the weights were updated slightly to
+the weights were updated to:
 
+w = [0.2126, 0.7152, 0.0722]^T
 
-w = [0.2126 , 0.7152 , 0.0722]t
-
-so we are using modern one we canalso use the old one tooo but as per standered 
-its needed there
+Modern ITU-R BT.709 weights used for standardized sRGB grayscale conversion.
 */
 #pragma once
 #include <cmath>
@@ -52,7 +48,7 @@ namespace MygreyScale{
 
     void greyScale(double &R , double &G , double &B){
 
-        // its wtc 
+        // Luminance dot product: w^T * c 
 
         double  Result = 0.2126*R+0.7152*G+0.0722*B;
 

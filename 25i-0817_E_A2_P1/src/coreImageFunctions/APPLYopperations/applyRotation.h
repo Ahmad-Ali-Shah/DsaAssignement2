@@ -7,11 +7,8 @@ namespace rotateObject {
 
         ///////////////////////////////////
 
-        // There is btw another way but i hold for generic case
-
-        // ie for 90 transpose and reverse from n to 1 changing both order resultss all 4 quadrental shifts
-
-        // on th other hand i use proper rotation matrix for the propeer rotations 
+        // Standard affine 2D rotation matrix formulation:
+        // Maps original coordinates to rotated space, handling dimensional swaps for 90/270 degrees. 
 
         /////////////////////////////////////
 

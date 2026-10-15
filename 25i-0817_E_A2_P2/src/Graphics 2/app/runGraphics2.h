@@ -15,17 +15,28 @@
 #include "../../pipeline/pipeline.h"
 
 namespace GraphicsApp2 {
+    struct ClickChecker {
+        float btnX;
+        float btnW;
+        float btnH;
+        float& curY;
+        int mouseX;
+        int mouseY;
+
+        int operator()(int id) const {
+            if (mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH) return id;
+            curY += 30.0f;
+            return GraphicsTool2::NONE;
+        }
+    };
+
     int detectClickP2(float barX, float barY, float barW, int mouseX, int mouseY) {
         float btnX = barX + 10.0f;
         float btnW = barW - 20.0f;
         float btnH = 26.0f;
         float curY = barY + 40.0f;
 
-        auto check = [&](int id) -> int {
-            if (mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH) return id;
-            curY += 30.0f;
-            return GraphicsTool2::NONE;
-        };
+        ClickChecker check{btnX, btnW, btnH, curY, mouseX, mouseY};
 
         int id = check(GraphicsTool2::LOAD); if (id != GraphicsTool2::NONE) return id;
         id = check(GraphicsTool2::CROP); if (id != GraphicsTool2::NONE) return id;

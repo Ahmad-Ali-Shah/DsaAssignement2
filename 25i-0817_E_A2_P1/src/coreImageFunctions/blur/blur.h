@@ -7,9 +7,9 @@
 
 //Blur smooths out sharp edges and pixel variations by blending every pixel with its surrounding neighbors.
 
-// it takes the kerrnal radius like to how uch radius we need to blurr
+// It applies a spatial filter radius to determine the neighborhood smoothing window.
 
-// there are 3 basic ethods of the imager filtering in which Frobenius Matrix Inner Product is one of the best and goated way to do sdo
+// There are three fundamental methods of spatial filtering; the Frobenius Matrix Inner Product provides an exact and mathematically rigorous formulation.
 
 
 //////////////////////////////////////
@@ -30,7 +30,7 @@ namespace FrobeniusMatrixInnerProductForBlurr{
 
     // first calculating the product
 
-    static double frobeniusInnerProduct(const double P[3][3], const double K[3][3]) {
+    double frobeniusInnerProduct(const double P[3][3], const double K[3][3]) {
         double sum = 0.0;
 
         for (int i = 0; i < 3; ++i) {
@@ -48,7 +48,7 @@ namespace FrobeniusMatrixInnerProductForBlurr{
 
     // clamping the result for thee smooth output 
 
-    static int clampCoord(int pos, int maxLimit) {
+    int clampCoord(int pos, int maxLimit) {
 
         if (maxLimit <= 0)
             return 0;
@@ -60,15 +60,13 @@ namespace FrobeniusMatrixInnerProductForBlurr{
         return pos;
     }
 
-    static void blurPixel(const double patchR[3][3],  const double patchG[3][3],  const double patchB[3][3],   unsigned int &outR,  unsigned int &outG,   unsigned int &outB) 
+    void blurPixel(const double patchR[3][3],  const double patchG[3][3],  const double patchB[3][3],   unsigned int &outR,  unsigned int &outG,   unsigned int &outB) 
     {
-        // its not the same kernal btw iie k=Ax=0
-        //in calculus when you blur or transform a function f(t) you use an integral transform
-        //g(x,y) = integral (k(x,y) * f(y) ) dy here 
-        //In calculus, the weighting function k(x,y)
-        //was historically named the Integral Kernel 
-        //its also called as a Filter Mask, Weight Matrix, or Averaging Window.
-        //also we divide 9 to make the same one smoother regardless of darked and darker
+        // Note: This filter kernel is distinct from the null space kernel (Ax = 0) in linear algebra.
+        // In continuous analysis, transforming a function f(t) uses an integral transform:
+        // g(x,y) = integral( K(x,y) * f(y) dy )
+        // In discrete digital filtering, the weighting function K is the filter mask (weight matrix).
+        // Dividing by 9 normalizes the weights so overall image luminosity is preserved without overflow.
 
         const double K[3][3] = {
 

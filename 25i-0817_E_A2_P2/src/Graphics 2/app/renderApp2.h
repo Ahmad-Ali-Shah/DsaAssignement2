@@ -11,6 +11,36 @@
 #include "../../pipeline/pipeline.h"
 
 namespace GraphicsApp2 {
+    struct App2ButtonDrawer {
+        sf::RenderWindow& win;
+        const sf::Font& font;
+        float btnX;
+        float btnW;
+        float btnH;
+        float& curY;
+        int mouseX;
+        int mouseY;
+
+        void operator()(const std::string& lbl, sf::Color bg) const {
+            bool hov = (mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH);
+            sf::RectangleShape b(sf::Vector2f(btnW, btnH));
+            b.setPosition(btnX, curY);
+            b.setFillColor(hov ? sf::Color(bg.r + 25, bg.g + 25, bg.b + 25) : bg);
+            b.setOutlineColor(hov ? sf::Color(255, 204, 0) : sf::Color(80, 90, 110));
+            b.setOutlineThickness(1.0f);
+            win.draw(b);
+
+            sf::Text t;
+            t.setFont(font);
+            t.setString(lbl);
+            t.setCharacterSize(12);
+            t.setFillColor(sf::Color(240, 240, 240));
+            t.setPosition(btnX + 8.0f, curY + 5.0f);
+            win.draw(t);
+            curY += 30.0f;
+        }
+    };
+
     void renderApp2(sf::RenderWindow& win, const sf::Font& font, const sf::Font& sigFont, const sf::Texture& canvasTex, int mouseX, int mouseY, HistoryManager& history, ProcessingPipeline& pipeline, bool showDualFill, bool showBenchmark, const std::string& lastAction, int animFrame) {
         win.clear(sf::Color(12, 14, 18));
 
@@ -40,24 +70,7 @@ namespace GraphicsApp2 {
         float btnH = 26.0f;
         float curY = barY + 40.0f;
 
-        auto drawBtn = [&](const std::string& lbl, sf::Color bg) {
-            bool hov = (mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH);
-            sf::RectangleShape b(sf::Vector2f(btnW, btnH));
-            b.setPosition(btnX, curY);
-            b.setFillColor(hov ? sf::Color(bg.r + 25, bg.g + 25, bg.b + 25) : bg);
-            b.setOutlineColor(hov ? sf::Color(255, 204, 0) : sf::Color(80, 90, 110));
-            b.setOutlineThickness(1.0f);
-            win.draw(b);
-
-            sf::Text t;
-            t.setFont(font);
-            t.setString(lbl);
-            t.setCharacterSize(12);
-            t.setFillColor(sf::Color(240, 240, 240));
-            t.setPosition(btnX + 8.0f, curY + 5.0f);
-            win.draw(t);
-            curY += 30.0f;
-        };
+        App2ButtonDrawer drawBtn{win, font, btnX, btnW, btnH, curY, mouseX, mouseY};
 
         drawBtn("1. Load Image", sf::Color(35, 55, 80));
         drawBtn("2. Crop Region (50%)", sf::Color(40, 45, 60));

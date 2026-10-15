@@ -4,7 +4,7 @@
 
 namespace flipAxis{
 
-   int flipMatric[2][2][2] = {
+   const int flipMatrix[2][2][2] = {
        {
          // reflect around x 
          {1,0},
@@ -25,8 +25,8 @@ namespace flipAxis{
        int pointCoordinates[2] = {orignalX, orignalY};
 
 
-       int reflectedX = flipMatric[1][0][0] * pointCoordinates[0] + flipMatric[1][0][1] * pointCoordinates[1];
-       int reflectedY = flipMatric[1][1][0] * pointCoordinates[0] + flipMatric[1][1][1] * pointCoordinates[1];
+       int reflectedX = flipMatrix[1][0][0] * pointCoordinates[0] + flipMatrix[1][0][1] * pointCoordinates[1];
+       int reflectedY = flipMatrix[1][1][0] * pointCoordinates[0] + flipMatrix[1][1][1] * pointCoordinates[1];
 
      
        myCrop::crop(reflectedX, reflectedY, orignalWidth - 1, 0);
@@ -40,8 +40,8 @@ namespace flipAxis{
        int pointCoordinates[2] = {orignalX, orignalY};
 
      
-       int reflectedX = flipMatric[0][0][0] * pointCoordinates[0] + flipMatric[0][0][1] * pointCoordinates[1];
-       int reflectedY = flipMatric[0][1][0] * pointCoordinates[0] + flipMatric[0][1][1] * pointCoordinates[1];
+       int reflectedX = flipMatrix[0][0][0] * pointCoordinates[0] + flipMatrix[0][0][1] * pointCoordinates[1];
+       int reflectedY = flipMatrix[0][1][0] * pointCoordinates[0] + flipMatrix[0][1][1] * pointCoordinates[1];
 
 
        myCrop::crop(reflectedX, reflectedY, 0, orignalHeight - 1);

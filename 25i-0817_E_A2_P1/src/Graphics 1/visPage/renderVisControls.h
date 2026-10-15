@@ -5,23 +5,16 @@
 
 namespace VisPage {
 
-    void renderVisControls(sf::RenderWindow& window, const sf::Font& font, float mouseX, float mouseY, VisConstants::VisButtonRects& rects) {
-        float winW = static_cast<float>(window.getSize().x);
-        float startX = winW - 305.0f;
-        float curY = 32.0f;
-        float panelW = 280.0f;
+    struct VisButtonDrawer {
+        sf::RenderWindow& window;
+        const sf::Font& font;
+        float startX;
+        float panelW;
+        float& curY;
+        float mouseX;
+        float mouseY;
 
-        // Section Title: DATA STRUCTURES
-        sf::Text title;
-        title.setFont(font);
-        title.setString("DATA STRUCTURE VIS");
-        title.setCharacterSize(22);
-        title.setFillColor(sf::Color(255, 228, 50));
-        title.setPosition(startX + 10.0f, curY);
-        window.draw(title);
-        curY += 38.0f;
-
-        auto drawVisBtn = [&](sf::FloatRect& r, const std::string& label, sf::Color cNormal, sf::Color cHover) {
+        void operator()(sf::FloatRect& r, const std::string& label, sf::Color cNormal, sf::Color cHover) const {
             r = sf::FloatRect(startX, curY, panelW, 46.0f);
             bool hovered = r.contains(mouseX, mouseY);
             sf::RectangleShape b(sf::Vector2f(panelW, 46.0f));
@@ -42,7 +35,26 @@ namespace VisPage {
             window.draw(t);
 
             curY += 58.0f;
-        };
+        }
+    };
+
+    void renderVisControls(sf::RenderWindow& window, const sf::Font& font, float mouseX, float mouseY, VisConstants::VisButtonRects& rects) {
+        float winW = static_cast<float>(window.getSize().x);
+        float startX = winW - 305.0f;
+        float curY = 32.0f;
+        float panelW = 280.0f;
+
+        // Section Title: DATA STRUCTURES
+        sf::Text title;
+        title.setFont(font);
+        title.setString("DATA STRUCTURE VIS");
+        title.setCharacterSize(22);
+        title.setFillColor(sf::Color(255, 228, 50));
+        title.setPosition(startX + 10.0f, curY);
+        window.draw(title);
+        curY += 38.0f;
+
+        VisButtonDrawer drawVisBtn{window, font, startX, panelW, curY, mouseX, mouseY};
 
         // 1. Show Stack Button (Blue)
         drawVisBtn(rects.showStackBtn, "SHOW STACK (LIFO)", sf::Color(18, 55, 110, 235), sf::Color(30, 90, 180, 255));

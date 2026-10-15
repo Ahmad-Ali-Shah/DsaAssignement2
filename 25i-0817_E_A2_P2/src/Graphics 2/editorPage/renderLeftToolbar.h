@@ -21,22 +21,15 @@ namespace EditorPage {
         sf::FloatRect resizeBtn;
     };
 
-    void renderLeftToolbar(sf::RenderWindow& window, const EditorTextures& tex, const sf::Font& font, float mouseX, float mouseY, LeftButtonRects& rects) {
-        float startX = 24.0f;
-        float curY = 30.0f;
+    struct IconButtonDrawer {
+        sf::RenderWindow& window;
+        const sf::Font& font;
+        float startX;
+        float& curY;
+        float mouseX;
+        float mouseY;
 
-        // Section Title: OPERATIONS
-        sf::Text title;
-        title.setFont(font);
-        title.setString("OPERATIONS");
-        title.setCharacterSize(22);
-        title.setFillColor(sf::Color(255, 228, 50));
-        title.setPosition(startX, curY);
-        window.draw(title);
-        curY += 32.0f;
-
-        // Helper to draw an icon button
-        auto drawButton = [&](sf::FloatRect& btnRect, const sf::Texture& t, sf::IntRect uv, const std::string& label, float scale, float yOffset = 0.0f) {
+        void operator()(sf::FloatRect& btnRect, const sf::Texture& t, sf::IntRect uv, const std::string& label, float scale, float yOffset = 0.0f) const {
             float bw = 138.0f;
             float bh = 42.0f;
             btnRect = sf::FloatRect(startX, curY, bw, bh);
@@ -64,7 +57,25 @@ namespace EditorPage {
             window.draw(txt);
 
             curY += bh + 8.0f;
-        };
+        }
+    };
+
+    void renderLeftToolbar(sf::RenderWindow& window, const EditorTextures& tex, const sf::Font& font, float mouseX, float mouseY, LeftButtonRects& rects) {
+        float startX = 24.0f;
+        float curY = 30.0f;
+
+        // Section Title: OPERATIONS
+        sf::Text title;
+        title.setFont(font);
+        title.setString("OPERATIONS");
+        title.setCharacterSize(22);
+        title.setFillColor(sf::Color(255, 228, 50));
+        title.setPosition(startX, curY);
+        window.draw(title);
+        curY += 32.0f;
+
+        // Helper to draw an icon button
+        IconButtonDrawer drawButton{window, font, startX, curY, mouseX, mouseY};
 
         // 1) Load Image (compact camera icon separated cleanly from label)
         drawButton(rects.loadBtn, tex.imageLoad, sf::IntRect(143, 31, 232, 138), "Load", 0.16f);

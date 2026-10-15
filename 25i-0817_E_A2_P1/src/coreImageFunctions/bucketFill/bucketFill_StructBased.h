@@ -5,7 +5,7 @@
 /////////////////////////////////////////
 
 
-// class point stack that are visited btw
+// Stack tracking coordinates for depth-first traversal
 
 
 //////////////////////////////////////////
@@ -14,7 +14,7 @@
 
 namespace MybucketFill{
 
-    inline void ReplaceNearOne(Pixel** InputImage , double width , double height  , int startxCoor , int startyCoor,  unsigned int newR, unsigned int newG, unsigned int newB ){
+    void ReplaceNearOne(Pixel** InputImage , double width , double height  , int startxCoor , int startyCoor,  unsigned int newR, unsigned int newG, unsigned int newB ){
 
         int w = static_cast<int>(width);
         int h = static_cast<int>(height);
@@ -69,13 +69,13 @@ namespace MybucketFill{
                 if(nx >= 0 && nx < w && ny >= 0 && ny < h){// just correct that condition
 
                     if (InputImage[ny][nx] == targetColor) {
-                        // push ts again
+                        // Push matching neighbor onto stack
                         StoringBucket.push({nx , ny});
                     }
                 }
             }
         }
-        // replaced all lnked element 
+        // All connected matching pixels replaced 
 
         
     }

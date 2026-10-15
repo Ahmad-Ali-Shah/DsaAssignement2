@@ -1,13 +1,9 @@
 /*
 
-croping is nothing but a proper translation
-
-It is pure translation of the origin: the orign 
+Cropping corresponds to an affine translation of the origin:
 (0,0) -> (x0,y0)
 
-
-so solving ts by proper standered matrix of translation
-
+Solved using the standard 3x3 translation affine matrix.
 */
 
 #pragma once
@@ -20,16 +16,16 @@ namespace myCrop{
 
         /////////////////////////////
 
-        // standered matrix of a 
+        // Standard 3x3 homogeneous translation matrix
 
         ///////////////////////////
 
 
-        int standeredXytrnaslationMatrix[3][3] = {{1,0,extendedX} , {0,1,extendedY} , {0,0,1}};
+        int standardTranslationMatrix[3][3] = {{1,0,extendedX} , {0,1,extendedY} , {0,0,1}};
 
         //////////////////////////
 
-        // took points as the point matrix
+        // Homogeneous coordinate vector
 
         /////////////////////////////
 
@@ -38,9 +34,9 @@ namespace myCrop{
 
 
         // Direct O(1) evaluation derived from matrix-vector multiplication
-        pointCoordinates[0] = (pointCoordinates[0] + standeredXytrnaslationMatrix[0][2]); // x+a
+        pointCoordinates[0] = (pointCoordinates[0] + standardTranslationMatrix[0][2]); // x+a
 
-        pointCoordinates[1] = (pointCoordinates[1] + standeredXytrnaslationMatrix[1][2]); // y+b
+        pointCoordinates[1] = (pointCoordinates[1] + standardTranslationMatrix[1][2]); // y+b
 
         pointCoordinates[2] = 1;
 
@@ -51,6 +47,6 @@ namespace myCrop{
         orignalY = pointCoordinates[1];
 
 
-        // values got changed 
+        // Coordinates translated successfully
     }
 }

@@ -26,32 +26,34 @@ public:
             int* data = new int[N];
             for (int i = 0; i < N; i++) data[i] = 42;
 
+            typedef std::chrono::high_resolution_clock::time_point TimePoint;
+
             // 1. Stack Single Push
-            auto t0 = std::chrono::high_resolution_clock::now();
+            TimePoint t0 = std::chrono::high_resolution_clock::now();
             stackType<int> s1(N);
             for (int i = 0; i < N; i++) s1.push(data[i]);
-            auto t1 = std::chrono::high_resolution_clock::now();
+            TimePoint t1 = std::chrono::high_resolution_clock::now();
             double singlePushUs = std::chrono::duration<double, std::micro>(t1 - t0).count();
 
             // 2. Stack Batch Push
-            auto t2 = std::chrono::high_resolution_clock::now();
+            TimePoint t2 = std::chrono::high_resolution_clock::now();
             stackType<int> s2(N);
             s2.pushBatch(data, N);
-            auto t3 = std::chrono::high_resolution_clock::now();
+            TimePoint t3 = std::chrono::high_resolution_clock::now();
             double batchPushUs = std::chrono::duration<double, std::micro>(t3 - t2).count();
 
             // 3. Queue Single Enqueue
-            auto t4 = std::chrono::high_resolution_clock::now();
+            TimePoint t4 = std::chrono::high_resolution_clock::now();
             queueType<int> q1(N);
             for (int i = 0; i < N; i++) q1.addQueue(data[i]);
-            auto t5 = std::chrono::high_resolution_clock::now();
+            TimePoint t5 = std::chrono::high_resolution_clock::now();
             double singleQUs = std::chrono::duration<double, std::micro>(t5 - t4).count();
 
             // 4. Queue Batch Enqueue
-            auto t6 = std::chrono::high_resolution_clock::now();
+            TimePoint t6 = std::chrono::high_resolution_clock::now();
             queueType<int> q2(N);
             q2.addQueueBatch(data, N);
-            auto t7 = std::chrono::high_resolution_clock::now();
+            TimePoint t7 = std::chrono::high_resolution_clock::now();
             double batchQUs = std::chrono::duration<double, std::micro>(t7 - t6).count();
 
             delete[] data;
