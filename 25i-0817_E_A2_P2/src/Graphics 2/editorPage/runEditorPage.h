@@ -125,7 +125,7 @@ namespace EditorPage {
                     } else if (event.type == sf::Event::KeyPressed) {
                         if (event.key.code == sf::Keyboard::Return) {
                             isTypingSave = false;
-                            executeEditorAction(EditorConstants::OP_SAVE, img, width, height, history, savePath, "", currentOp);
+                            executeEditorAction(EditorConstants::opSave, img, width, height, history, savePath, "", currentOp);
                         } else if (event.key.code == sf::Keyboard::Escape) {
                             isTypingSave = false;
                         }
@@ -143,12 +143,12 @@ namespace EditorPage {
                     if (rightRects.backBtn.contains(mouseX, mouseY)) {
                         return; // Move back to main menu / mode selection
                     } else if (rightRects.saveBtn.contains(mouseX, mouseY)) {
-                        executeEditorAction(EditorConstants::OP_SAVE, img, width, height, history, savePath, "", currentOp);
+                        executeEditorAction(EditorConstants::opSave, img, width, height, history, savePath, "", currentOp);
                     } else if (rightRects.reloadBtn.contains(mouseX, mouseY)) {
                         int rw = 0, rh = 0;
                         Pixel** reloaded = ReadPath::ReadImage(initialImagePath, rw, rh);
                         if (reloaded && rw > 0 && rh > 0) {
-                            history.recordGridOperation("Reload", HistoryOpType::RESIZE, img, width, height);
+                            history.recordGridOperation("Reload", HistoryOpType::resize, img, width, height);
                             ReadPath::freeImage(img, height);
                             img = reloaded;
                             width = rw;
@@ -171,43 +171,43 @@ namespace EditorPage {
                     }
                     // Left toolbar clicks
                     else if (leftRects.rot90Btn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_ROT_90, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opRot90, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.rot180Btn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_ROT_180, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opRot180, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.rot270Btn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_ROT_270, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opRot270, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.rot360Btn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_ROT_360, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opRot360, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.flipHBtn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_FLIP_H, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opFlipH, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.flipVBtn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_FLIP_V, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opFlipV, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.grayBtn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_GRAYSCALE, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opGrayscale, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.blurBtn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_BLUR, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opBlur, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.bucketBtn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_BUCKET_FILL, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opBucketFill, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.resizeBtn.contains(mouseX, mouseY)) {
-                        if (executeEditorAction(EditorConstants::OP_RESIZE, img, width, height, history, "", "", currentOp)) {
+                        if (executeEditorAction(EditorConstants::opResize, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                         }
                     } else if (leftRects.brightBtn.contains(mouseX, mouseY)) {
@@ -218,7 +218,7 @@ namespace EditorPage {
                         modal.val1 = "40";
                         modal.val2 = "";
                         modal.activeField = 1;
-                        modal.opType = EditorConstants::OP_BRIGHTNESS;
+                        modal.opType = EditorConstants::opBrightness;
                     } else if (leftRects.cropBtn.contains(mouseX, mouseY)) {
                         modal.active = true;
                         modal.title = "CROP IMAGE DIMENSIONS";
@@ -227,7 +227,7 @@ namespace EditorPage {
                         modal.val1 = std::to_string(width / 2);
                         modal.val2 = std::to_string(height / 2);
                         modal.activeField = 1;
-                        modal.opType = EditorConstants::OP_CROP;
+                        modal.opType = EditorConstants::opCrop;
                     }
                 }
             }

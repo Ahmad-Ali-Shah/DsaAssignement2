@@ -13,8 +13,8 @@ class HistoryManager {
 private:
     stackType<HistoryRecord> undoStack;
     stackType<HistoryRecord> redoStack;
-    unsigned int memoryBudgetBytes;
-    unsigned int currentMemoryUsageBytes;
+    int memoryBudgetBytes;
+    int currentMemoryUsageBytes;
     int discardedRecordsCount;
     int pushCount;
     int popCount;
@@ -28,7 +28,7 @@ private:
         HistoryGridHelper::freeGrid(grid, h);
     }
 
-    void evictOldestRecords(unsigned int neededBytes) {
+    void evictOldestRecords(int neededBytes) {
         while (currentMemoryUsageBytes + neededBytes > memoryBudgetBytes && !undoStack.isEmptyStack()) {
             HistoryRecord oldest = undoStack.removeBottom();
             currentMemoryUsageBytes = (currentMemoryUsageBytes >= oldest.estimatedMemoryBytes)
@@ -52,7 +52,7 @@ private:
     }
 
 public:
-    HistoryManager(unsigned int budgetBytes = 50 * 1024 * 1024, int stackCap = 100)
+    HistoryManager(int budgetBytes = 50 * 1024 * 1024, int stackCap = 100)
         : undoStack(stackCap), redoStack(stackCap),
           memoryBudgetBytes(budgetBytes), currentMemoryUsageBytes(0),
           discardedRecordsCount(0), pushCount(0), popCount(0), sequenceCounter(0) {}
@@ -66,13 +66,13 @@ public:
         clearRedoStack();
     }
 
-    void setMemoryBudget(unsigned int budgetBytes) {
+    void setMemoryBudget(int budgetBytes) {
         memoryBudgetBytes = budgetBytes;
         evictOldestRecords(0);
     }
 
-    unsigned int getMemoryBudget() const { return memoryBudgetBytes; }
-    unsigned int getCurrentMemoryUsage() const { return currentMemoryUsageBytes; }
+    int getMemoryBudget() const { return memoryBudgetBytes; }
+    int getCurrentMemoryUsage() const { return currentMemoryUsageBytes; }
     int getDiscardedRecordsCount() const { return discardedRecordsCount; }
 
     // --- Record Compact Operations ---
@@ -82,7 +82,7 @@ public:
         clearRedoStack();
         HistoryRecord rec;
         rec.opName = "Rotate " + std::to_string(angle) + " deg";
-        rec.opType = HistoryOpType::ROTATE;
+        rec.opType = HistoryOpType::rotate;
         rec.sequenceNumber = ++sequenceCounter;
         rec.angle = angle;
         rec.startX = 0; rec.startY = 0; rec.endX = w; rec.endY = h;
@@ -99,7 +99,7 @@ public:
         clearRedoStack();
         HistoryRecord rec;
         rec.opName = horizontal ? "Flip Horizontal" : "Flip Vertical";
-        rec.opType = HistoryOpType::FLIP;
+        rec.opType = HistoryOpType::flip;
         rec.sequenceNumber = ++sequenceCounter;
         rec.isHorizontal = horizontal;
         rec.startX = 0; rec.startY = 0; rec.endX = w; rec.endY = h;
@@ -140,7 +140,7 @@ public:
         }
 
         // Section 7.2: Coalesce consecutive brightness operations on top of Undo stack
-        if (!undoStack.isEmptyStack() && undoStack.top().opType == HistoryOpType::BRIGHTNESS) {
+        if (!undoStack.isEmptyStack() && undoStack.top().opType == HistoryOpType::brightness) {
             HistoryRecord topRec = undoStack.top();
             undoStack.pop();
 
@@ -151,7 +151,7 @@ public:
             HistoryCoalescing::mergeClippedPixels(topRec, currentClipped, tempCount);
             delete[] currentClipped;
 
-            unsigned int oldMem = topRec.estimatedMemoryBytes;
+            int oldMem = topRec.estimatedMemoryBytes;
             topRec.calculateMemory();
             currentMemoryUsageBytes = (currentMemoryUsageBytes >= oldMem) ? (currentMemoryUsageBytes - oldMem) : 0;
 
@@ -166,7 +166,7 @@ public:
         // Otherwise create new Brightness record
         HistoryRecord rec;
         rec.opName = "Brightness (" + std::to_string((int)delta) + ")";
-        rec.opType = HistoryOpType::BRIGHTNESS;
+        rec.opType = HistoryOpType::brightness;
         rec.sequenceNumber = ++sequenceCounter;
         rec.brightnessDelta = delta;
         for (int i = 0; i < tempCount; i++) {
@@ -188,7 +188,7 @@ public:
         clearRedoStack();
         HistoryRecord rec;
         rec.opName = "Bucket Fill";
-        rec.opType = HistoryOpType::BUCKET_FILL;
+        rec.opType = HistoryOpType::bucketFill;
         rec.sequenceNumber = ++sequenceCounter;
         rec.originalColor = origCol;
         rec.replacementColor = newCol;
@@ -242,7 +242,7 @@ public:
         redoRec.opType = rec.opType;
 
         switch (rec.opType) {
-            case HistoryOpType::ROTATE: {
+            case HistoryOpType::rotate: {
                 redoRec.angle = rec.angle;
                 redoRec.calculateMemory();
                 redoStack.push(redoRec);
@@ -252,7 +252,7 @@ public:
                 currentImg = rotateObject::applyRotate(currentImg, currentW, currentH, invAngle);
                 break;
             }
-            case HistoryOpType::FLIP: {
+            case HistoryOpType::flip: {
                 redoRec.isHorizontal = rec.isHorizontal;
                 redoRec.calculateMemory();
                 redoStack.push(redoRec);
@@ -265,7 +265,7 @@ public:
                 }
                 break;
             }
-            case HistoryOpType::BRIGHTNESS: {
+            case HistoryOpType::brightness: {
                 redoRec.brightnessDelta = rec.brightnessDelta;
                 for (int i = 0; i < rec.clippedCount; i++) {
                     redoRec.addClippedPixel(rec.clippedPixels[i]);
@@ -284,7 +284,7 @@ public:
                 }
                 break;
             }
-            case HistoryOpType::BUCKET_FILL: {
+            case HistoryOpType::bucketFill: {
                 redoRec.originalColor = rec.originalColor;
                 redoRec.replacementColor = rec.replacementColor;
                 for (int i = 0; i < rec.changedCount; i++) {
@@ -303,10 +303,10 @@ public:
                 }
                 break;
             }
-            case HistoryOpType::GRAYSCALE:
-            case HistoryOpType::BLUR:
-            case HistoryOpType::CROP:
-            case HistoryOpType::RESIZE: {
+            case HistoryOpType::grayscale:
+            case HistoryOpType::blur:
+            case HistoryOpType::crop:
+            case HistoryOpType::resize: {
                 redoRec.savedGrid = cloneGrid(currentImg, currentW, currentH);
                 redoRec.savedW = currentW;
                 redoRec.savedH = currentH;
@@ -335,18 +335,18 @@ public:
                                   ? (currentMemoryUsageBytes - rec.estimatedMemoryBytes) : 0;
 
         switch (rec.opType) {
-            case HistoryOpType::ROTATE: {
+            case HistoryOpType::rotate: {
                 currentImg = rotateObject::applyRotate(currentImg, currentW, currentH, rec.angle);
                 recordRotate(rec.angle, currentW, currentH);
                 break;
             }
-            case HistoryOpType::FLIP: {
+            case HistoryOpType::flip: {
                 if (rec.isHorizontal) flipAxis::applyFlipHorizontal(currentImg, currentW, currentH);
                 else flipAxis::applyFlipVertical(currentImg, currentW, currentH);
                 recordFlip(rec.isHorizontal, currentW, currentH);
                 break;
             }
-            case HistoryOpType::BRIGHTNESS: {
+            case HistoryOpType::brightness: {
                 MyBrightness::applyBrightness(currentImg, currentW, currentH, rec.brightnessDelta);
                 HistoryRecord forwardRec = rec;
                 forwardRec.calculateMemory();
@@ -355,7 +355,7 @@ public:
                 currentMemoryUsageBytes += forwardRec.estimatedMemoryBytes;
                 break;
             }
-            case HistoryOpType::BUCKET_FILL: {
+            case HistoryOpType::bucketFill: {
                 for (int i = 0; i < rec.changedCount; i++) {
                     int px = rec.changedPoints[i].coordinatesX;
                     int py = rec.changedPoints[i].coordinatesY;
@@ -370,10 +370,10 @@ public:
                 currentMemoryUsageBytes += forwardRec.estimatedMemoryBytes;
                 break;
             }
-            case HistoryOpType::GRAYSCALE:
-            case HistoryOpType::BLUR:
-            case HistoryOpType::CROP:
-            case HistoryOpType::RESIZE: {
+            case HistoryOpType::grayscale:
+            case HistoryOpType::blur:
+            case HistoryOpType::crop:
+            case HistoryOpType::resize: {
                 HistoryRecord undoRec;
                 undoRec.opName = rec.opName;
                 undoRec.opType = rec.opType;

@@ -22,9 +22,9 @@ namespace rotateObject{
 
         // converting to radian 
 
-           const double PI = 3.14159265358979323846;
+           const double piVal = 3.14159265358979323846;
 
-           double radians = AngleRotate * (PI / 180.0);
+           double radians = AngleRotate * (piVal / 180.0);
 
         // finding cosine and sin value so use that as below in the rotation matrix
 

@@ -36,11 +36,11 @@ private:
 
 
 public:
-    ProcessingPipeline(int queueCapacity = 100, int m = SchedulerMode::PRIORITY): mode(m), fifoQueue(queueCapacity), prioQueue(queueCapacity), nextJobId(1), addCount(0), deleteCount(0), maxRecordedQueueSize(0), globalArrivalSeq(0) {}
+    ProcessingPipeline(int queueCapacity = 100, int m = SchedulerMode::priority): mode(m), fifoQueue(queueCapacity), prioQueue(queueCapacity), nextJobId(1), addCount(0), deleteCount(0), maxRecordedQueueSize(0), globalArrivalSeq(0) {}
 
     void setMode(int m) {
         mode = m;
-        std::cout << "[Pipeline] Scheduler mode set to: " << (mode == SchedulerMode::FIFO ? "FIFO (Phase 1)" : "PRIORITY (Phase 2)") << "\n";
+        std::cout << "[Pipeline] Scheduler mode set to: " << (mode == SchedulerMode::fifo ? "FIFO (Phase 1)" : "PRIORITY (Phase 2)") << "\n";
     }
 
     int getMode() const {
@@ -48,13 +48,10 @@ public:
          }
 
     bool addJob(Job job) {
-
         job.id = nextJobId++;
-
         job.arrivalTime = ++globalArrivalSeq;
 
-
-        if (mode == SchedulerMode::FIFO) {
+        if (mode == SchedulerMode::fifo) {
 
             if (fifoQueue.isFullQueue()) {
 
@@ -97,9 +94,7 @@ public:
     }
 
     int getCurrentQueueSize() const {
-
-        return (mode == SchedulerMode::FIFO) ? fifoQueue.size() : prioQueue.size();
-
+        return (mode == SchedulerMode::fifo) ? fifoQueue.size() : prioQueue.size();
     }
 
     int size() const { 
@@ -110,65 +105,48 @@ public:
         }
 
     Job peekNextJob() const {
-
         if (isEmpty()) 
         return Job();
 
-        return (mode == SchedulerMode::FIFO) ? fifoQueue.front() : prioQueue.front();
-
+        return (mode == SchedulerMode::fifo) ? fifoQueue.front() : prioQueue.front();
     }
 
     bool isEmpty() const {
-
-        return (mode == SchedulerMode::FIFO) ? fifoQueue.isEmptyQueue() : prioQueue.isEmptyQueue();
-
+        return (mode == SchedulerMode::fifo) ? fifoQueue.isEmptyQueue() : prioQueue.isEmptyQueue();
     }
 
     void listPendingJobs() const {
-
         if (isEmpty()) {
-
             std::cout << "[Pipeline] No pending jobs.\n";
-
             return;
-
         }
 
-        std::cout << "\n--- Pending Jobs (" << (mode == SchedulerMode::FIFO ? "FIFO" : "PRIORITY") << ") ---\n";
-
+        std::cout << "\n--- Pending Jobs (" << (mode == SchedulerMode::fifo ? "FIFO" : "PRIORITY") << ") ---\n";
         int sz = getCurrentQueueSize();
-
         for (int i = 0; i < sz; i++) {
-
-            Job j = (mode == SchedulerMode::FIFO) ? fifoQueue.getAt(i) : prioQueue.getAt(i);
-
+            Job j = (mode == SchedulerMode::fifo) ? fifoQueue.getAt(i) : prioQueue.getAt(i);
 
             std::cout << "  [" << (i + 1) << "] Job #" << j.id << ": " << j.name << " (Priority: " << j.priority << ", Arr: " << j.arrivalTime << ")";
-
             if (j.isBarrier()) 
             std::cout << " [BARRIER]";
-
             if (j.isCancelled) 
             std::cout << " (CANCELLED)";
-
             std::cout << "\n";
         }
-
         std::cout << "------------------------------------\n";
-        
     }
 
     int getPendingJobs(Job out[], int maxCount) const {
         int sz = getCurrentQueueSize();
         int cnt = (sz < maxCount) ? sz : maxCount;
         for (int i = 0; i < cnt; i++) {
-            out[i] = (mode == SchedulerMode::FIFO) ? fifoQueue.getAt(i) : prioQueue.getAt(i);
+            out[i] = (mode == SchedulerMode::fifo) ? fifoQueue.getAt(i) : prioQueue.getAt(i);
         }
         return cnt;
     }
 
     void clearJobs() {
-        if (mode == SchedulerMode::FIFO) {
+        if (mode == SchedulerMode::fifo) {
             while (!fifoQueue.isEmptyQueue()) { fifoQueue.deleteQueue(); deleteCount++; }
         } else {
             while (!prioQueue.isEmptyQueue()) { prioQueue.deleteQueue(); deleteCount++; }
@@ -183,7 +161,7 @@ public:
         }
 
         Job currentJob;
-        if (mode == SchedulerMode::FIFO) {
+        if (mode == SchedulerMode::fifo) {
             currentJob = fifoQueue.front();
             fifoQueue.deleteQueue();
         } else {
@@ -201,22 +179,22 @@ public:
                   << " | Pri: " << currentJob.priority << "]...\n";
 
         switch (currentJob.type) {
-            case JobType::UNDO_REDO:
+            case JobType::undoRedo:
                 if (currentJob.name.find("Undo") != std::string::npos) {
                     history.undo(img, w, h);
                 } else {
                     history.redo(img, w, h);
                 }
                 break;
-            case JobType::RESIZE:
-                history.recordGridOperation(currentJob.name, HistoryOpType::RESIZE, img, w, h);
+            case JobType::resize:
+                history.recordGridOperation(currentJob.name, HistoryOpType::resize, img, w, h);
                 img = scaling::applyResize(img, w, h, currentJob.targetW, currentJob.targetH);
                 break;
-            case JobType::BLUR:
-                history.recordGridOperation(currentJob.name, HistoryOpType::BLUR, img, w, h);
+            case JobType::blur:
+                history.recordGridOperation(currentJob.name, HistoryOpType::blur, img, w, h);
                 FrobeniusMatrixInnerProductForBlurr::applyBlur(img, w, h);
                 break;
-            case JobType::BUCKET_FILL_STACK: {
+            case JobType::bucketFillStack: {
                 if (img && w > 0 && h > 0 && currentJob.startX >= 0 && currentJob.startX < w && currentJob.startY >= 0 && currentJob.startY < h) {
                     Pixel orig = img[currentJob.startY][currentJob.startX];
                     Pixel target{currentJob.r, currentJob.g, currentJob.b};
@@ -235,7 +213,7 @@ public:
                 }
                 break;
             }
-            case JobType::BUCKET_FILL_QUEUE: {
+            case JobType::bucketFillQueue: {
                 if (img && w > 0 && h > 0 && currentJob.startX >= 0 && currentJob.startX < w && currentJob.startY >= 0 && currentJob.startY < h) {
                     Pixel orig = img[currentJob.startY][currentJob.startX];
                     Pixel target{currentJob.r, currentJob.g, currentJob.b};
@@ -254,8 +232,8 @@ public:
                 }
                 break;
             }
-            case JobType::SAVE_PROJECT:
-            case JobType::EXPORT_IMAGE:
+            case JobType::saveProject:
+            case JobType::exportImage:
                 ReadPath::Write(currentJob.filePath, img, w, h, true);
                 std::cout << "[Pipeline Barrier] Image written to: " << currentJob.filePath << "\n";
                 break;
@@ -272,15 +250,7 @@ public:
     }
 
     // --- Section 7.3: Workload Comparison (delegated to workloadBenchmark.h) ---
-    static void generateStandard30JobWorkload(Job outWorkload[]) {
-        WorkloadBenchmark::generateStandard30JobWorkload(outWorkload);
-    }
-
-    static ExecutionStats simulateWorkload(const Job originalJobs[], int totalJobs, int runMode) {
-        return WorkloadBenchmark::simulateWorkload(originalJobs, totalJobs, runMode);
-    }
-
-    static void runBenchmarkComparison() {
+    void runBenchmarkComparison() {
         WorkloadBenchmark::runBenchmarkComparison();
     }
 };

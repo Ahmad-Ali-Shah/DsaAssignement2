@@ -19,7 +19,7 @@ namespace SelectionPage {
         sf::RectangleShape box1(sf::Vector2f(boxW, boxH));
         box1.setPosition(boxX, opt1Y - boxH / 2.0f);
 
-        bool h1 = (hoveredChoice == SelectionConstants::CHOICE_IMAGE_LAB);
+        bool h1 = (hoveredChoice == SelectionConstants::choiceImageLab);
         if (h1) {
             box1.setFillColor(sf::Color(44, 65, 62, 240));
             box1.setOutlineColor(sf::Color(255, 225, 50, 255));
@@ -51,7 +51,7 @@ namespace SelectionPage {
         sf::RectangleShape box2(sf::Vector2f(boxW, boxH));
         box2.setPosition(boxX, opt2Y - boxH / 2.0f);
 
-        bool h2 = (hoveredChoice == SelectionConstants::CHOICE_VISUALIZATION_STACK);
+        bool h2 = (hoveredChoice == SelectionConstants::choiceVisualizationStack);
         if (h2) {
             box2.setFillColor(sf::Color(44, 65, 62, 240));
             box2.setOutlineColor(sf::Color(255, 225, 50, 255));

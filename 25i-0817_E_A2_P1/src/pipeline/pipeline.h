@@ -117,20 +117,20 @@ public:
         history.recordAction(currentJob.name, img, w, h);
 
         switch (currentJob.type) {
-            case JobType::RESIZE:
+            case JobType::resize:
                 img = scaling::applyResize(img, w, h, currentJob.targetW, currentJob.targetH);
                 break;
-            case JobType::BLUR:
+            case JobType::blur:
                 FrobeniusMatrixInnerProductForBlurr::applyBlur(img, w, h);
                 break;
-            case JobType::BUCKET_FILL_STACK:
+            case JobType::bucketFillStack:
                 MybucketFill::ReplaceNearOne(img, w, h, currentJob.startX, currentJob.startY, currentJob.r, currentJob.g, currentJob.b);
                 break;
-            case JobType::BUCKET_FILL_QUEUE:
+            case JobType::bucketFillQueue:
                 MybucketFill::ReplaceNearOneQueue(img, w, h, currentJob.startX, currentJob.startY, currentJob.r, currentJob.g, currentJob.b);
                 break;
-            case JobType::SAVE_PROJECT:
-            case JobType::EXPORT_IMAGE:
+            case JobType::saveProject:
+            case JobType::exportImage:
                 ReadPath::Write(currentJob.filePath, img, w, h, true);
                 std::cout << "[Pipeline] Image written to: " << currentJob.filePath << "\n";
                 break;

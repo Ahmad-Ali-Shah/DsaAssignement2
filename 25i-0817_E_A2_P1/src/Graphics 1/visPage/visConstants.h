@@ -3,17 +3,17 @@
 #include <string>
 
 namespace VisConstants {
-    const int VIEW_NONE = 0;
-    const int VIEW_STACK = 1;
-    const int VIEW_QUEUE = 2;
+    const int viewNone = 0;
+    const int viewStack = 1;
+    const int viewQueue = 2;
 
-    const int ANIM_IDLE = 0;
-    const int ANIM_STACK_POP_PUSH = 1;
-    const int ANIM_QUEUE_PROCESS = 2;
-    const int ANIM_IMAGE_STEPS = 3;
+    const int animIdle = 0;
+    const int animStackPopPush = 1;
+    const int animQueueProcess = 2;
+    const int animImageSteps = 3;
 
-    const int MAX_STACK_ITEMS = 8;
-    const int MAX_QUEUE_ITEMS = 8;
+    const int maxStackItems = 8;
+    const int maxQueueItems = 8;
 
     struct VisTextures {
         sf::Texture bg;

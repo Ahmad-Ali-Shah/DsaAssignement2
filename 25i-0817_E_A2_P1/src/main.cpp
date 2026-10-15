@@ -99,9 +99,9 @@ int main() {
                 int w = 0, h = 0;
                 cout << "Enter image file path: ";
                 cin >> path;
-                cout << "Enter width (or 0 for PPM auto-detect): ";
+                cout << "Enter width (or 0 for PPM automatic detection): ";
                 cin >> w;
-                cout << "Enter height (or 0 for PPM auto-detect): ";
+                cout << "Enter height (or 0 for PPM automatic detection): ";
                 cin >> h;
 
                 if (activeImage) {
@@ -183,7 +183,7 @@ int main() {
                 int tw, th;
                 cout << "Enter target width: "; cin >> tw;
                 cout << "Enter target height: "; cin >> th;
-                Job j(0, JobType::RESIZE, "Resize to " + to_string(tw) + "x" + to_string(th));
+                Job j(0, JobType::resize, "Resize to " + to_string(tw) + "x" + to_string(th));
                 j.targetW = tw;
                 j.targetH = th;
                 pipeline.addJob(j);
@@ -192,7 +192,7 @@ int main() {
 
             case 8: { // Queue Blur
                 if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
-                Job j(0, JobType::BLUR, "Blur (3x3 Kernel)");
+                Job j(0, JobType::blur, "Blur (3x3 Kernel)");
                 pipeline.addJob(j);
                 break;
             }
@@ -208,7 +208,7 @@ int main() {
                 cout << "Select traversal algorithm (1 = Stack-based DFS, 2 = Queue-based BFS): ";
                 cin >> typeChoice;
 
-                Job j(0, (typeChoice == 1) ? JobType::BUCKET_FILL_STACK : JobType::BUCKET_FILL_QUEUE,
+                Job j(0, (typeChoice == 1) ? JobType::bucketFillStack : JobType::bucketFillQueue,
                       (typeChoice == 1) ? "BucketFill (Stack)" : "BucketFill (Queue)");
                 j.startX = sx;
                 j.startY = sy;
@@ -219,8 +219,8 @@ int main() {
 
             case 10: { // Queue Save Project
                 if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
-                Job j(0, JobType::SAVE_PROJECT, "Save Project");
-                j.filePath = activeFile.empty() ? "project_saved.ppm" : activeFile;
+                Job j(0, JobType::saveProject, "Save Project");
+                j.filePath = activeFile.empty() ? "projectSaved.ppm" : activeFile;
                 pipeline.addJob(j);
                 break;
             }
@@ -230,7 +230,7 @@ int main() {
                 string outPath;
                 cout << "Enter export file path (e.g. output.ppm): ";
                 cin >> outPath;
-                Job j(0, JobType::EXPORT_IMAGE, "Export to " + outPath);
+                Job j(0, JobType::exportImage, "Export to " + outPath);
                 j.filePath = outPath;
                 pipeline.addJob(j);
                 break;

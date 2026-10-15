@@ -1,27 +1,27 @@
 #pragma once
 
 namespace GraphicsTool {
-    const int NONE = 0;
-    const int LOAD = 1;
-    const int CROP = 2;
-    const int ROTATE_90 = 3;
-    const int ROTATE_180 = 4;
-    const int ROTATE_270 = 5;
-    const int FLIP_H = 6;
-    const int FLIP_V = 7;
-    const int BRIGHTNESS_UP = 8;
-    const int BRIGHTNESS_DOWN = 9;
-    const int GRAYSCALE = 10;
-    const int ENQUEUE_RESIZE = 11;
-    const int ENQUEUE_BLUR = 12;
-    const int ENQUEUE_BUCKET_STACK = 13;
-    const int ENQUEUE_BUCKET_QUEUE = 14;
-    const int ENQUEUE_SAVE = 15;
-    const int ENQUEUE_EXPORT = 16;
-    const int PROCESS_NEXT = 17;
-    const int PROCESS_ALL = 18;
-    const int CLEAR_PIPELINE = 19;
-    const int UNDO = 20;
-    const int REDO = 21;
-    const int TOGGLE_INSPECTOR = 22;
+    const int none = 0;
+    const int load = 1;
+    const int crop = 2;
+    const int rotate90 = 3;
+    const int rotate180 = 4;
+    const int rotate270 = 5;
+    const int flipH = 6;
+    const int flipV = 7;
+    const int brightnessUp = 8;
+    const int brightnessDown = 9;
+    const int grayscale = 10;
+    const int enqueueResize = 11;
+    const int enqueueBlur = 12;
+    const int enqueueBucketStack = 13;
+    const int enqueueBucketQueue = 14;
+    const int enqueueSave = 15;
+    const int enqueueExport = 16;
+    const int processNext = 17;
+    const int processAll = 18;
+    const int clearPipeline = 19;
+    const int undo = 20;
+    const int redo = 21;
+    const int toggleInspector = 22;
 }

@@ -30,14 +30,14 @@ namespace FrobeniusMatrixInnerProductForBlurr{
 
     // first calculating the product
 
-    double frobeniusInnerProduct(const double P[3][3], const double K[3][3]) {
+    double frobeniusInnerProduct(const double patch[3][3], const double kernel[3][3]) {
         double sum = 0.0;
 
         for (int i = 0; i < 3; ++i) {
 
             for (int j = 0; j < 3; ++j) {
 
-                sum += P[i][j] * K[i][j];
+                sum += patch[i][j] * kernel[i][j];
 
             }
 
@@ -63,7 +63,7 @@ namespace FrobeniusMatrixInnerProductForBlurr{
     void blurPixel(const double patchR[3][3],  const double patchG[3][3],  const double patchB[3][3],   unsigned int &outR,  unsigned int &outG,   unsigned int &outB) 
     {
         // 3x3 box blur filter kernel (normalized averaging)
-        const double K[3][3] = {
+        const double kernel[3][3] = {
 
             { 1.0 / 9.0, 1.0 / 9.0, 1.0 / 9.0 },
             { 1.0 / 9.0, 1.0 / 9.0, 1.0 / 9.0 },
@@ -71,11 +71,11 @@ namespace FrobeniusMatrixInnerProductForBlurr{
 
         };
 
-        double resR = frobeniusInnerProduct(patchR, K);
+        double resR = frobeniusInnerProduct(patchR, kernel);
 
-        double resG = frobeniusInnerProduct(patchG, K);
+        double resG = frobeniusInnerProduct(patchG, kernel);
 
-        double resB = frobeniusInnerProduct(patchB, K);
+        double resB = frobeniusInnerProduct(patchB, kernel);
 
         if (resR < 0.0) resR = 0.0; else if (resR > 255.0) resR = 255.0;
         if (resG < 0.0) resG = 0.0; else if (resG > 255.0) resG = 255.0;

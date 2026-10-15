@@ -1,19 +1,19 @@
 #pragma once
 
 namespace SelectionConstants {
-    const int CHOICE_NONE = 0;
-    const int CHOICE_IMAGE_LAB = 1;
-    const int CHOICE_VISUALIZATION_STACK = 2;
+    const int choiceNone = 0;
+    const int choiceImageLab = 1;
+    const int choiceVisualizationStack = 2;
 
-    const int SHIP_FRAME_FAST_X = 3;
-    const int SHIP_FRAME_FAST_Y = 0;
-    const int SHIP_FRAME_FAST_W = 42;
-    const int SHIP_FRAME_FAST_H = 44;
+    const int shipFrameFastX = 3;
+    const int shipFrameFastY = 0;
+    const int shipFrameFastW = 42;
+    const int shipFrameFastH = 44;
 
-    const int SHIP_FRAME_SLOW_X = 51;
-    const int SHIP_FRAME_SLOW_Y = 0;
-    const int SHIP_FRAME_SLOW_W = 42;
-    const int SHIP_FRAME_SLOW_H = 42;
+    const int shipFrameSlowX = 51;
+    const int shipFrameSlowY = 0;
+    const int shipFrameSlowW = 42;
+    const int shipFrameSlowH = 42;
 
-    const float SPEED_FAST_THRESHOLD = 380.0f;
+    const float speedFastThreshold = 380.0f;
 }

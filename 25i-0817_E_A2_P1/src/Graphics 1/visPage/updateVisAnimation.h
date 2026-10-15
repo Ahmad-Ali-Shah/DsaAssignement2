@@ -29,7 +29,7 @@ namespace VisPage {
                             int& queueCount,
                             std::string& currentOp,
                             std::string& statusMsg) {
-        if (anim.animType == VisConstants::ANIM_IDLE) return;
+        if (anim.animType == VisConstants::animIdle) return;
 
         anim.timer += dt;
         if (anim.timer < anim.stepDuration) return;
@@ -38,7 +38,7 @@ namespace VisPage {
         anim.currentStep++;
 
         // 1. Stack Animation: Clear Stack A -> Save in Other Stack B -> Re-push to Stack A
-        if (anim.animType == VisConstants::ANIM_STACK_POP_PUSH) {
+        if (anim.animType == VisConstants::animStackPopPush) {
             if (anim.currentStep >= 1 && anim.currentStep <= 5) {
                 if (mainTop >= 0) {
                     std::string item = mainStack[mainTop];
@@ -61,13 +61,13 @@ namespace VisPage {
                     currentOp = "Re-push: " + item;
                 }
             } else {
-                anim.animType = VisConstants::ANIM_IDLE;
+                anim.animType = VisConstants::animIdle;
                 statusMsg = "Animation Complete: Array cleared, stored in other stack, and refilled!";
                 currentOp = "Current Image";
             }
         }
         // 2. Queue Animation: Dequeue and Enqueue circular cycle
-        else if (anim.animType == VisConstants::ANIM_QUEUE_PROCESS) {
+        else if (anim.animType == VisConstants::animQueueProcess) {
             if (anim.currentStep <= 4) {
                 if (queueCount > 0) {
                     std::string item = queueArr[queueFront];
@@ -85,15 +85,15 @@ namespace VisPage {
                     currentOp = "Enqueue Rear";
                 }
             } else {
-                anim.animType = VisConstants::ANIM_IDLE;
+                anim.animType = VisConstants::animIdle;
                 statusMsg = "Queue Animation Complete: Circular array operations finished.";
                 currentOp = "Current Image";
             }
         }
         // 3. Image Pipeline Animation: Rotation -> Grayscale -> Blur -> Brightness
-        else if (anim.animType == VisConstants::ANIM_IMAGE_STEPS) {
+        else if (anim.animType == VisConstants::animImageSteps) {
             if (!img || width <= 0 || height <= 0) {
-                anim.animType = VisConstants::ANIM_IDLE;
+                anim.animType = VisConstants::animIdle;
                 return;
             }
 
@@ -118,7 +118,7 @@ namespace VisPage {
                 MyBrightness::applyBrightness(img, width, height, 35.0);
                 GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
             } else if (anim.currentStep >= 5) {
-                anim.animType = VisConstants::ANIM_IDLE;
+                anim.animType = VisConstants::animIdle;
                 currentOp = "Pipeline Complete";
                 statusMsg = "Image Pipeline Complete: All 4 transformations applied.";
             }

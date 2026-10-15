@@ -14,7 +14,7 @@ namespace GraphicsScheduler {
         bg.setOutlineThickness(1.0f);
         win.draw(bg);
 
-        std::string modeStr = (pipeline.getMode() == SchedulerMode::FIFO) ? "FIFO (Phase 1)" : "PRIORITY SCHEDULER (Phase 2)";
+        std::string modeStr = (pipeline.getMode() == SchedulerMode::fifo) ? "FIFO (Phase 1)" : "PRIORITY SCHEDULER (Phase 2)";
         sf::Text header;
         header.setFont(font);
         header.setString("ACTIVE SCHEDULER: " + modeStr + " | Pending: " + std::to_string(pipeline.getCurrentQueueSize()));

@@ -84,7 +84,7 @@ namespace GraphicsApp2 {
         drawBtn("Redo (" + std::to_string(history.getRedoSize()) + ")", sf::Color(45, 55, 45));
 
         curY += 6.0f;
-        std::string modeLbl = (pipeline.getMode() == SchedulerMode::FIFO) ? "Switch -> Priority Mode" : "Switch -> FIFO Mode";
+        std::string modeLbl = (pipeline.getMode() == SchedulerMode::fifo) ? "Switch -> Priority Mode" : "Switch -> FIFO Mode";
         drawBtn(modeLbl, sf::Color(80, 60, 20));
         drawBtn("Enqueue Resize [P3]", sf::Color(38, 52, 68));
         drawBtn("Enqueue Blur [P2]", sf::Color(38, 52, 68));

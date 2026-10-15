@@ -33,12 +33,12 @@ namespace GraphicsApp {
 
         while (win->isOpen()) {
             int choice = SelectionPage::runSelectionPage(*win, assetDir);
-            if (choice == SelectionConstants::CHOICE_NONE || !win->isOpen()) {
+            if (choice == SelectionConstants::choiceNone || !win->isOpen()) {
                 break;
             }
 
             std::string loadedImagePath = "";
-            if (choice == SelectionConstants::CHOICE_IMAGE_LAB) {
+            if (choice == SelectionConstants::choiceImageLab) {
                 bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
                 if (!inputOk || !win->isOpen()) {
                     continue; // Back to selection page
@@ -46,7 +46,7 @@ namespace GraphicsApp {
 
                 EditorPage::runEditorPage(*win, assetDir, img, width, height, history, pipeline, loadedImagePath);
                 continue; // Back to selection page when editor finishes / back clicked
-            } else if (choice == SelectionConstants::CHOICE_VISUALIZATION_STACK) {
+            } else if (choice == SelectionConstants::choiceVisualizationStack) {
                 bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
                 if (!inputOk || !win->isOpen()) {
                     continue; // Back to selection page
@@ -94,7 +94,7 @@ namespace GraphicsApp {
                 else if (event.type == sf::Event::MouseButtonPressed) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
                         int toolId = GraphicsToolbar::detectToolClick(0.0f, 0.0f, 240.0f, event.mouseButton.x, event.mouseButton.y);
-                        if (toolId != GraphicsTool::NONE) {
+                        if (toolId != GraphicsTool::none) {
                             handleToolExecution(toolId, img, width, height, history, pipeline, showInspector, lastAction);
                             if (img && width > 0 && height > 0) {
                                 GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);

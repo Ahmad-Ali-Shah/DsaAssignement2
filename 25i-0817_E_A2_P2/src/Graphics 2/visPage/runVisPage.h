@@ -48,7 +48,7 @@ namespace VisPage {
         std::string statusMsg = "Visualization Active - Inspect Array Cells or Animate Operations";
 
         // Stack array representation items
-        std::string mainStack[VisConstants::MAX_STACK_ITEMS];
+        std::string mainStack[VisConstants::maxStackItems];
         int mainTop = 4;
         mainStack[0] = "Root Base";
         mainStack[1] = "PPM Matrix";
@@ -57,17 +57,17 @@ namespace VisPage {
         mainStack[4] = "Grayscale";
 
         // Auxiliary stack ("Other Stack") for pop-and-repush animation
-        std::string auxStack[VisConstants::MAX_STACK_ITEMS];
+        std::string auxStack[VisConstants::maxStackItems];
         int auxTop = -1;
 
         // Circular Queue array representation items
-        std::string queueArr[VisConstants::MAX_QUEUE_ITEMS];
+        std::string queueArr[VisConstants::maxQueueItems];
         int queueFront = 0;
         int queueRear = -1;
         int queueCount = 0;
 
-        Job pendingJobs[VisConstants::MAX_QUEUE_ITEMS];
-        int foundJobs = pipeline.getPendingJobs(pendingJobs, VisConstants::MAX_QUEUE_ITEMS);
+        Job pendingJobs[VisConstants::maxQueueItems];
+        int foundJobs = pipeline.getPendingJobs(pendingJobs, VisConstants::maxQueueItems);
         if (foundJobs > 0) {
             for (int qIdx = 0; qIdx < foundJobs; qIdx++) {
                 queueArr[qIdx] = pendingJobs[qIdx].name;
@@ -206,11 +206,11 @@ namespace VisPage {
                         stackWin.visible = true;
                         stackWin.minimized = false;
                         queueWin.visible = false;
-                        anim.animType = VisConstants::ANIM_STACK_POP_PUSH;
+                        anim.animType = VisConstants::animStackPopPush;
                         anim.currentStep = 0;
                         anim.timer = 0.0f;
                     } else if (visRects.animImageBtn.contains(mouseX, mouseY)) {
-                        anim.animType = VisConstants::ANIM_IMAGE_STEPS;
+                        anim.animType = VisConstants::animImageSteps;
                         anim.currentStep = 0;
                         anim.timer = 0.0f;
                     } else if (visRects.backBtn.contains(mouseX, mouseY)) {
@@ -219,52 +219,52 @@ namespace VisPage {
 
                     // Left toolbar operations: apply transformation and push to stack
                     else if (leftRects.rot90Btn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_ROT_90, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opRot90, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Rot 90"; }
                         }
                     } else if (leftRects.rot180Btn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_ROT_180, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opRot180, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Rot 180"; }
                         }
                     } else if (leftRects.rot270Btn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_ROT_270, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opRot270, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Rot 270"; }
                         }
                     } else if (leftRects.rot360Btn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_ROT_360, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opRot360, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Rot 360"; }
                         }
                     } else if (leftRects.flipHBtn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_FLIP_H, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opFlipH, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Flip H"; }
                         }
                     } else if (leftRects.flipVBtn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_FLIP_V, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opFlipV, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Flip V"; }
                         }
                     } else if (leftRects.grayBtn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_GRAYSCALE, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opGrayscale, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Grayscale"; }
                         }
                     } else if (leftRects.blurBtn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_BLUR, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opBlur, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Box Blur"; }
                         }
                     } else if (leftRects.bucketBtn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_BUCKET_FILL, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opBucketFill, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Bucket"; }
                         }
                     } else if (leftRects.resizeBtn.contains(mouseX, mouseY)) {
-                        if (EditorPage::executeEditorAction(EditorConstants::OP_RESIZE, img, width, height, history, "", "", currentOp)) {
+                        if (EditorPage::executeEditorAction(EditorConstants::opResize, img, width, height, history, "", "", currentOp)) {
                             GraphicsCanvas::createTextureFromPixels(canvasTex, img, width, height);
                             if (mainTop < 7) { mainTop++; mainStack[mainTop] = "Resize"; }
                         }
@@ -276,7 +276,7 @@ namespace VisPage {
                         modal.val1 = "40";
                         modal.val2 = "";
                         modal.activeField = 1;
-                        modal.opType = EditorConstants::OP_BRIGHTNESS;
+                        modal.opType = EditorConstants::opBrightness;
                     } else if (leftRects.cropBtn.contains(mouseX, mouseY)) {
                         modal.active = true;
                         modal.title = "CROP IMAGE DIMENSIONS";
@@ -285,7 +285,7 @@ namespace VisPage {
                         modal.val1 = std::to_string(width / 2);
                         modal.val2 = std::to_string(height / 2);
                         modal.activeField = 1;
-                        modal.opType = EditorConstants::OP_CROP;
+                        modal.opType = EditorConstants::opCrop;
                     }
                 }
             }

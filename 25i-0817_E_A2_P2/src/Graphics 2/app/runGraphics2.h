@@ -26,7 +26,7 @@ namespace GraphicsApp2 {
         int operator()(int id) const {
             if (mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH) return id;
             curY += 30.0f;
-            return GraphicsTool2::NONE;
+            return GraphicsTool2::none;
         }
     };
 
@@ -38,36 +38,36 @@ namespace GraphicsApp2 {
 
         ClickChecker check{btnX, btnW, btnH, curY, mouseX, mouseY};
 
-        int id = check(GraphicsTool2::LOAD); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::CROP); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::ROTATE_90); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::FLIP_H); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::BRIGHTNESS_UP); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::GRAYSCALE); if (id != GraphicsTool2::NONE) return id;
+        int id = check(GraphicsTool2::load); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::crop); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::rotate90); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::flipH); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::brightnessUp); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::grayscale); if (id != GraphicsTool2::none) return id;
 
         curY += 6.0f;
-        id = check(GraphicsTool2::UNDO); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::REDO); if (id != GraphicsTool2::NONE) return id;
+        id = check(GraphicsTool2::undo); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::redo); if (id != GraphicsTool2::none) return id;
 
         curY += 6.0f;
-        id = check(GraphicsTool2::TOGGLE_MODE); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::ENQUEUE_RESIZE); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::ENQUEUE_BLUR); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::ENQUEUE_BUCKET_STACK); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::ENQUEUE_BUCKET_QUEUE); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::ENQUEUE_SAVE); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::ENQUEUE_EXPORT); if (id != GraphicsTool2::NONE) return id;
+        id = check(GraphicsTool2::toggleMode); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::enqueueResize); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::enqueueBlur); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::enqueueBucketStack); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::enqueueBucketQueue); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::enqueueSave); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::enqueueExport); if (id != GraphicsTool2::none) return id;
 
         curY += 6.0f;
-        id = check(GraphicsTool2::PROCESS_NEXT); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::PROCESS_ALL); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::CLEAR_PIPELINE); if (id != GraphicsTool2::NONE) return id;
+        id = check(GraphicsTool2::processNext); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::processAll); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::clearPipeline); if (id != GraphicsTool2::none) return id;
 
         curY += 6.0f;
-        id = check(GraphicsTool2::RUN_BENCHMARK); if (id != GraphicsTool2::NONE) return id;
-        id = check(GraphicsTool2::TOGGLE_DUAL_FILL); if (id != GraphicsTool2::NONE) return id;
+        id = check(GraphicsTool2::runBenchmark); if (id != GraphicsTool2::none) return id;
+        id = check(GraphicsTool2::toggleDualFill); if (id != GraphicsTool2::none) return id;
 
-        return GraphicsTool2::NONE;
+        return GraphicsTool2::none;
     }
 
     void runGraphics2(Pixel**& img, int& width, int& height, HistoryManager& history, ProcessingPipeline& pipeline) {
@@ -84,12 +84,12 @@ namespace GraphicsApp2 {
 
         while (win->isOpen()) {
             int choice = SelectionPage::runSelectionPage(*win, assetDir);
-            if (choice == SelectionConstants::CHOICE_NONE || !win->isOpen()) {
+            if (choice == SelectionConstants::choiceNone || !win->isOpen()) {
                 break;
             }
 
             std::string loadedImagePath = "";
-            if (choice == SelectionConstants::CHOICE_IMAGE_LAB) {
+            if (choice == SelectionConstants::choiceImageLab) {
                 bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
                 if (!inputOk || !win->isOpen()) {
                     continue; // Back to selection page
@@ -97,7 +97,7 @@ namespace GraphicsApp2 {
 
                 EditorPage::runEditorPage(*win, assetDir, img, width, height, history, pipeline, loadedImagePath);
                 continue; // Back to selection page when editor finishes / back clicked
-            } else if (choice == SelectionConstants::CHOICE_VISUALIZATION_STACK) {
+            } else if (choice == SelectionConstants::choiceVisualizationStack) {
                 bool inputOk = InputPage::runInputPage(*win, assetDir, img, width, height, loadedImagePath);
                 if (!inputOk || !win->isOpen()) {
                     continue; // Back to selection page
@@ -156,7 +156,7 @@ namespace GraphicsApp2 {
                 else if (event.type == sf::Event::MouseButtonPressed) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
                         int toolId = detectClickP2(0.0f, 0.0f, 240.0f, event.mouseButton.x, event.mouseButton.y);
-                        if (toolId != GraphicsTool2::NONE) {
+                        if (toolId != GraphicsTool2::none) {
                             handleToolExecution2(toolId, img, width, height, history, pipeline, showDualFill, showBenchmark, lastAction);
                             if (img && width > 0 && height > 0) {
                                 sf::Uint8* pixels = new sf::Uint8[width * height * 4];

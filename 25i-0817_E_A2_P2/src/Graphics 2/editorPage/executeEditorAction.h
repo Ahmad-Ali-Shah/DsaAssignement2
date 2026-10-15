@@ -20,40 +20,40 @@ namespace EditorPage {
 
         bool changed = false;
 
-        if (op == EditorConstants::OP_ROT_90) {
+        if (op == EditorConstants::opRot90) {
             history.recordRotate(90, width, height);
             img = rotateObject::applyRotate(img, width, height, 90);
             currentOperation = "Rotations 90";
             changed = true;
-        } else if (op == EditorConstants::OP_ROT_180) {
+        } else if (op == EditorConstants::opRot180) {
             history.recordRotate(180, width, height);
             img = rotateObject::applyRotate(img, width, height, 180);
             currentOperation = "Rotations 180";
             changed = true;
-        } else if (op == EditorConstants::OP_ROT_270) {
+        } else if (op == EditorConstants::opRot270) {
             history.recordRotate(270, width, height);
             img = rotateObject::applyRotate(img, width, height, 270);
             currentOperation = "Rotations 270";
             changed = true;
-        } else if (op == EditorConstants::OP_ROT_360) {
+        } else if (op == EditorConstants::opRot360) {
             currentOperation = "Rotations 360";
             changed = true;
-        } else if (op == EditorConstants::OP_FLIP_H) {
+        } else if (op == EditorConstants::opFlipH) {
             history.recordFlip(true, width, height);
             flipAxis::applyFlipHorizontal(img, width, height);
             currentOperation = "Horizontal Flip";
             changed = true;
-        } else if (op == EditorConstants::OP_FLIP_V) {
+        } else if (op == EditorConstants::opFlipV) {
             history.recordFlip(false, width, height);
             flipAxis::applyFlipVertical(img, width, height);
             currentOperation = "Vertical Flip";
             changed = true;
-        } else if (op == EditorConstants::OP_GRAYSCALE) {
-            history.recordGridOperation("Grayscale", HistoryOpType::GRAYSCALE, img, width, height);
+        } else if (op == EditorConstants::opGrayscale) {
+            history.recordGridOperation("Grayscale", HistoryOpType::grayscale, img, width, height);
             MygreyScale::applyGrayscale(img, width, height);
             currentOperation = "Grayscale";
             changed = true;
-        } else if (op == EditorConstants::OP_BRIGHTNESS) {
+        } else if (op == EditorConstants::opBrightness) {
             double delta = 30.0;
             if (!p1.empty()) {
                 delta = static_cast<double>(std::stoi(p1));
@@ -62,13 +62,13 @@ namespace EditorPage {
             MyBrightness::applyBrightness(img, width, height, delta);
             currentOperation = "Brightness " + std::to_string(static_cast<int>(delta));
             changed = true;
-        } else if (op == EditorConstants::OP_BLUR) {
-            history.recordGridOperation("Blur", HistoryOpType::BLUR, img, width, height);
+        } else if (op == EditorConstants::opBlur) {
+            history.recordGridOperation("Blur", HistoryOpType::blur, img, width, height);
             FrobeniusMatrixInnerProductForBlurr::applyBlur(img, width, height);
             currentOperation = "Box Blur";
             changed = true;
-        } else if (op == EditorConstants::OP_RESIZE) {
-            history.recordGridOperation("Resize", HistoryOpType::RESIZE, img, width, height);
+        } else if (op == EditorConstants::opResize) {
+            history.recordGridOperation("Resize", HistoryOpType::resize, img, width, height);
             int newW = width / 2;
             int newH = height / 2;
             if (newW < 2) newW = 2;
@@ -76,7 +76,7 @@ namespace EditorPage {
             img = scaling::applyResize(img, width, height, newW, newH);
             currentOperation = "Resize (" + std::to_string(width) + "x" + std::to_string(height) + ")";
             changed = true;
-        } else if (op == EditorConstants::OP_CROP) {
+        } else if (op == EditorConstants::opCrop) {
             int cw = width / 2;
             int ch = height / 2;
             if (!p1.empty() && !p2.empty()) {
@@ -85,16 +85,16 @@ namespace EditorPage {
                 if (cw > width) cw = width;
                 if (ch > height) ch = height;
             }
-            history.recordGridOperation("Crop", HistoryOpType::CROP, img, width, height);
+            history.recordGridOperation("Crop", HistoryOpType::crop, img, width, height);
             img = myCrop::applyCrop(img, width, height, 0, 0, cw, ch);
             currentOperation = "Crop (" + std::to_string(cw) + "x" + std::to_string(ch) + ")";
             changed = true;
-        } else if (op == EditorConstants::OP_BUCKET_FILL) {
-            history.recordGridOperation("Bucket Fill", HistoryOpType::BUCKET_FILL, img, width, height);
+        } else if (op == EditorConstants::opBucketFill) {
+            history.recordGridOperation("Bucket Fill", HistoryOpType::bucketFill, img, width, height);
             MybucketFill::ReplaceNearOneQueue(img, static_cast<double>(width), static_cast<double>(height), width / 2, height / 2, 255, 120, 80);
             currentOperation = "Bucket Fill (Queue)";
             changed = true;
-        } else if (op == EditorConstants::OP_SAVE) {
+        } else if (op == EditorConstants::opSave) {
             std::string outPath = p1.empty() ? "25i-0817_E_A2_P2/images/output.png" : p1;
             ReadPath::WriteImage(outPath, img, width, height);
             currentOperation = "Saved to " + outPath;

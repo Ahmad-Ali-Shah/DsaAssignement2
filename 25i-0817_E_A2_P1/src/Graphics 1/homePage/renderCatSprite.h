@@ -39,13 +39,13 @@ namespace HomePage {
         };
 
         sf::IntRect rect(99, 422, 25, 18);
-        if (stage == HomeConstants::STAGE_SITTING) {
+        if (stage == HomeConstants::stageSitting) {
             if (frameIdx >= 0 && frameIdx < 7) rect = sittingFrames[frameIdx];
-        } else if (stage == HomeConstants::STAGE_STANDING) {
+        } else if (stage == HomeConstants::stageStanding) {
             if (frameIdx >= 0 && frameIdx < 2) rect = standingFrames[frameIdx];
-        } else if (stage == HomeConstants::STAGE_WALKING) {
+        } else if (stage == HomeConstants::stageWalking) {
             if (frameIdx >= 0 && frameIdx < 4) rect = walkingFrames[frameIdx];
-        } else if (stage == HomeConstants::STAGE_RUNNING) {
+        } else if (stage == HomeConstants::stageRunning) {
             if (frameIdx >= 0 && frameIdx < 8) rect = runningFrames[frameIdx];
         }
 

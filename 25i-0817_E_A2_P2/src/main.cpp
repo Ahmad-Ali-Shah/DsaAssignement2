@@ -69,7 +69,7 @@ int main() {
 
     // Configurable 5 MB budget default
     HistoryManager history(5 * 1024 * 1024);
-    ProcessingPipeline pipeline(100, SchedulerMode::PRIORITY);
+    ProcessingPipeline pipeline(100, SchedulerMode::priority);
 
     cout << "========================================================\n";
     cout << "           IMAGELAB STUDIO P2: MODE SELECTION           \n";
@@ -139,7 +139,7 @@ int main() {
             }
             case 4: {
                 if (!currentImage) { cout << "No image loaded!\n"; break; }
-                history.recordGridOperation("Grayscale", HistoryOpType::GRAYSCALE, currentImage, width, height);
+                history.recordGridOperation("Grayscale", HistoryOpType::grayscale, currentImage, width, height);
                 MygreyScale::applyGrayscale(currentImage, width, height);
                 cout << "[Success] Grayscale applied!\n";
                 break;
@@ -171,7 +171,7 @@ int main() {
                 int sx, sy, cw, ch;
                 cout << "Enter startX startY cropWidth cropHeight: ";
                 cin >> sx >> sy >> cw >> ch;
-                history.recordGridOperation("Crop", HistoryOpType::CROP, currentImage, width, height);
+                history.recordGridOperation("Crop", HistoryOpType::crop, currentImage, width, height);
                 currentImage = myCrop::applyCrop(currentImage, width, height, sx, sy, cw, ch);
                 cout << "[Success] Image cropped! New dimensions: " << width << "x" << height << "\n";
                 break;
@@ -181,14 +181,14 @@ int main() {
                 int tw, th;
                 cout << "Enter targetWidth targetHeight: ";
                 cin >> tw >> th;
-                history.recordGridOperation("Resize", HistoryOpType::RESIZE, currentImage, width, height);
+                history.recordGridOperation("Resize", HistoryOpType::resize, currentImage, width, height);
                 currentImage = scaling::applyResize(currentImage, width, height, tw, th);
                 cout << "[Success] Image resized to: " << width << "x" << height << "\n";
                 break;
             }
             case 9: {
                 if (!currentImage) { cout << "No image loaded!\n"; break; }
-                history.recordGridOperation("Blur", HistoryOpType::BLUR, currentImage, width, height);
+                history.recordGridOperation("Blur", HistoryOpType::blur, currentImage, width, height);
                 FrobeniusMatrixInnerProductForBlurr::applyBlur(currentImage, width, height);
                 cout << "[Success] Blur applied!\n";
                 break;
@@ -263,20 +263,20 @@ int main() {
                 cout << "Job Type: [1] Undo/Redo(Pri:1), [2] Blur(Pri:2), [3] Resize(Pri:3), [4] Export Barrier(Pri:4): ";
                 int jt; cin >> jt;
                 if (jt == 1) {
-                    pipeline.addJob(Job(0, JobType::UNDO_REDO, "Undo Job", 1));
+                    pipeline.addJob(Job(0, JobType::undoRedo, "Undo Job", 1));
                 } else if (jt == 2) {
-                    pipeline.addJob(Job(0, JobType::BLUR, "Blur Job", 2));
+                    pipeline.addJob(Job(0, JobType::blur, "Blur Job", 2));
                 } else if (jt == 3) {
                     int tw, th;
                     cout << "Enter targetWidth targetHeight: ";
                     cin >> tw >> th;
-                    Job j(0, JobType::RESIZE, "Resize Job", 3);
+                    Job j(0, JobType::resize, "Resize Job", 3);
                     j.targetW = tw; j.targetH = th;
                     pipeline.addJob(j);
                 } else if (jt == 4) {
                     cout << "Enter export file path: ";
                     string fp; cin >> fp;
-                    Job j(0, JobType::EXPORT_IMAGE, "Export Barrier", 4);
+                    Job j(0, JobType::exportImage, "Export Barrier", 4);
                     j.filePath = fp;
                     pipeline.addJob(j);
                 }
@@ -296,18 +296,18 @@ int main() {
             case 18: {
                 cout << "Select Mode: [1] FIFO, [2] PRIORITY: ";
                 int m; cin >> m;
-                pipeline.setMode(m == 1 ? SchedulerMode::FIFO : SchedulerMode::PRIORITY);
+                pipeline.setMode(m == 1 ? SchedulerMode::fifo : SchedulerMode::priority);
                 break;
             }
             case 19:
-                ProcessingPipeline::runBenchmarkComparison();
+                pipeline.runBenchmarkComparison();
                 break;
             case 20:
                 BenchmarkRunner::runBatchBenchmarks();
                 break;
             case 21: {
                 cout << "Enter new memory budget in KB (e.g., 5120 for 5MB, 50 for 50KB to test eviction): ";
-                unsigned int kb; cin >> kb;
+                int kb; cin >> kb;
                 history.setMemoryBudget(kb * 1024);
                 cout << "[Success] Memory budget updated to " << kb << " KB\n";
                 break;

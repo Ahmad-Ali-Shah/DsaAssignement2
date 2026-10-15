@@ -32,7 +32,7 @@ namespace InputPage {
 
         std::string enteredPath = "";
         std::string errorMsg = "";
-        int currentState = InputConstants::STATE_TYPING;
+        int currentState = InputConstants::stateTyping;
 
         sf::Clock clock;
         sf::Clock blinkClock;
@@ -74,7 +74,7 @@ namespace InputPage {
                     return false;
                 }
 
-                if (currentState == InputConstants::STATE_TYPING) {
+                if (currentState == InputConstants::stateTyping) {
                     if (event.type == sf::Event::KeyPressed) {
                         // Clipboard Paste (Ctrl+V)
                         if (event.key.control && event.key.code == sf::Keyboard::V) {
@@ -99,7 +99,7 @@ namespace InputPage {
                             } else {
                                 if (validateAndLoadImage(enteredPath, img, width, height)) {
                                     outLoadedPath = enteredPath;
-                                    currentState = InputConstants::STATE_LOADING;
+                                    currentState = InputConstants::stateLoading;
                                     catX = trackLeft;
                                     loopsCompleted = 0;
                                     errorMsg = "";
@@ -132,18 +132,18 @@ namespace InputPage {
             }
 
             // Update loading cat animation
-            if (currentState == InputConstants::STATE_LOADING) {
+            if (currentState == InputConstants::stateLoading) {
                 catTimer += dt;
-                if (catTimer >= InputConstants::CAT_FRAME_TIME) {
-                    catTimer -= InputConstants::CAT_FRAME_TIME;
-                    catFrame = (catFrame + 1) % InputConstants::CAT_RUN_FRAMES;
+                if (catTimer >= InputConstants::catFrameTime) {
+                    catTimer -= InputConstants::catFrameTime;
+                    catFrame = (catFrame + 1) % InputConstants::catRunFrames;
                 }
 
-                catX += InputConstants::CAT_SPEED * dt;
+                catX += InputConstants::catSpeed * dt;
                 if (catX >= trackRight) {
                     catX = trackLeft;
                     loopsCompleted++;
-                    if (loopsCompleted >= InputConstants::REQUIRED_CAT_LOOPS) {
+                    if (loopsCompleted >= InputConstants::requiredCatLoops) {
                         return true;
                     }
                 }
@@ -153,9 +153,9 @@ namespace InputPage {
             window.clear(sf::Color::Black);
             renderInputBackground(window, bgTex);
 
-            if (currentState == InputConstants::STATE_TYPING) {
+            if (currentState == InputConstants::stateTyping) {
                 renderInputPrompt(window, font, titleFont, enteredPath, cursorBlink, errorMsg);
-            } else if (currentState == InputConstants::STATE_LOADING) {
+            } else if (currentState == InputConstants::stateLoading) {
                 renderLoadingScreen(window, catTex, font, titleFont, catX, catY, catFrame, loopsCompleted, outLoadedPath);
             }
 

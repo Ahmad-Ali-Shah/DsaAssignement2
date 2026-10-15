@@ -10,7 +10,7 @@ namespace InputPage {
         }
         bgTex.setSmooth(true);
 
-        if (!catTex.loadFromFile(assetPath + "/white_0.png")) {
+        if (!catTex.loadFromFile(assetPath + "/white0.png")) {
             return false;
         }
         catTex.setSmooth(false);

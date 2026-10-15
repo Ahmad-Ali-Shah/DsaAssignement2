@@ -16,7 +16,7 @@ struct Pixel {
     unsigned int b;
 
     Pixel() : r(0), g(0), b(0) {}
-    Pixel(unsigned int _r, unsigned int _g, unsigned int _b) : r(_r), g(_g), b(_b) {}
+    Pixel(unsigned int redVal, unsigned int greenVal, unsigned int blueVal) : r(redVal), g(greenVal), b(blueVal) {}
 
     bool operator==(const Pixel& other) const {
         return r == other.r && g == other.g && b == other.b;

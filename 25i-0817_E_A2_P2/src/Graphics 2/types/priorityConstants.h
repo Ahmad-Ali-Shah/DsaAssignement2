@@ -1,25 +1,25 @@
 #pragma once
 
 namespace GraphicsTool2 {
-    const int NONE = 0;
-    const int LOAD = 1;
-    const int CROP = 2;
-    const int ROTATE_90 = 3;
-    const int FLIP_H = 4;
-    const int BRIGHTNESS_UP = 5;
-    const int GRAYSCALE = 6;
-    const int UNDO = 7;
-    const int REDO = 8;
-    const int ENQUEUE_RESIZE = 9;
-    const int ENQUEUE_BLUR = 10;
-    const int ENQUEUE_BUCKET_STACK = 11;
-    const int ENQUEUE_BUCKET_QUEUE = 12;
-    const int ENQUEUE_SAVE = 13;
-    const int ENQUEUE_EXPORT = 14;
-    const int PROCESS_NEXT = 15;
-    const int PROCESS_ALL = 16;
-    const int TOGGLE_MODE = 17;
-    const int RUN_BENCHMARK = 18;
-    const int TOGGLE_DUAL_FILL = 19;
-    const int CLEAR_PIPELINE = 20;
+    const int none = 0;
+    const int load = 1;
+    const int crop = 2;
+    const int rotate90 = 3;
+    const int flipH = 4;
+    const int brightnessUp = 5;
+    const int grayscale = 6;
+    const int undo = 7;
+    const int redo = 8;
+    const int enqueueResize = 9;
+    const int enqueueBlur = 10;
+    const int enqueueBucketStack = 11;
+    const int enqueueBucketQueue = 12;
+    const int enqueueSave = 13;
+    const int enqueueExport = 14;
+    const int processNext = 15;
+    const int processAll = 16;
+    const int toggleMode = 17;
+    const int runBenchmark = 18;
+    const int toggleDualFill = 19;
+    const int clearPipeline = 20;
 }

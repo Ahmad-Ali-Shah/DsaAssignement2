@@ -9,25 +9,25 @@ namespace SelectionPage {
 
         if (isFast) {
             ship.setTextureRect(sf::IntRect(
-                SelectionConstants::SHIP_FRAME_FAST_X,
-                SelectionConstants::SHIP_FRAME_FAST_Y,
-                SelectionConstants::SHIP_FRAME_FAST_W,
-                SelectionConstants::SHIP_FRAME_FAST_H
+                SelectionConstants::shipFrameFastX,
+                SelectionConstants::shipFrameFastY,
+                SelectionConstants::shipFrameFastW,
+                SelectionConstants::shipFrameFastH
             ));
             ship.setOrigin(
-                SelectionConstants::SHIP_FRAME_FAST_W / 2.0f,
-                SelectionConstants::SHIP_FRAME_FAST_H / 2.0f
+                SelectionConstants::shipFrameFastW / 2.0f,
+                SelectionConstants::shipFrameFastH / 2.0f
             );
         } else {
             ship.setTextureRect(sf::IntRect(
-                SelectionConstants::SHIP_FRAME_SLOW_X,
-                SelectionConstants::SHIP_FRAME_SLOW_Y,
-                SelectionConstants::SHIP_FRAME_SLOW_W,
-                SelectionConstants::SHIP_FRAME_SLOW_H
+                SelectionConstants::shipFrameSlowX,
+                SelectionConstants::shipFrameSlowY,
+                SelectionConstants::shipFrameSlowW,
+                SelectionConstants::shipFrameSlowH
             ));
             ship.setOrigin(
-                SelectionConstants::SHIP_FRAME_SLOW_W / 2.0f,
-                SelectionConstants::SHIP_FRAME_SLOW_H / 2.0f
+                SelectionConstants::shipFrameSlowW / 2.0f,
+                SelectionConstants::shipFrameSlowH / 2.0f
             );
         }
 

@@ -266,10 +266,10 @@ void testPipelineQueue() {
     cout << "========================================================\n";
 
     ProcessingPipeline pipeline(3);
-    Job j1(1, JobType::BLUR, "Blur 1");
-    Job j2(2, JobType::BLUR, "Blur 2");
-    Job j3(3, JobType::BLUR, "Blur 3");
-    Job j4(4, JobType::BLUR, "Blur 4");
+    Job j1(1, JobType::blur, "Blur 1");
+    Job j2(2, JobType::blur, "Blur 2");
+    Job j3(3, JobType::blur, "Blur 3");
+    Job j4(4, JobType::blur, "Blur 4");
 
     bool add1 = pipeline.addJob(j1);
     bool add2 = pipeline.addJob(j2);

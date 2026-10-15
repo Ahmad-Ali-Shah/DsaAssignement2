@@ -15,7 +15,7 @@ namespace SelectionPage {
         sf::Font titleFont;
 
         if (!loadSelectionAssets(bgTex, shipTex, mainFont, titleFont, assetPath)) {
-            return SelectionConstants::CHOICE_IMAGE_LAB;
+            return SelectionConstants::choiceImageLab;
         }
 
         // Hide standard operating system mouse cursor in favor of custom spaceship cursor
@@ -30,7 +30,7 @@ namespace SelectionPage {
         float prevX = mouseX;
         float prevY = mouseY;
         bool isFast = false;
-        int hoveredChoice = SelectionConstants::CHOICE_NONE;
+        int hoveredChoice = SelectionConstants::choiceNone;
 
         sf::FloatRect rect1;
         sf::FloatRect rect2;
@@ -46,7 +46,7 @@ namespace SelectionPage {
                 if (event.type == sf::Event::Closed) {
                     window.setMouseCursorVisible(true);
                     window.close();
-                    return SelectionConstants::CHOICE_NONE;
+                    return SelectionConstants::choiceNone;
                 }
                 if (event.type == sf::Event::MouseButtonPressed) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
@@ -54,22 +54,22 @@ namespace SelectionPage {
                         float cy = static_cast<float>(event.mouseButton.y);
                         if (rect1.contains(cx, cy)) {
                             window.setMouseCursorVisible(true);
-                            return SelectionConstants::CHOICE_IMAGE_LAB;
+                            return SelectionConstants::choiceImageLab;
                         }
                         if (rect2.contains(cx, cy)) {
                             window.setMouseCursorVisible(true);
-                            return SelectionConstants::CHOICE_VISUALIZATION_STACK;
+                            return SelectionConstants::choiceVisualizationStack;
                         }
                     }
                 }
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Return) {
                         window.setMouseCursorVisible(true);
-                        return SelectionConstants::CHOICE_IMAGE_LAB;
+                        return SelectionConstants::choiceImageLab;
                     }
                     if (event.key.code == sf::Keyboard::Num2) {
                         window.setMouseCursorVisible(true);
-                        return SelectionConstants::CHOICE_VISUALIZATION_STACK;
+                        return SelectionConstants::choiceVisualizationStack;
                     }
                 }
             }
@@ -78,23 +78,23 @@ namespace SelectionPage {
             mouseX = static_cast<float>(currPos.x);
             mouseY = static_cast<float>(currPos.y);
 
-            updateShipSpeed(mouseX, mouseY, prevX, prevY, dt, SelectionConstants::SPEED_FAST_THRESHOLD, isFast);
+            updateShipSpeed(mouseX, mouseY, prevX, prevY, dt, SelectionConstants::speedFastThreshold, isFast);
             prevX = mouseX;
             prevY = mouseY;
 
             if (rect1.contains(mouseX, mouseY)) {
-                hoveredChoice = SelectionConstants::CHOICE_IMAGE_LAB;
+                hoveredChoice = SelectionConstants::choiceImageLab;
             } else if (rect2.contains(mouseX, mouseY)) {
-                hoveredChoice = SelectionConstants::CHOICE_VISUALIZATION_STACK;
+                hoveredChoice = SelectionConstants::choiceVisualizationStack;
             } else {
-                hoveredChoice = SelectionConstants::CHOICE_NONE;
+                hoveredChoice = SelectionConstants::choiceNone;
             }
 
             renderSelectionPage(window, bgTex, shipTex, titleFont, mainFont, hoveredChoice, timeSeconds, mouseX, mouseY, isFast, rect1, rect2);
         }
 
         window.setMouseCursorVisible(true);
-        return SelectionConstants::CHOICE_NONE;
+        return SelectionConstants::choiceNone;
     }
 
 }

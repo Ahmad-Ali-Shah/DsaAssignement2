@@ -17,7 +17,7 @@ namespace HomePage {
         }
 
         sf::Texture catTex;
-        if (!loadCatTexture(catTex, assetPath + "/white_0.png")) {
+        if (!loadCatTexture(catTex, assetPath + "/white0.png")) {
             return true;
         }
 
@@ -30,7 +30,7 @@ namespace HomePage {
 
         float catX = 80.0f;
         float catY = winH * 0.44f - 110.0f;
-        int catStage = HomeConstants::STAGE_SITTING;
+        int catStage = HomeConstants::stageSitting;
         int catFrame = 0;
         float catTimer = 0.0f;
         int sitLoops = 0;

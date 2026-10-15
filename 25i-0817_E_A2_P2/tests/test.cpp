@@ -47,9 +47,9 @@ void testPriorityQueue() {
     priorityQueueType<Job> pq(20);
 
     // 1. Same-priority jobs served in arrival order (FIFO tie-breaking)
-    pq.addQueue(Job(1, JobType::BLUR, "Blur A", 2, 10));
-    pq.addQueue(Job(2, JobType::BLUR, "Blur B", 2, 20));
-    pq.addQueue(Job(3, JobType::BLUR, "Blur C", 2, 30));
+    pq.addQueue(Job(1, JobType::blur, "Blur A", 2, 10));
+    pq.addQueue(Job(2, JobType::blur, "Blur B", 2, 20));
+    pq.addQueue(Job(3, JobType::blur, "Blur C", 2, 30));
 
     assert(pq.front().id == 1); pq.deleteQueue();
     assert(pq.front().id == 2); pq.deleteQueue();
@@ -57,9 +57,9 @@ void testPriorityQueue() {
     cout << "  [PASS] Same-priority jobs served in arrival order (FIFO tie handling)\n";
 
     // 2. Mixed priorities
-    pq.addQueue(Job(4, JobType::RESIZE, "Resize", 3, 1));
-    pq.addQueue(Job(5, JobType::UNDO_REDO, "Undo", 1, 2));
-    pq.addQueue(Job(6, JobType::BLUR, "Blur", 2, 3));
+    pq.addQueue(Job(4, JobType::resize, "Resize", 3, 1));
+    pq.addQueue(Job(5, JobType::undoRedo, "Undo", 1, 2));
+    pq.addQueue(Job(6, JobType::blur, "Blur", 2, 3));
 
     assert(pq.front().id == 5); pq.deleteQueue(); // Pri 1
     assert(pq.front().id == 6); pq.deleteQueue(); // Pri 2
@@ -69,11 +69,11 @@ void testPriorityQueue() {
     // 3. Finalization barrier rule:
     // Submitted: Resize(3) Blur(2) Export(4) Blur(2) Undo(1)
     // Expected:  Blur(2), Resize(3), Export(4), Undo(1), Blur(2)
-    pq.addQueue(Job(10, JobType::RESIZE, "Resize(3)", 3, 1));
-    pq.addQueue(Job(20, JobType::BLUR, "Blur(2)", 2, 2));
-    pq.addQueue(Job(30, JobType::EXPORT_IMAGE, "Export(4) [Barrier]", 4, 3));
-    pq.addQueue(Job(40, JobType::BLUR, "Blur(2)-post", 2, 4));
-    pq.addQueue(Job(50, JobType::UNDO_REDO, "Undo(1)-post", 1, 5));
+    pq.addQueue(Job(10, JobType::resize, "Resize(3)", 3, 1));
+    pq.addQueue(Job(20, JobType::blur, "Blur(2)", 2, 2));
+    pq.addQueue(Job(30, JobType::exportImage, "Export(4) [Barrier]", 4, 3));
+    pq.addQueue(Job(40, JobType::blur, "Blur(2)-post", 2, 4));
+    pq.addQueue(Job(50, JobType::undoRedo, "Undo(1)-post", 1, 5));
 
     assert(pq.front().id == 20); pq.deleteQueue(); // Blur(2)
     assert(pq.front().id == 10); pq.deleteQueue(); // Resize(3)
@@ -93,7 +93,7 @@ void testMemoryAwareHistory() {
     Pixel** img = createTestGrid(w, h, {100, 100, 100});
 
     for (int i = 0; i < 15; i++) {
-        hm.recordGridOperation("Grayscale " + to_string(i), HistoryOpType::GRAYSCALE, img, w, h);
+        hm.recordGridOperation("Grayscale " + to_string(i), HistoryOpType::grayscale, img, w, h);
     }
 
     assert(hm.getDiscardedRecordsCount() > 0);
@@ -234,7 +234,7 @@ void testBatchedOperations() {
 // --------------------------------------------------------------------------
 void testWorkloadBenchmark() {
     cout << "\n--- TEST SUITE 5: 30-JOB BENCHMARK EXECUTION ---\n";
-    ProcessingPipeline::runBenchmarkComparison();
+    WorkloadBenchmark::runBenchmarkComparison();
     cout << "  [PASS] 30-Job Workload executed in both FIFO and Priority modes\n";
 }
 

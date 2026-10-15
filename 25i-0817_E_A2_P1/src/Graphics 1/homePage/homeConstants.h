@@ -1,15 +1,15 @@
 #pragma once
 
 namespace HomeConstants {
-    const int STAGE_SITTING = 0;
-    const int STAGE_STANDING = 1;
-    const int STAGE_WALKING = 2;
-    const int STAGE_RUNNING = 3;
-    const int STAGE_DONE = 4;
+    const int stageSitting = 0;
+    const int stageStanding = 1;
+    const int stageWalking = 2;
+    const int stageRunning = 3;
+    const int stageDone = 4;
 
-    const int SITTING_FRAMES = 7;
-    const int STANDING_FRAMES = 2;
-    const int WALKING_FRAMES = 4;
-    const int RUNNING_FRAMES = 8;
-    const int ASTEROID_FRAMES = 5;
+    const int sittingFrames = 7;
+    const int standingFrames = 2;
+    const int walkingFrames = 4;
+    const int runningFrames = 8;
+    const int asteroidFrames = 5;
 }

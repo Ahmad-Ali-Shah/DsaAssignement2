@@ -84,23 +84,23 @@ namespace EditorPage {
         drawButton(rects.cropBtn, tex.crop, sf::IntRect(0, 0, tex.crop.getSize().x, tex.crop.getSize().y), "Crop", 0.18f);
 
         // 3) Rotations: 90, 180, 270, 360
-        drawButton(rects.rot90Btn, tex.rotations, sf::IntRect(EditorConstants::ROT_90_X, EditorConstants::ROT_90_Y, EditorConstants::ROT_90_W, EditorConstants::ROT_90_H), "Rot 90", 0.24f);
-        drawButton(rects.rot180Btn, tex.rotations, sf::IntRect(EditorConstants::ROT_180_X, EditorConstants::ROT_180_Y, EditorConstants::ROT_180_W, EditorConstants::ROT_180_H), "Rot 180", 0.24f);
-        drawButton(rects.rot270Btn, tex.rotations, sf::IntRect(EditorConstants::ROT_270_X, EditorConstants::ROT_270_Y, EditorConstants::ROT_270_W, EditorConstants::ROT_270_H), "Rot 270", 0.24f);
-        drawButton(rects.rot360Btn, tex.rotations, sf::IntRect(EditorConstants::ROT_360_X, EditorConstants::ROT_360_Y, EditorConstants::ROT_360_W, EditorConstants::ROT_360_H), "Rot 360", 0.28f);
+        drawButton(rects.rot90Btn, tex.rotations, sf::IntRect(EditorConstants::rot90X, EditorConstants::rot90Y, EditorConstants::rot90W, EditorConstants::rot90H), "Rot 90", 0.24f);
+        drawButton(rects.rot180Btn, tex.rotations, sf::IntRect(EditorConstants::rot180X, EditorConstants::rot180Y, EditorConstants::rot180W, EditorConstants::rot180H), "Rot 180", 0.24f);
+        drawButton(rects.rot270Btn, tex.rotations, sf::IntRect(EditorConstants::rot270X, EditorConstants::rot270Y, EditorConstants::rot270W, EditorConstants::rot270H), "Rot 270", 0.24f);
+        drawButton(rects.rot360Btn, tex.rotations, sf::IntRect(EditorConstants::rot360X, EditorConstants::rot360Y, EditorConstants::rot360W, EditorConstants::rot360H), "Rot 360", 0.28f);
 
         // 4) Flip Horizontal and Vertical using arrow.png (Flip V shifted up slightly)
         drawButton(rects.flipHBtn, tex.arrow, sf::IntRect(0, 0, tex.arrow.getSize().x, tex.arrow.getSize().y), "Flip H", 0.18f);
         drawButton(rects.flipVBtn, tex.arrow, sf::IntRect(0, 0, tex.arrow.getSize().x, tex.arrow.getSize().y), "Flip V", 0.18f, -4.0f);
 
         // 5) Adjustment: Grayscale & Brightness
-        drawButton(rects.grayBtn, tex.adjustment, sf::IntRect(EditorConstants::ADJ_GRAY_X, EditorConstants::ADJ_GRAY_Y, EditorConstants::ADJ_GRAY_W, EditorConstants::ADJ_GRAY_H), "Grayscale", 0.28f);
-        drawButton(rects.brightBtn, tex.adjustment, sf::IntRect(EditorConstants::ADJ_BRIGHT_X, EditorConstants::ADJ_BRIGHT_Y, EditorConstants::ADJ_BRIGHT_W, EditorConstants::ADJ_BRIGHT_H), "Bright +", 0.28f);
+        drawButton(rects.grayBtn, tex.adjustment, sf::IntRect(EditorConstants::adjGrayX, EditorConstants::adjGrayY, EditorConstants::adjGrayW, EditorConstants::adjGrayH), "Grayscale", 0.28f);
+        drawButton(rects.brightBtn, tex.adjustment, sf::IntRect(EditorConstants::adjBrightX, EditorConstants::adjBrightY, EditorConstants::adjBrightW, EditorConstants::adjBrightH), "Bright +", 0.28f);
 
         // 6) Tools: Blur, Bucket, Resize
-        drawButton(rects.blurBtn, tex.tools, sf::IntRect(EditorConstants::TOOL_BLUR_X, EditorConstants::TOOL_BLUR_Y, EditorConstants::TOOL_BLUR_W, EditorConstants::TOOL_BLUR_H), "Blur", 0.20f);
-        drawButton(rects.bucketBtn, tex.tools, sf::IntRect(EditorConstants::TOOL_BUCKET_X, EditorConstants::TOOL_BUCKET_Y, EditorConstants::TOOL_BUCKET_W, EditorConstants::TOOL_BUCKET_H), "Fill", 0.20f);
-        drawButton(rects.resizeBtn, tex.tools, sf::IntRect(EditorConstants::TOOL_RESIZE_X, EditorConstants::TOOL_RESIZE_Y, EditorConstants::TOOL_RESIZE_W, EditorConstants::TOOL_RESIZE_H), "Half Size", 0.20f);
+        drawButton(rects.blurBtn, tex.tools, sf::IntRect(EditorConstants::toolBlurX, EditorConstants::toolBlurY, EditorConstants::toolBlurW, EditorConstants::toolBlurH), "Blur", 0.20f);
+        drawButton(rects.bucketBtn, tex.tools, sf::IntRect(EditorConstants::toolBucketX, EditorConstants::toolBucketY, EditorConstants::toolBucketW, EditorConstants::toolBucketH), "Fill", 0.20f);
+        drawButton(rects.resizeBtn, tex.tools, sf::IntRect(EditorConstants::toolResizeX, EditorConstants::toolResizeY, EditorConstants::toolResizeW, EditorConstants::toolResizeH), "Half Size", 0.20f);
     }
 
 }

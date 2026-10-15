@@ -23,7 +23,7 @@ public:
         std::cout << "   - Total Pops:             " << history.getPopCount() << "\n";
 
         std::cout << "\n2. Scheduler & Queue Metrics (Section 7.3):\n";
-        std::cout << "   - Current Mode:           " << (pipeline.getMode() == SchedulerMode::FIFO ? "FIFO" : "PRIORITY (Barrier-Aware)") << "\n";
+        std::cout << "   - Current Mode:           " << (pipeline.getMode() == SchedulerMode::fifo ? "FIFO" : "PRIORITY (Barrier-Aware)") << "\n";
         std::cout << "   - Pending Jobs Count:     " << pipeline.getCurrentQueueSize() << "\n";
 
         std::cout << "\n3. History Stack Contents (Compact Records):\n";

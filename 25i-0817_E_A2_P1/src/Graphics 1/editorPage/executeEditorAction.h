@@ -20,41 +20,41 @@ namespace EditorPage {
 
         bool changed = false;
 
-        if (op == EditorConstants::OP_ROT_90) {
+        if (op == EditorConstants::opRot90) {
             history.recordAction("Rotate 90", img, width, height);
             img = rotateObject::applyRotate(img, width, height, 90);
             currentOperation = "Rotations 90";
             changed = true;
-        } else if (op == EditorConstants::OP_ROT_180) {
+        } else if (op == EditorConstants::opRot180) {
             history.recordAction("Rotate 180", img, width, height);
             img = rotateObject::applyRotate(img, width, height, 180);
             currentOperation = "Rotations 180";
             changed = true;
-        } else if (op == EditorConstants::OP_ROT_270) {
+        } else if (op == EditorConstants::opRot270) {
             history.recordAction("Rotate 270", img, width, height);
             img = rotateObject::applyRotate(img, width, height, 270);
             currentOperation = "Rotations 270";
             changed = true;
-        } else if (op == EditorConstants::OP_ROT_360) {
+        } else if (op == EditorConstants::opRot360) {
             history.recordAction("Rotate 360", img, width, height);
             currentOperation = "Rotations 360";
             changed = true;
-        } else if (op == EditorConstants::OP_FLIP_H) {
+        } else if (op == EditorConstants::opFlipH) {
             history.recordAction("Flip Horizontal", img, width, height);
             flipAxis::applyFlipHorizontal(img, width, height);
             currentOperation = "Horizontal Flip";
             changed = true;
-        } else if (op == EditorConstants::OP_FLIP_V) {
+        } else if (op == EditorConstants::opFlipV) {
             history.recordAction("Flip Vertical", img, width, height);
             flipAxis::applyFlipVertical(img, width, height);
             currentOperation = "Vertical Flip";
             changed = true;
-        } else if (op == EditorConstants::OP_GRAYSCALE) {
+        } else if (op == EditorConstants::opGrayscale) {
             history.recordAction("Grayscale", img, width, height);
             MygreyScale::applyGrayscale(img, width, height);
             currentOperation = "Grayscale";
             changed = true;
-        } else if (op == EditorConstants::OP_BRIGHTNESS) {
+        } else if (op == EditorConstants::opBrightness) {
             double delta = 30.0;
             if (!p1.empty()) {
                 delta = static_cast<double>(std::stoi(p1));
@@ -63,12 +63,12 @@ namespace EditorPage {
             MyBrightness::applyBrightness(img, width, height, delta);
             currentOperation = "Brightness " + std::to_string(static_cast<int>(delta));
             changed = true;
-        } else if (op == EditorConstants::OP_BLUR) {
+        } else if (op == EditorConstants::opBlur) {
             history.recordAction("Blur", img, width, height);
             FrobeniusMatrixInnerProductForBlurr::applyBlur(img, width, height);
             currentOperation = "Box Blur";
             changed = true;
-        } else if (op == EditorConstants::OP_RESIZE) {
+        } else if (op == EditorConstants::opResize) {
             history.recordAction("Resize", img, width, height);
             int newW = width / 2;
             int newH = height / 2;
@@ -77,7 +77,7 @@ namespace EditorPage {
             img = scaling::applyResize(img, width, height, newW, newH);
             currentOperation = "Resize (" + std::to_string(width) + "x" + std::to_string(height) + ")";
             changed = true;
-        } else if (op == EditorConstants::OP_CROP) {
+        } else if (op == EditorConstants::opCrop) {
             int cw = width / 2;
             int ch = height / 2;
             if (!p1.empty() && !p2.empty()) {
@@ -90,12 +90,12 @@ namespace EditorPage {
             img = myCrop::applyCrop(img, width, height, 0, 0, cw, ch);
             currentOperation = "Crop (" + std::to_string(cw) + "x" + std::to_string(ch) + ")";
             changed = true;
-        } else if (op == EditorConstants::OP_BUCKET_FILL) {
+        } else if (op == EditorConstants::opBucketFill) {
             history.recordAction("Bucket Fill", img, width, height);
             MybucketFill::ReplaceNearOneQueue(img, static_cast<double>(width), static_cast<double>(height), width / 2, height / 2, 255, 120, 80);
             currentOperation = "Bucket Fill (Queue)";
             changed = true;
-        } else if (op == EditorConstants::OP_SAVE) {
+        } else if (op == EditorConstants::opSave) {
             std::string outPath = p1.empty() ? "25i-0817_E_A2_P1/images/output.png" : p1;
             ReadPath::WriteImage(outPath, img, width, height);
             currentOperation = "Saved to " + outPath;

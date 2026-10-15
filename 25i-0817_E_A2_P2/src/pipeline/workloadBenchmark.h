@@ -8,8 +8,8 @@
 #include "job.h"
 
 namespace SchedulerMode {
-    const int FIFO = 0;
-    const int PRIORITY = 1;
+    const int fifo = 0;
+    const int priority = 1;
 }
 
 struct ExecutionStats {
@@ -27,40 +27,40 @@ public:
         long long arr = 1;
 
         // Group 1: 10 jobs before first barrier
-        outWorkload[0] = Job(id++, JobType::RESIZE, "Resize 1", 3, arr++, 60.0);
-        outWorkload[1] = Job(id++, JobType::BLUR, "Blur 1", 2, arr++, 40.0);
-        outWorkload[2] = Job(id++, JobType::BUCKET_FILL_STACK, "BucketFill 1", 2, arr++, 25.0);
-        outWorkload[3] = Job(id++, JobType::UNDO_REDO, "Undo Request 1", 1, arr++, 5.0);
-        outWorkload[4] = Job(id++, JobType::RESIZE, "Resize 2", 3, arr++, 60.0);
-        outWorkload[5] = Job(id++, JobType::BLUR, "Blur 2", 2, arr++, 40.0);
-        outWorkload[6] = Job(id++, JobType::UNDO_REDO, "Redo Request 1", 1, arr++, 5.0);
-        outWorkload[7] = Job(id++, JobType::BUCKET_FILL_QUEUE, "BucketFill 2", 2, arr++, 25.0);
-        outWorkload[8] = Job(id++, JobType::RESIZE, "Resize 3", 3, arr++, 60.0);
-        outWorkload[9] = Job(id++, JobType::EXPORT_IMAGE, "Export Snapshot 1", 4, arr++, 100.0); // Barrier 1
+        outWorkload[0] = Job(id++, JobType::resize, "Resize 1", 3, arr++, 60.0);
+        outWorkload[1] = Job(id++, JobType::blur, "Blur 1", 2, arr++, 40.0);
+        outWorkload[2] = Job(id++, JobType::bucketFillStack, "BucketFill 1", 2, arr++, 25.0);
+        outWorkload[3] = Job(id++, JobType::undoRedo, "Undo Request 1", 1, arr++, 5.0);
+        outWorkload[4] = Job(id++, JobType::resize, "Resize 2", 3, arr++, 60.0);
+        outWorkload[5] = Job(id++, JobType::blur, "Blur 2", 2, arr++, 40.0);
+        outWorkload[6] = Job(id++, JobType::undoRedo, "Redo Request 1", 1, arr++, 5.0);
+        outWorkload[7] = Job(id++, JobType::bucketFillQueue, "BucketFill 2", 2, arr++, 25.0);
+        outWorkload[8] = Job(id++, JobType::resize, "Resize 3", 3, arr++, 60.0);
+        outWorkload[9] = Job(id++, JobType::exportImage, "Export Snapshot 1", 4, arr++, 100.0); // Barrier 1
 
         // Group 2: 10 jobs between Barrier 1 and Barrier 2
-        outWorkload[10] = Job(id++, JobType::RESIZE, "Resize 4", 3, arr++, 60.0);
-        outWorkload[11] = Job(id++, JobType::UNDO_REDO, "Undo Request 2", 1, arr++, 5.0);
-        outWorkload[12] = Job(id++, JobType::BLUR, "Blur 3", 2, arr++, 40.0);
-        outWorkload[13] = Job(id++, JobType::BUCKET_FILL_STACK, "BucketFill 3", 2, arr++, 25.0);
-        outWorkload[14] = Job(id++, JobType::BLUR, "Blur 4", 2, arr++, 40.0);
-        outWorkload[15] = Job(id++, JobType::UNDO_REDO, "Undo Request 3", 1, arr++, 5.0);
-        outWorkload[16] = Job(id++, JobType::RESIZE, "Resize 5", 3, arr++, 60.0);
-        outWorkload[17] = Job(id++, JobType::BUCKET_FILL_QUEUE, "BucketFill 4", 2, arr++, 25.0);
-        outWorkload[18] = Job(id++, JobType::BLUR, "Blur 5", 2, arr++, 40.0);
-        outWorkload[19] = Job(id++, JobType::SAVE_PROJECT, "Save Project 1", 4, arr++, 100.0); // Barrier 2
+        outWorkload[10] = Job(id++, JobType::resize, "Resize 4", 3, arr++, 60.0);
+        outWorkload[11] = Job(id++, JobType::undoRedo, "Undo Request 2", 1, arr++, 5.0);
+        outWorkload[12] = Job(id++, JobType::blur, "Blur 3", 2, arr++, 40.0);
+        outWorkload[13] = Job(id++, JobType::bucketFillStack, "BucketFill 3", 2, arr++, 25.0);
+        outWorkload[14] = Job(id++, JobType::blur, "Blur 4", 2, arr++, 40.0);
+        outWorkload[15] = Job(id++, JobType::undoRedo, "Undo Request 3", 1, arr++, 5.0);
+        outWorkload[16] = Job(id++, JobType::resize, "Resize 5", 3, arr++, 60.0);
+        outWorkload[17] = Job(id++, JobType::bucketFillQueue, "BucketFill 4", 2, arr++, 25.0);
+        outWorkload[18] = Job(id++, JobType::blur, "Blur 5", 2, arr++, 40.0);
+        outWorkload[19] = Job(id++, JobType::saveProject, "Save Project 1", 4, arr++, 100.0); // Barrier 2
 
         // Group 3: 10 jobs after Barrier 2
-        outWorkload[20] = Job(id++, JobType::RESIZE, "Resize 6", 3, arr++, 60.0);
-        outWorkload[21] = Job(id++, JobType::BLUR, "Blur 6", 2, arr++, 40.0);
-        outWorkload[22] = Job(id++, JobType::UNDO_REDO, "Undo Request 4", 1, arr++, 5.0);
-        outWorkload[23] = Job(id++, JobType::BUCKET_FILL_STACK, "BucketFill 5", 2, arr++, 25.0);
-        outWorkload[24] = Job(id++, JobType::UNDO_REDO, "Redo Request 2", 1, arr++, 5.0);
-        outWorkload[25] = Job(id++, JobType::BLUR, "Blur 7", 2, arr++, 40.0);
-        outWorkload[26] = Job(id++, JobType::RESIZE, "Resize 7", 3, arr++, 60.0);
-        outWorkload[27] = Job(id++, JobType::BUCKET_FILL_QUEUE, "BucketFill 6", 2, arr++, 25.0);
-        outWorkload[28] = Job(id++, JobType::BLUR, "Blur 8", 2, arr++, 40.0);
-        outWorkload[29] = Job(id++, JobType::EXPORT_IMAGE, "Final Export", 4, arr++, 100.0); // Final Barrier
+        outWorkload[20] = Job(id++, JobType::resize, "Resize 6", 3, arr++, 60.0);
+        outWorkload[21] = Job(id++, JobType::blur, "Blur 6", 2, arr++, 40.0);
+        outWorkload[22] = Job(id++, JobType::undoRedo, "Undo Request 4", 1, arr++, 5.0);
+        outWorkload[23] = Job(id++, JobType::bucketFillStack, "BucketFill 5", 2, arr++, 25.0);
+        outWorkload[24] = Job(id++, JobType::undoRedo, "Redo Request 2", 1, arr++, 5.0);
+        outWorkload[25] = Job(id++, JobType::blur, "Blur 7", 2, arr++, 40.0);
+        outWorkload[26] = Job(id++, JobType::resize, "Resize 7", 3, arr++, 60.0);
+        outWorkload[27] = Job(id++, JobType::bucketFillQueue, "BucketFill 6", 2, arr++, 25.0);
+        outWorkload[28] = Job(id++, JobType::blur, "Blur 8", 2, arr++, 40.0);
+        outWorkload[29] = Job(id++, JobType::exportImage, "Final Export", 4, arr++, 100.0); // Final Barrier
     }
 
     static ExecutionStats simulateWorkload(const Job originalJobs[], int totalJobs, int runMode) {
@@ -71,7 +71,7 @@ public:
         int p1Count = 0;
         int totalProcessed = 0;
 
-        if (runMode == SchedulerMode::FIFO) {
+        if (runMode == SchedulerMode::fifo) {
             queueType<Job> q(totalJobs + 10);
             for (int i = 0; i < totalJobs; i++) q.addQueue(originalJobs[i]);
 
@@ -129,8 +129,8 @@ public:
         std::cout << "        SECTION 7.3 & 7.5: 30-JOB WORKLOAD SCHEDULER COMPARISON          \n";
         std::cout << "=========================================================================\n";
 
-        ExecutionStats fifoStats = simulateWorkload(workload, 30, SchedulerMode::FIFO);
-        ExecutionStats prioStats = simulateWorkload(workload, 30, SchedulerMode::PRIORITY);
+        ExecutionStats fifoStats = simulateWorkload(workload, 30, SchedulerMode::fifo);
+        ExecutionStats prioStats = simulateWorkload(workload, 30, SchedulerMode::priority);
 
         std::cout << std::left << std::setw(30) << "Metric"
                   << std::setw(20) << "FIFO Mode"

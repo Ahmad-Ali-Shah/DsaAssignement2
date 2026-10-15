@@ -4,14 +4,14 @@
 
 // History Operation integer constants (no enum)
 namespace HistoryOpType {
-    const int ROTATE = 1;
-    const int FLIP = 2;
-    const int BRIGHTNESS = 3;
-    const int CROP = 4;
-    const int BUCKET_FILL = 5;
-    const int GRAYSCALE = 6;
-    const int BLUR = 7;
-    const int RESIZE = 8;
+    const int rotate = 1;
+    const int flip = 2;
+    const int brightness = 3;
+    const int crop = 4;
+    const int bucketFill = 5;
+    const int grayscale = 6;
+    const int blur = 7;
+    const int resize = 8;
 }
 
 struct ClippedPixel {
@@ -24,7 +24,7 @@ struct HistoryRecord {
     std::string opName;
     int opType;
     long long sequenceNumber;
-    unsigned int estimatedMemoryBytes;
+    int estimatedMemoryBytes;
 
     // Affected region bounding box
     int startX, startY;
@@ -93,16 +93,16 @@ struct HistoryRecord {
     }
 
     void calculateMemory() {
-        estimatedMemoryBytes = sizeof(HistoryRecord);
+        estimatedMemoryBytes = static_cast<int>(sizeof(HistoryRecord));
         if (clippedCapacity > 0) {
-            estimatedMemoryBytes += (unsigned int)clippedCapacity * sizeof(ClippedPixel);
+            estimatedMemoryBytes += static_cast<int>(clippedCapacity * sizeof(ClippedPixel));
         }
         if (changedCapacity > 0) {
-            estimatedMemoryBytes += (unsigned int)changedCapacity * sizeof(Point);
+            estimatedMemoryBytes += static_cast<int>(changedCapacity * sizeof(Point));
         }
         if (savedGrid && savedW > 0 && savedH > 0) {
-            estimatedMemoryBytes += (unsigned int)savedW * savedH * sizeof(Pixel);
-            estimatedMemoryBytes += (unsigned int)savedH * sizeof(Pixel*);
+            estimatedMemoryBytes += static_cast<int>(savedW * savedH * sizeof(Pixel));
+            estimatedMemoryBytes += static_cast<int>(savedH * sizeof(Pixel*));
         }
     }
 
@@ -171,7 +171,7 @@ struct HistoryRecord {
     }
 
     HistoryRecord()
-        : opName(""), opType(HistoryOpType::BRIGHTNESS), sequenceNumber(0), estimatedMemoryBytes(sizeof(HistoryRecord)),
+        : opName(""), opType(HistoryOpType::brightness), sequenceNumber(0), estimatedMemoryBytes(static_cast<int>(sizeof(HistoryRecord))),
           startX(0), startY(0), endX(0), endY(0),
           angle(0), isHorizontal(false), brightnessDelta(0.0),
           clippedPixels(nullptr), clippedCount(0), clippedCapacity(0),

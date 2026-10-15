@@ -1,76 +1,76 @@
 #pragma once
 
 namespace EditorConstants {
-    const int OP_NONE = 0;
-    const int OP_LOAD = 1;
-    const int OP_CROP = 2;
-    const int OP_ROT_90 = 3;
-    const int OP_ROT_180 = 4;
-    const int OP_ROT_270 = 5;
-    const int OP_ROT_360 = 6;
-    const int OP_FLIP_H = 7;
-    const int OP_FLIP_V = 8;
-    const int OP_GRAYSCALE = 9;
-    const int OP_BRIGHTNESS = 10;
-    const int OP_BLUR = 11;
-    const int OP_RESIZE = 12;
-    const int OP_BUCKET_FILL = 13;
-    const int OP_RELOAD = 14;
-    const int OP_SAVE = 15;
+    const int opNone = 0;
+    const int opLoad = 1;
+    const int opCrop = 2;
+    const int opRot90 = 3;
+    const int opRot180 = 4;
+    const int opRot270 = 5;
+    const int opRot360 = 6;
+    const int opFlipH = 7;
+    const int opFlipV = 8;
+    const int opGrayscale = 9;
+    const int opBrightness = 10;
+    const int opBlur = 11;
+    const int opResize = 12;
+    const int opBucketFill = 13;
+    const int opReload = 14;
+    const int opSave = 15;
 
     // Sprite cut coordinates from user specification
-    const int LOAD_FRAME_X = 143;
-    const int LOAD_FRAME_Y = 31;
-    const int LOAD_FRAME_W = 232;
-    const int LOAD_FRAME_H = 138;
+    const int loadFrameX = 143;
+    const int loadFrameY = 31;
+    const int loadFrameW = 232;
+    const int loadFrameH = 138;
 
-    const int ROT_90_X = 50;
-    const int ROT_90_Y = 15;
-    const int ROT_90_W = 156;
-    const int ROT_90_H = 123;
+    const int rot90X = 50;
+    const int rot90Y = 15;
+    const int rot90W = 156;
+    const int rot90H = 123;
 
-    const int ROT_180_X = 266;
-    const int ROT_180_Y = 12;
-    const int ROT_180_W = 165;
-    const int ROT_180_H = 125;
+    const int rot180X = 266;
+    const int rot180Y = 12;
+    const int rot180W = 165;
+    const int rot180H = 125;
 
-    const int ROT_270_X = 492;
-    const int ROT_270_Y = 6;
-    const int ROT_270_W = 161;
-    const int ROT_270_H = 137;
+    const int rot270X = 492;
+    const int rot270Y = 6;
+    const int rot270W = 161;
+    const int rot270H = 137;
 
-    const int ROT_360_X = 751;
-    const int ROT_360_Y = 26;
-    const int ROT_360_W = 96;
-    const int ROT_360_H = 105;
+    const int rot360X = 751;
+    const int rot360Y = 26;
+    const int rot360W = 96;
+    const int rot360H = 105;
 
-    const int TOOL_BLUR_X = 34;
-    const int TOOL_BLUR_Y = 27;
-    const int TOOL_BLUR_W = 204;
-    const int TOOL_BLUR_H = 170;
+    const int toolBlurX = 34;
+    const int toolBlurY = 27;
+    const int toolBlurW = 204;
+    const int toolBlurH = 170;
 
-    const int TOOL_BUCKET_X = 490;
-    const int TOOL_BUCKET_Y = 13;
-    const int TOOL_BUCKET_W = 199;
-    const int TOOL_BUCKET_H = 198;
+    const int toolBucketX = 490;
+    const int toolBucketY = 13;
+    const int toolBucketW = 199;
+    const int toolBucketH = 198;
 
-    const int TOOL_RESIZE_X = 921;
-    const int TOOL_RESIZE_Y = 19;
-    const int TOOL_RESIZE_W = 247;
-    const int TOOL_RESIZE_H = 183;
+    const int toolResizeX = 921;
+    const int toolResizeY = 19;
+    const int toolResizeW = 247;
+    const int toolResizeH = 183;
 
-    const int ADJ_GRAY_X = 10;
-    const int ADJ_GRAY_Y = 0;
-    const int ADJ_GRAY_W = 109;
-    const int ADJ_GRAY_H = 109;
+    const int adjGrayX = 10;
+    const int adjGrayY = 0;
+    const int adjGrayW = 109;
+    const int adjGrayH = 109;
 
-    const int ADJ_BRIGHT_X = 186;
-    const int ADJ_BRIGHT_Y = 0;
-    const int ADJ_BRIGHT_W = 78;
-    const int ADJ_BRIGHT_H = 113;
+    const int adjBrightX = 186;
+    const int adjBrightY = 0;
+    const int adjBrightW = 78;
+    const int adjBrightH = 113;
 
-    const int ADJ_CONTRAST_X = 329;
-    const int ADJ_CONTRAST_Y = 0;
-    const int ADJ_CONTRAST_W = 125;
-    const int ADJ_CONTRAST_H = 118;
+    const int adjContrastX = 329;
+    const int adjContrastY = 0;
+    const int adjContrastW = 125;
+    const int adjContrastH = 118;
 }
