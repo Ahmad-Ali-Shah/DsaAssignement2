@@ -50,138 +50,262 @@ void printMenu() {
 }
 
 int main() {
+
     Pixel** activeImage = nullptr;
+
     int width = 0;
+
     int height = 0;
+
     string activeFile = "";
 
     HistoryManager history(50);
+
     ProcessingPipeline pipeline(30);
 
+
     cout << "========================================================\n";
+
     cout << "                    WELCOME TO IMAGELAB                 \n";
+
     cout << "========================================================\n";
 
     int choice = -1;
+
     while (choice != 0) {
+
         printMenu();
+
         if (!(cin >> choice)) {
+
             if (cin.eof()) {
+
                 break;
+
             }
+
             cin.clear();
+
             string ignore;
+
             cin >> ignore;
+
             continue;
+
         }
 
         if (choice == 0) {
+
             cout << "Exiting ImageLab. Goodbye!\n";
+
             break;
+
         }
 
         switch (choice) {
-            case 1: { // Load Image
+
+            case 1: { 
+
                 string path;
+
                 int w = 0, h = 0;
+
                 cout << "Enter image file path: ";
+
                 cin >> path;
+
                 cout << "Enter width (or 0 for PPM automatic detection): ";
+
                 cin >> w;
                 cout << "Enter height (or 0 for PPM automatic detection): ";
+
                 cin >> h;
 
                 if (activeImage) {
+
                     ReadPath::freeImage(activeImage, height);
+
                 }
+
                 activeImage = ReadPath::Read(path, w, h);
+
                 if (activeImage) {
+
                     width = (w > 0) ? w : 100;
+
                     height = (h > 0) ? h : 100;
+
                     activeFile = path;
+
                     cout << "[Success] Image loaded (" << width << "x" << height << ") from: " << path << "\n";
+
                 }
+
                 break;
+
             }
 
             case 2: { // Crop
-                if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
+
+                if (!activeImage) { 
+                    cout << "[Error] No active image loaded.\n"; 
+                    break;
+                 }
                 int x1, y1, w, h;
+
                 cout << "Enter starting X: "; cin >> x1;
+
                 cout << "Enter starting Y: "; cin >> y1;
+
                 cout << "Enter crop width: "; cin >> w;
+
                 cout << "Enter crop height: "; cin >> h;
 
+
                 history.recordAction("Crop", activeImage, width, height);
+
                 activeImage = myCrop::applyCrop(activeImage, width, height, x1, y1, w, h);
+
                 cout << "[Success] Image cropped to " << width << "x" << height << "\n";
+
+
                 break;
             }
 
             case 3: { // Rotate
-                if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
+
+                if (!activeImage) {
+                     cout << "[Error] No active image loaded.\n"; 
+                     break;
+                     }
+
                 int angle;
+
                 cout << "Enter angle (90, 180, 270): ";
+
                 cin >> angle;
+
                 history.recordAction("Rotate " + to_string(angle), activeImage, width, height);
+
                 activeImage = rotateObject::applyRotate(activeImage, width, height, angle);
+
                 cout << "[Success] Rotated by " << angle << " degrees. Dimensions: " << width << "x" << height << "\n";
+
                 break;
+
             }
 
             case 4: { // Flip
-                if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
+
+                if (!activeImage) {
+                     cout << "[Error] No active image loaded.\n";
+                      break; 
+                    }
                 int dir;
+
                 cout << "Direction (1 = Horizontal, 2 = Vertical): ";
+
                 cin >> dir;
+
                 if (dir == 1) {
+
                     history.recordAction("Flip Horizontal", activeImage, width, height);
+
                     flipAxis::applyFlipHorizontal(activeImage, width, height);
+
                     cout << "[Success] Flipped horizontally.\n";
-                } else {
+
+                } 
+                else {
+
                     history.recordAction("Flip Vertical", activeImage, width, height);
+
                     flipAxis::applyFlipVertical(activeImage, width, height);
+
                     cout << "[Success] Flipped vertically.\n";
+
                 }
+
                 break;
+
             }
 
             case 5: { // Brightness
-                if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
+
+                if (!activeImage) { 
+                    cout << "[Error] No active image loaded.\n"; 
+                    break; 
+                }
                 double delta;
+
                 cout << "Enter brightness adjustment delta (-255 to +255): ";
+
                 cin >> delta;
+
                 history.recordAction("Brightness", activeImage, width, height);
+
                 MyBrightness::applyBrightness(activeImage, width, height, delta);
+
                 cout << "[Success] Brightness adjusted by " << delta << "\n";
+
                 break;
+
             }
 
+
             case 6: { // Grayscale
-                if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
+
+                if (!activeImage) { 
+                    cout << "[Error] No active image loaded.\n"; 
+                    break; 
+                }
                 history.recordAction("Grayscale", activeImage, width, height);
+
                 MygreyScale::applyGrayscale(activeImage, width, height);
+
                 cout << "[Success] Converted to Grayscale.\n";
+
                 break;
             }
 
             case 7: { // Queue Resize
-                if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
+
+                if (!activeImage) {
+                     cout << "[Error] No active image loaded.\n";
+                      break;
+                     }
                 int tw, th;
+
                 cout << "Enter target width: "; cin >> tw;
+
                 cout << "Enter target height: "; cin >> th;
+
+
+
                 Job j(0, JobType::resize, "Resize to " + to_string(tw) + "x" + to_string(th));
+
                 j.targetW = tw;
+
                 j.targetH = th;
+
                 pipeline.addJob(j);
+
                 break;
+
             }
 
             case 8: { // Queue Blur
-                if (!activeImage) { cout << "[Error] No active image loaded.\n"; break; }
-                Job j(0, JobType::blur, "Blur (3x3 Kernel)");
+
+                if (!activeImage) {
+                     cout << "[Error] No active image loaded.\n"; 
+                     break;
+                     }
+                Job j(0, JobType::blur, "Blur ");
+
                 pipeline.addJob(j);
+
                 break;
+                
             }
 
             case 9: { // Queue Bucket Fill
@@ -192,7 +316,7 @@ int main() {
                 cout << "Enter replacement Color R: "; cin >> vr;
                 cout << "Enter replacement Color G: "; cin >> vg;
                 cout << "Enter replacement Color B: "; cin >> vb;
-                cout << "Select traversal algorithm (1 = Stack-based DFS, 2 = Queue-based BFS): ";
+                cout << "Choose fill type (1 = Stack fill, 2 = Queue fill): ";
                 cin >> typeChoice;
 
                 Job j(0, (typeChoice == 1) ? JobType::bucketFillStack : JobType::bucketFillQueue,

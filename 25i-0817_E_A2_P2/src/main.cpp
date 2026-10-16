@@ -43,8 +43,8 @@ void printMenu() {
     cout << " [7]  Crop Image\n";
     cout << " [8]  Resize Image\n";
     cout << " [9]  Apply Blur Filter\n";
-    cout << " [10] Bucket Fill (Stack-based DFS)\n";
-    cout << " [11] Bucket Fill (Queue-based BFS)\n";
+    cout << " [10] Bucket Fill (Stack)\n";
+    cout << " [11] Bucket Fill (Queue)\n";
     cout << " [12] Undo Last Action (Compact Delta)\n";
     cout << " [13] Redo Action\n";
     cout << " [14] Pipeline: Add Job to Scheduler\n";
