@@ -172,7 +172,7 @@ How to Build and Run (From 25i-0817_E_A2_P2 folder):
    g++ -std=c++17 -Wall -Wextra -Isrc src/main.cpp -lsfml-graphics -lsfml-window -lsfml-system -o src/main
 
 2. Run ImageLab Phase 2:
-   ./src/main          # Runs ImageLab console menu (Option 23 launches Graphical Studio GUI)
+   ./src/main          # Runs ImageLab console menu directly (Option 23 launches GUI Studio)
 
 3. Compile the Phase 2 test suite:
    g++ -std=c++17 -Wall -Wextra -Isrc tests/test.cpp -lsfml-graphics -lsfml-system -o tests/test

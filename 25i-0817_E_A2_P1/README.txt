@@ -171,7 +171,7 @@ How to Build and Run (From 25i-0817_E_A2_P1 folder):
    g++ -std=c++17 -Wall -Wextra -Isrc src/main.cpp -lsfml-graphics -lsfml-window -lsfml-system -o src/main
 
 2. Run ImageLab:
-   ./src/main          # Runs ImageLab console menu (Option 19 launches Graphical Studio GUI)
+   ./src/main          # Runs ImageLab console menu directly (Option 19 launches GUI Studio)
 
 3. Compile the automated test suite:
    g++ -std=c++17 -Wall -Wextra -Isrc tests/test.cpp -lsfml-graphics -lsfml-system -o tests/test
