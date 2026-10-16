@@ -74,7 +74,7 @@ namespace GraphicsApp2 {
         sf::RenderWindow* win = GraphicsWindow2::initWindow2(1280, 800, "ImageLab Studio (Phase 2) - Priority Scheduler & Memory-Aware History");
         if (!win) return;
 
-        std::string assetDir = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P2/All Req Assests", ".");
+        std::string assetDir = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P2/assets", ".");
 
         bool proceed = HomePage::runHomePage(*win, assetDir);
         if (!proceed || !win->isOpen()) {

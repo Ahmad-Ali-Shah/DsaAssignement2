@@ -23,7 +23,7 @@ namespace GraphicsApp {
         sf::RenderWindow* win = GraphicsWindow::initWindow(1280, 800, "ImageLab Studio (Phase 1)");
         if (!win) return;
 
-        std::string assetDir = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P1/All Req Assests", ".");
+        std::string assetDir = GraphicsAssetHelper::resolveAssetPath("25i-0817_E_A2_P1/assets", ".");
 
         bool proceed = HomePage::runHomePage(*win, assetDir);
         if (!proceed || !win->isOpen()) {

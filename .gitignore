@@ -18,3 +18,8 @@ tests/verifyOperations
 25i-0817_E_A2_P2/tests/verifyOperations
 */images/out*.ppm
 images/out*.ppm
+
+# Submission Archives and duplicate wrapper directories
+*.zip
+.report_source/
+25i-0817_E_A2/

@@ -8,7 +8,7 @@
 * Section: BS CS E
 * Project: Assignment 2 (Phase 1 and Phase 2 Comprehensive Implementation)
 
-![ImageLab Tools Spritesheet](25i-0817_E_A2_P2/assets/imagelab_tools_spritesheet.png)
+![ImageLab Tools](25i-0817_E_A2_P2/assets/tools.png)
 
 ## Project Overview
 
@@ -29,7 +29,7 @@ The software is structured into two sequential phases:
 * Strict Zero Shifting Circular Queue: FIFO pipeline operations use circular modulo arithmetic with a dedicated item counter, achieving O(1) additions and deletions without moving elements in memory.
 * Non Recursive Traversal: Bucket fill uses explicit stack and circular queue instances, avoiding recursion and preventing call stack overflow on large canvases.
 
-![Bucket Fill Verification](.report_source/phase1/bucket_fill_comparison.png)
+![Bucket Fill Verification](25i-0817_E_A2_P1/images/bucket_fill_comparison.png)
 
 ## Features and Module Breakdown
 

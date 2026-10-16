@@ -10,7 +10,7 @@ namespace GraphicsAssetHelper {
     }
 
     static std::string resolveAssetPath(const std::string& relativePath, const std::string& fallbackPrefix) {
-        if (fileExists(relativePath)) {
+        if (fileExists(relativePath + "/ship.png") || fileExists(relativePath)) {
             return relativePath;
         }
 
@@ -24,14 +24,19 @@ namespace GraphicsAssetHelper {
             stripped = stripped.substr(prefix2.length());
         }
 
-        if (fileExists(stripped)) {
+        if (fileExists(stripped + "/ship.png") || fileExists(stripped)) {
             return stripped;
         }
 
         std::string prefixed = fallbackPrefix + "/" + stripped;
-        if (fileExists(prefixed)) {
+        if (fileExists(prefixed + "/ship.png") || fileExists(prefixed)) {
             return prefixed;
         }
+
+        if (fileExists("assets/ship.png")) return "assets";
+        if (fileExists("25i-0817_E_A2_P2/assets/ship.png")) return "25i-0817_E_A2_P2/assets";
+        if (fileExists("25i-0817_E_A2_P1/assets/ship.png")) return "25i-0817_E_A2_P1/assets";
+        if (fileExists("../assets/ship.png")) return "../assets";
 
         return relativePath;
     }
