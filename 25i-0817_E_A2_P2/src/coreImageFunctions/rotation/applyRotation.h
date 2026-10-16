@@ -6,6 +6,7 @@ namespace rotateObject {
     Pixel** applyRotate(Pixel** img, int& width, int& height, int angle) {
 
         if (!img || width <= 0 || height <= 0) 
+        
         return img;
 
         int normAngle = angle % 360; //coterminal angle 

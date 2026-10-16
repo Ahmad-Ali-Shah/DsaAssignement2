@@ -7,6 +7,8 @@
 #include "../priorityQueue.h"
 #include "job.h"
 
+using namespace std;
+
 namespace SchedulerMode {
     const int fifo = 0;
     const int priority = 1;
@@ -125,34 +127,34 @@ public:
         Job workload[30];
         generateStandard30JobWorkload(workload);
 
-        std::cout << "\n=========================================================================\n";
-        std::cout << "        SECTION 7.3 & 7.5: 30-JOB WORKLOAD SCHEDULER COMPARISON          \n";
-        std::cout << "=========================================================================\n";
+        cout << "\n=========================================================================\n";
+        cout << "        SECTION 7.3 & 7.5: 30-JOB WORKLOAD SCHEDULER COMPARISON          \n";
+        cout << "=========================================================================\n";
 
         ExecutionStats fifoStats = simulateWorkload(workload, 30, SchedulerMode::fifo);
         ExecutionStats prioStats = simulateWorkload(workload, 30, SchedulerMode::priority);
 
-        std::cout << std::left << std::setw(30) << "Metric"
+        cout << std::left << std::setw(30) << "Metric"
                   << std::setw(20) << "FIFO Mode"
                   << std::setw(20) << "Priority Mode"
                   << "Improvement\n";
-        std::cout << "-------------------------------------------------------------------------\n";
-        std::cout << std::left << std::setw(30) << "Jobs Processed"
+        cout << "-------------------------------------------------------------------------\n";
+        cout << std::left << std::setw(30) << "Jobs Processed"
                   << std::setw(20) << fifoStats.totalJobs
                   << std::setw(20) << prioStats.totalJobs
                   << "Identical\n";
-        std::cout << std::left << std::setw(30) << "Avg Waiting Time (ms)"
+        cout << std::left << std::setw(30) << "Avg Waiting Time (ms)"
                   << std::setw(20) << std::fixed << std::setprecision(2) << fifoStats.avgWaitTime
                   << std::setw(20) << prioStats.avgWaitTime
                   << ((fifoStats.avgWaitTime - prioStats.avgWaitTime) / fifoStats.avgWaitTime * 100.0) << "%\n";
-        std::cout << std::left << std::setw(30) << "Avg Completion Time (ms)"
+        cout << std::left << std::setw(30) << "Avg Completion Time (ms)"
                   << std::setw(20) << std::fixed << std::setprecision(2) << fifoStats.avgCompletionTime
                   << std::setw(20) << prioStats.avgCompletionTime
                   << ((fifoStats.avgCompletionTime - prioStats.avgCompletionTime) / fifoStats.avgCompletionTime * 100.0) << "%\n";
-        std::cout << std::left << std::setw(30) << "Avg Priority-1 Wait (ms)"
+        cout << std::left << std::setw(30) << "Avg Priority-1 Wait (ms)"
                   << std::setw(20) << std::fixed << std::setprecision(2) << fifoStats.avgP1WaitTime
                   << std::setw(20) << prioStats.avgP1WaitTime
                   << "\033[1;32m" << ((fifoStats.avgP1WaitTime - prioStats.avgP1WaitTime) / fifoStats.avgP1WaitTime * 100.0) << "% faster\033[0m\n";
-        std::cout << "=========================================================================\n\n";
+        cout << "=========================================================================\n\n";
     }
 };

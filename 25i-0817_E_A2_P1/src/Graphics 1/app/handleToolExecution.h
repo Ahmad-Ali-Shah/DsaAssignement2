@@ -14,12 +14,14 @@
 #include "../../read/write.h"
 #include "../../read/delete.h"
 
+using namespace std;
+
 namespace GraphicsApp {
-    void handleToolExecution(int toolId, Pixel**& img, int& width, int& height, HistoryManager& history, ProcessingPipeline& pipeline, bool& showInspector, std::string& lastAction) {
+    void handleToolExecution(int toolId, Pixel**& img, int& width, int& height, HistoryManager& history, ProcessingPipeline& pipeline, bool& showInspector, string& lastAction) {
         if (toolId == GraphicsTool::load) {
-            std::cout << "\n[GUI] Enter path of image to load (PPM, PNG, JPG): ";
-            std::string path;
-            std::cin >> path;
+            cout << "\n[GUI] Enter path of image to load (PPM, PNG, JPG): ";
+            string path;
+            cin >> path;
             int newW = 0, newH = 0;
             Pixel** newImg = ReadPath::Read(path, newW, newH);
             if (newImg) {

@@ -3,33 +3,35 @@
 #include "../history/history.h"
 #include "../pipeline/pipeline.h"
 
+using namespace std;
+
 class DataStructureInspector {
 public:
     static void display(const HistoryManager& history, const ProcessingPipeline& pipeline) {
-        std::cout << "\n========================================================\n";
-        std::cout << "               DATA STRUCTURE INSPECTOR                 \n";
-        std::cout << "========================================================\n";
+        cout << "\n========================================================\n";
+        cout << "               DATA STRUCTURE INSPECTOR                 \n";
+        cout << "========================================================\n";
 
-        std::cout << "1. Stack Metrics:\n";
-        std::cout << "   - Undo Stack Size: " << history.getUndoSize() << "\n";
-        std::cout << "   - Redo Stack Size: " << history.getRedoSize() << "\n";
-        std::cout << "   - Total Push Operations: " << history.getPushCount() << "\n";
-        std::cout << "   - Total Pop Operations:  " << history.getPopCount() << "\n";
+        cout << "1. Stack Metrics:\n";
+        cout << "   - Undo Stack Size: " << history.getUndoSize() << "\n";
+        cout << "   - Redo Stack Size: " << history.getRedoSize() << "\n";
+        cout << "   - Total Push Operations: " << history.getPushCount() << "\n";
+        cout << "   - Total Pop Operations:  " << history.getPopCount() << "\n";
 
-        std::cout << "\n2. Queue Metrics:\n";
-        std::cout << "   - Current Queue Size:      " << pipeline.getCurrentQueueSize() << "\n";
-        std::cout << "   - Max Recorded Queue Size: " << pipeline.getMaxRecordedQueueSize() << "\n";
-        std::cout << "   - Total addQueue Calls:    " << pipeline.getAddCount() << "\n";
-        std::cout << "   - Total deleteQueue Calls: " << pipeline.getDeleteCount() << "\n";
+        cout << "\n2. Queue Metrics:\n";
+        cout << "   - Current Queue Size:      " << pipeline.getCurrentQueueSize() << "\n";
+        cout << "   - Max Recorded Queue Size: " << pipeline.getMaxRecordedQueueSize() << "\n";
+        cout << "   - Total addQueue Calls:    " << pipeline.getAddCount() << "\n";
+        cout << "   - Total deleteQueue Calls: " << pipeline.getDeleteCount() << "\n";
 
-        std::cout << "\n3. Data Structure Contents:\n";
-        std::cout << "   - Undo Stack (Top to Bottom): ";
+        cout << "\n3. Data Structure Contents:\n";
+        cout << "   - Undo Stack (Top to Bottom): ";
         history.printUndoContents();
-        std::cout << "   - Redo Stack (Top to Bottom): ";
+        cout << "   - Redo Stack (Top to Bottom): ";
         history.printRedoContents();
-        std::cout << "   - Pending Jobs (Front to Rear): ";
+        cout << "   - Pending Jobs (Front to Rear): ";
         pipeline.printPendingJobNames();
 
-        std::cout << "========================================================\n\n";
+        cout << "========================================================\n\n";
     }
 };

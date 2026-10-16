@@ -4,6 +4,8 @@
 
 #include "pipeline/job.h"
 
+using namespace std;
+
 // overloaded function to find out the priorities
 
 template <typename T>
@@ -315,7 +317,7 @@ public:
 
         if (isEmptyQueue()) {
 
-            std::cout << "[Empty Queue]\n";
+            cout << "[Empty Queue]\n";
 
             return Type();
 
@@ -332,7 +334,7 @@ public:
 
         if (isEmptyQueue()) {
 
-            std::cout << "[Already Deleted]\n";
+            cout << "[Already Deleted]\n";
 
             return;
 
@@ -355,7 +357,7 @@ public:
 
         if (isEmptyQueue()) {
 
-            std::cout << "[Empty Queue]\n";
+            cout << "[Empty Queue]\n";
 
             return;
 
@@ -364,11 +366,11 @@ public:
 
         for (int i = 0; i < count; i++) {
 
-            std::cout << "[Job Pri: " << itemPriority(array[i]) << "] ";
+            cout << "[Job Pri: " << itemPriority(array[i]) << "] ";
 
         }
 
-        std::cout << "\n";
+        cout << "\n";
 
     }
     

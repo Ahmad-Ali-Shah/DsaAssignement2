@@ -4,6 +4,8 @@
 #include "../stack.h"
 #include "command.h"
 
+using namespace std;
+
 class HistoryManager {
 
 private:
@@ -195,7 +197,7 @@ public:
 
         if (undoStack.isEmptyStack()) {
 
-            std::cout << "[Empty]\n";
+            cout << "[Empty]\n";
 
             return;
 
@@ -203,11 +205,11 @@ public:
 
         for (int i = undoStack.size() - 1; i >= 0; i--) {
 
-            std::cout << undoStack.getAt(i).opName << " ";
+            cout << undoStack.getAt(i).opName << " ";
 
         }
 
-        std::cout << "\n";
+        cout << "\n";
 
     }
 
@@ -215,7 +217,7 @@ public:
 
         if (redoStack.isEmptyStack()) {
 
-            std::cout << "[Empty]\n";
+            cout << "[Empty]\n";
 
             return;
 
@@ -223,11 +225,11 @@ public:
 
         for (int i = redoStack.size() - 1; i >= 0; i--) {
 
-            std::cout << redoStack.getAt(i).opName << " ";
+            cout << redoStack.getAt(i).opName << " ";
 
         }
 
-        std::cout << "\n";
+        cout << "\n";
         
     }
 };

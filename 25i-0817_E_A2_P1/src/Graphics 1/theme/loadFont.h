@@ -2,10 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+using namespace std;
+
 namespace GraphicsTheme {
-    bool loadFont(sf::Font& font, const std::string& path) {
+    bool loadFont(sf::Font& font, const string& path) {
         if (!font.loadFromFile(path)) {
-            std::cout << "[UI Warning] Could not load font from: " << path << "\n";
+            cout << "[UI Warning] Could not load font from: " << path << "\n";
             return false;
         }
         return true;

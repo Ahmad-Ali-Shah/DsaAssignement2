@@ -9,6 +9,8 @@
 #include "../coreImageFunctions/flip/applyFlip.h"
 #include "../coreImageFunctions/brightness/applyBrightness.h"
 
+using namespace std;
+
 class HistoryManager {
 private:
     stackType<HistoryRecord> undoStack;
@@ -35,7 +37,7 @@ private:
                                       ? (currentMemoryUsageBytes - oldest.estimatedMemoryBytes) : 0;
             oldest.freeSavedGrid();
             discardedRecordsCount++;
-            std::cout << "[Memory-Aware History] Budget exceeded (" << memoryBudgetBytes / 1024 << " KB). Discarded oldest record: "
+            cout << "[Memory-Aware History] Budget exceeded (" << memoryBudgetBytes / 1024 << " KB). Discarded oldest record: "
                       << oldest.opName << " (Total discarded: " << discardedRecordsCount << ")\n";
         }
     }
@@ -158,7 +160,7 @@ public:
             evictOldestRecords(topRec.estimatedMemoryBytes);
             undoStack.push(topRec);
             currentMemoryUsageBytes += topRec.estimatedMemoryBytes;
-            std::cout << "[Command Coalescing] Merged brightness adjustment: New total delta = "
+            cout << "[Command Coalescing] Merged brightness adjustment: New total delta = "
                       << topRec.brightnessDelta << "\n";
             return;
         }
@@ -417,24 +419,24 @@ public:
 
     void printUndoContents() const {
         if (undoStack.isEmptyStack()) {
-            std::cout << "[Empty]\n";
+            cout << "[Empty]\n";
             return;
         }
         for (int i = undoStack.size() - 1; i >= 0; i--) {
-            std::cout << "[" << undoStack.getAt(i).opName << " ~ "
+            cout << "[" << undoStack.getAt(i).opName << " ~ "
                       << undoStack.getAt(i).estimatedMemoryBytes << " B] ";
         }
-        std::cout << "\n";
+        cout << "\n";
     }
 
     void printRedoContents() const {
         if (redoStack.isEmptyStack()) {
-            std::cout << "[Empty]\n";
+            cout << "[Empty]\n";
             return;
         }
         for (int i = redoStack.size() - 1; i >= 0; i--) {
-            std::cout << "[" << redoStack.getAt(i).opName << "] ";
+            cout << "[" << redoStack.getAt(i).opName << "] ";
         }
-        std::cout << "\n";
+        cout << "\n";
     }
 };

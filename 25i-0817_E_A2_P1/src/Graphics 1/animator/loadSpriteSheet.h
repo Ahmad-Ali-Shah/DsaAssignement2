@@ -6,25 +6,14 @@
 
 #include <string>
 
+using namespace std;
+
 namespace GraphicsAnimator {
-
-    //////////////////////////////////////
-
-    // for loading sprite
-
-    ///////////////////////////////////
-
-    bool loadSpriteSheet(sf::Texture& tex, const std::string& path) {
-
+    bool loadSpriteSheet(sf::Texture& tex, const string& path) {
         if (!tex.loadFromFile(path)) {
-
-            std::cout << "[UI Warning] Could not load sprite sheet from: " << path << "\n";
-
+            cout << "[UI Warning] Could not load sprite sheet from: " << path << "\n";
             return false;
-
         }
-
         return true;
-        
     }
 }

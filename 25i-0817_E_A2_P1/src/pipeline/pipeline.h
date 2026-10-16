@@ -10,6 +10,8 @@
 #include "../read/write.h"
 #include "job.h"
 
+using namespace std;
+
 class ProcessingPipeline {
 private:
     queueType<Job> jobQueue;
@@ -24,7 +26,7 @@ public:
 
     bool addJob(Job job) {
         if (jobQueue.isFullQueue()) {
-            std::cout << "[Pipeline Full] Cannot add job: " << job.name << ". Please process pending jobs first.\n";
+            cout << "[Pipeline Full] Cannot add job: " << job.name << ". Please process pending jobs first.\n";
             return false;
         }
         job.id = nextJobId++;
@@ -33,25 +35,25 @@ public:
         if (jobQueue.size() > maxRecordedQueueSize) {
             maxRecordedQueueSize = jobQueue.size();
         }
-        std::cout << "[Pipeline] Added Job #" << job.id << ": " << job.name << "\n";
+        cout << "[Pipeline] Added Job #" << job.id << ": " << job.name << "\n";
         return true;
     }
 
     void listPendingJobs() const {
         if (jobQueue.isEmptyQueue()) {
-            std::cout << "[Pipeline] No pending jobs.\n";
+            cout << "[Pipeline] No pending jobs.\n";
             return;
         }
-        std::cout << "\n--- Pending Jobs (FRONT to REAR) ---\n";
+        cout << "\n--- Pending Jobs (FRONT to REAR) ---\n";
         for (int i = 0; i < jobQueue.size(); i++) {
             Job j = jobQueue.getAt(i);
-            std::cout << "  [" << (i + 1) << "] Job #" << j.id << ": " << j.name;
+            cout << "  [" << (i + 1) << "] Job #" << j.id << ": " << j.name;
             if (j.isCancelled) {
-                std::cout << " (CANCELLED)";
+                cout << " (CANCELLED)";
             }
-            std::cout << "\n";
+            cout << "\n";
         }
-        std::cout << "------------------------------------\n";
+        cout << "------------------------------------\n";
     }
 
     bool cancelJob(int jobId) {
@@ -59,7 +61,7 @@ public:
             Job j = jobQueue.getAt(i);
             if (j.id == jobId) {
                 if (j.isCancelled) {
-                    std::cout << "[Pipeline] Job #" << jobId << " is already cancelled.\n";
+                    cout << "[Pipeline] Job #" << jobId << " is already cancelled.\n";
                     return true;
                 }
                 // Update in place by reassigning logical element or marking
@@ -80,11 +82,11 @@ public:
                     jobQueue.addQueue(temp.front());
                     temp.deleteQueue();
                 }
-                std::cout << "[Pipeline] Successfully marked Job #" << jobId << " as cancelled.\n";
+                cout << "[Pipeline] Successfully marked Job #" << jobId << " as cancelled.\n";
                 return true;
             }
         }
-        std::cout << "[Pipeline] Job #" << jobId << " not found in queue.\n";
+        cout << "[Pipeline] Job #" << jobId << " not found in queue.\n";
         return false;
     }
 
@@ -93,12 +95,12 @@ public:
             jobQueue.deleteQueue();
             deleteCount++;
         }
-        std::cout << "[Pipeline] All pending jobs cleared.\n";
+        cout << "[Pipeline] All pending jobs cleared.\n";
     }
 
     bool processNextJob(Pixel**& img, int& w, int& h, HistoryManager& history) {
         if (jobQueue.isEmptyQueue()) {
-            std::cout << "[Pipeline] No pending jobs to process.\n";
+            cout << "[Pipeline] No pending jobs to process.\n";
             return false;
         }
 
@@ -107,11 +109,11 @@ public:
         deleteCount++;
 
         if (currentJob.isCancelled) {
-            std::cout << "[Pipeline] Skipping cancelled Job #" << currentJob.id << ": " << currentJob.name << "\n";
+            cout << "[Pipeline] Skipping cancelled Job #" << currentJob.id << ": " << currentJob.name << "\n";
             return true;
         }
 
-        std::cout << "[Pipeline] Executing Job #" << currentJob.id << ": " << currentJob.name << "...\n";
+        cout << "[Pipeline] Executing Job #" << currentJob.id << ": " << currentJob.name << "...\n";
 
         // Snapshot before executing so it can be recorded into Undo history
         history.recordAction(currentJob.name, img, w, h);
@@ -132,17 +134,17 @@ public:
             case JobType::saveProject:
             case JobType::exportImage:
                 ReadPath::Write(currentJob.filePath, img, w, h, true);
-                std::cout << "[Pipeline] Image written to: " << currentJob.filePath << "\n";
+                cout << "[Pipeline] Image written to: " << currentJob.filePath << "\n";
                 break;
         }
 
-        std::cout << "[Pipeline] Job #" << currentJob.id << " finished successfully!\n";
+        cout << "[Pipeline] Job #" << currentJob.id << " finished successfully!\n";
         return true;
     }
 
     void processAllJobs(Pixel**& img, int& w, int& h, HistoryManager& history) {
         if (jobQueue.isEmptyQueue()) {
-            std::cout << "[Pipeline] No pending jobs to process.\n";
+            cout << "[Pipeline] No pending jobs to process.\n";
             return;
         }
         while (!jobQueue.isEmptyQueue()) {
@@ -170,15 +172,15 @@ public:
 
     void printPendingJobNames() const {
         if (jobQueue.isEmptyQueue()) {
-            std::cout << "[Empty]\n";
+            cout << "[Empty]\n";
             return;
         }
         for (int i = 0; i < jobQueue.size(); i++) {
             Job j = jobQueue.getAt(i);
-            std::cout << j.name;
-            if (j.isCancelled) std::cout << "(C)";
-            std::cout << " ";
+            cout << j.name;
+            if (j.isCancelled) cout << "(C)";
+            cout << " ";
         }
-        std::cout << "\n";
+        cout << "\n";
     }
 };

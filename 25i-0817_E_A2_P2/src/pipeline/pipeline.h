@@ -15,6 +15,8 @@
 
 #include "workloadBenchmark.h"
 
+using namespace std;
+
 class ProcessingPipeline {
 
 private:
@@ -40,7 +42,7 @@ public:
 
     void setMode(int m) {
         mode = m;
-        std::cout << "[Pipeline] Scheduler mode set to: " << (mode == SchedulerMode::fifo ? "FIFO (Phase 1)" : "PRIORITY (Phase 2)") << "\n";
+        cout << "[Pipeline] Scheduler mode set to: " << (mode == SchedulerMode::fifo ? "FIFO (Phase 1)" : "PRIORITY (Phase 2)") << "\n";
     }
 
     int getMode() const {
@@ -55,7 +57,7 @@ public:
 
             if (fifoQueue.isFullQueue()) {
 
-                std::cout << "[Pipeline Full] Cannot add job: " << job.name << "\n";
+                cout << "[Pipeline Full] Cannot add job: " << job.name << "\n";
 
                 return false;
 
@@ -71,7 +73,7 @@ public:
 
             if (prioQueue.isFullQueue()) {
                 
-                std::cout << "[Pipeline Full] Cannot add job: " << job.name << "\n";
+                cout << "[Pipeline Full] Cannot add job: " << job.name << "\n";
 
                 return false;
 
@@ -87,7 +89,7 @@ public:
         addCount++;
 
 
-        std::cout << "[Pipeline] Added Job #" << job.id << " [" << job.name  << " | Pri: " << job.priority << " | Seq: " << job.arrivalTime << "]\n";
+        cout << "[Pipeline] Added Job #" << job.id << " [" << job.name  << " | Pri: " << job.priority << " | Seq: " << job.arrivalTime << "]\n";
 
         return true;
 
@@ -117,23 +119,23 @@ public:
 
     void listPendingJobs() const {
         if (isEmpty()) {
-            std::cout << "[Pipeline] No pending jobs.\n";
+            cout << "[Pipeline] No pending jobs.\n";
             return;
         }
 
-        std::cout << "\n--- Pending Jobs (" << (mode == SchedulerMode::fifo ? "FIFO" : "PRIORITY") << ") ---\n";
+        cout << "\n--- Pending Jobs (" << (mode == SchedulerMode::fifo ? "FIFO" : "PRIORITY") << ") ---\n";
         int sz = getCurrentQueueSize();
         for (int i = 0; i < sz; i++) {
             Job j = (mode == SchedulerMode::fifo) ? fifoQueue.getAt(i) : prioQueue.getAt(i);
 
-            std::cout << "  [" << (i + 1) << "] Job #" << j.id << ": " << j.name << " (Priority: " << j.priority << ", Arr: " << j.arrivalTime << ")";
+            cout << "  [" << (i + 1) << "] Job #" << j.id << ": " << j.name << " (Priority: " << j.priority << ", Arr: " << j.arrivalTime << ")";
             if (j.isBarrier()) 
-            std::cout << " [BARRIER]";
+            cout << " [BARRIER]";
             if (j.isCancelled) 
-            std::cout << " (CANCELLED)";
-            std::cout << "\n";
+            cout << " (CANCELLED)";
+            cout << "\n";
         }
-        std::cout << "------------------------------------\n";
+        cout << "------------------------------------\n";
     }
 
     int getPendingJobs(Job out[], int maxCount) const {
@@ -151,12 +153,12 @@ public:
         } else {
             while (!prioQueue.isEmptyQueue()) { prioQueue.deleteQueue(); deleteCount++; }
         }
-        std::cout << "[Pipeline] All pending jobs cleared.\n";
+        cout << "[Pipeline] All pending jobs cleared.\n";
     }
 
     bool processNextJob(Pixel**& img, int& w, int& h, HistoryManager& history) {
         if (isEmpty()) {
-            std::cout << "[Pipeline] No pending jobs to process.\n";
+            cout << "[Pipeline] No pending jobs to process.\n";
             return false;
         }
 
@@ -171,11 +173,11 @@ public:
         deleteCount++;
 
         if (currentJob.isCancelled) {
-            std::cout << "[Pipeline] Skipping cancelled Job #" << currentJob.id << ": " << currentJob.name << "\n";
+            cout << "[Pipeline] Skipping cancelled Job #" << currentJob.id << ": " << currentJob.name << "\n";
             return true;
         }
 
-        std::cout << "[Pipeline] Executing Job #" << currentJob.id << " [" << currentJob.name
+        cout << "[Pipeline] Executing Job #" << currentJob.id << " [" << currentJob.name
                   << " | Pri: " << currentJob.priority << "]...\n";
 
         switch (currentJob.type) {
@@ -235,11 +237,11 @@ public:
             case JobType::saveProject:
             case JobType::exportImage:
                 ReadPath::Write(currentJob.filePath, img, w, h, true);
-                std::cout << "[Pipeline Barrier] Image written to: " << currentJob.filePath << "\n";
+                cout << "[Pipeline Barrier] Image written to: " << currentJob.filePath << "\n";
                 break;
         }
 
-        std::cout << "[Pipeline] Job #" << currentJob.id << " finished successfully!\n";
+        cout << "[Pipeline] Job #" << currentJob.id << " finished successfully!\n";
         return true;
     }
 

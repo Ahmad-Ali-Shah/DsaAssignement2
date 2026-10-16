@@ -16,7 +16,7 @@ void assertCondition(const string& testName, bool condition) {
 
 
 
-// Test 1: Initial Empty State
+
 void testInitialEmptyState() {
     cout << "\n--- Test 1: Initial Empty State ---\n";
     stackType<int> s(10);
@@ -28,12 +28,12 @@ void testInitialEmptyState() {
 
 
 
-// Test 2: Safe Pop and Top on Empty Stack (Underflow Protection)
+
 void testEmptyUnderflowSafety() {
     cout << "\n--- Test 2: Empty Underflow Safety ---\n";
     stackType<int> s(10);
 
-    // Should not crash the program
+    
     int defaultVal = s.top();
     s.pop();
 
@@ -44,7 +44,7 @@ void testEmptyUnderflowSafety() {
 
 
 
-// Test 3: Single Item Push, Top, and Pop
+
 void testSingleItemPushPop() {
     cout << "\n--- Test 3: Single Item Push and Pop ---\n";
     stackType<int> s(10);
@@ -61,7 +61,7 @@ void testSingleItemPushPop() {
 
 
 
-// Test 4: LIFO (Last In First Out) Order Verification
+
 void testLifoOrder() {
     cout << "\n--- Test 4: LIFO Order Verification ---\n";
     stackType<int> s(10);
@@ -87,13 +87,13 @@ void testLifoOrder() {
 
 
 
-// Test 5: Dynamic Array Resizing (Exceeding Initial Capacity)
+
 void testDynamicCapacityExpansion() {
     cout << "\n--- Test 5: Dynamic Capacity Expansion ---\n";
-    // Initialize with a tiny capacity of 3
+    
     stackType<int> s(3);
 
-    // Push 8 elements to trigger dynamic resizing
+    
     for (int i = 1; i <= 8; i++) {
         s.push(i * 10);
     }
@@ -101,7 +101,7 @@ void testDynamicCapacityExpansion() {
     bool sizeCorrect = (s.size() == 8);
     bool topCorrect = (s.top() == 80);
 
-    // Verify all 8 elements pop in proper order
+    
     bool orderCorrect = true;
     for (int i = 8; i >= 1; i--) {
         if (s.top() != i * 10) {
@@ -117,7 +117,7 @@ void testDynamicCapacityExpansion() {
 
 
 
-// Test 6: initializeStack() Resets Populated Stack
+
 void testInitializeStack() {
     cout << "\n--- Test 6: Initialize Stack Reset ---\n";
     stackType<string> s(10);
@@ -135,7 +135,7 @@ void testInitializeStack() {
 
 
 
-// Test 7: Copy Constructor Deep Copy
+
 void testCopyConstructorDeepCopy() {
     cout << "\n--- Test 7: Copy Constructor Deep Copy ---\n";
     stackType<int> original(10);
@@ -143,10 +143,10 @@ void testCopyConstructorDeepCopy() {
     original.push(2);
     original.push(3);
 
-    // Invoke copy constructor
+    
     stackType<int> copyStack(original);
 
-    // Modify copyStack and ensure original is unaffected
+    
     copyStack.pop();
     copyStack.push(999);
 
@@ -159,7 +159,7 @@ void testCopyConstructorDeepCopy() {
 
 
 
-// Test 8: Overloaded Assignment Operator (=) Deep Copy
+
 void testAssignmentOperatorDeepCopy() {
     cout << "\n--- Test 8: Assignment Operator Deep Copy ---\n";
     stackType<int> original(10);
@@ -169,10 +169,10 @@ void testAssignmentOperatorDeepCopy() {
     stackType<int> assignedStack(5);
     assignedStack.push(1);
 
-    // Assign original to assignedStack
+    
     assignedStack = original;
 
-    // Modify original and check assignedStack
+    
     original.pop();
 
     bool assignedIntact = (assignedStack.size() == 2) && (assignedStack.top() == 60);
@@ -184,7 +184,7 @@ void testAssignmentOperatorDeepCopy() {
 
 
 
-// Test 9: Read-Only Inspection (Inspector Support without Popping)
+
 void testReadOnlyInspection() {
     cout << "\n--- Test 9: Read-Only Inspection ---\n";
     stackType<string> s(5);

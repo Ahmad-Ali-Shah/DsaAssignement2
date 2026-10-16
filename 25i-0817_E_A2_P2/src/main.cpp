@@ -72,15 +72,16 @@ int main() {
     ProcessingPipeline pipeline(100, SchedulerMode::priority);
 
     cout << "========================================================\n";
-    cout << "           IMAGELAB STUDIO P2: MODE SELECTION           \n";
+    cout << "                 WELCOME TO IMAGELAB P2                 \n";
     cout << "========================================================\n";
-    cout << " [1] Terminal / Console Menu Mode\n";
-    cout << " [2] Interactive Graphical Studio Mode (SFML)\n";
+    cout << " Please choose how you want to run ImageLab:\n";
+    cout << " [1] Text Menu (Run right here in this black box terminal)\n";
+    cout << " [2] Graphical Window (Open interactive graphics window)\n";
     cout << "========================================================\n";
-    cout << "Enter interface choice: ";
+    cout << "Enter 1 or 2: ";
     int startMode = 1;
     if (cin >> startMode && startMode == 2) {
-        cout << "[ImageLab P2] Launching Interactive Graphical Studio...\n";
+        cout << "[ImageLab P2] Launching Graphical Window...\n";
         GraphicsApp2::runGraphics2(currentImage, width, height, history, pipeline);
         if (currentImage) ReadPath::freeImage(currentImage, height);
         return 0;

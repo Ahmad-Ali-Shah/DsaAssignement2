@@ -5,22 +5,24 @@
 #include "stack.h"
 #include "circularQueue.h"
 
+using namespace std;
+
 class BenchmarkRunner {
 public:
     static void runBatchBenchmarks() {
-        std::cout << "\n=========================================================================\n";
-        std::cout << "          SECTION 7.4 & 7.5: SINGLE VS BATCHED OPERATIONS BENCHMARK      \n";
-        std::cout << "=========================================================================\n";
+        cout << "\n=========================================================================\n";
+        cout << "          SECTION 7.4 & 7.5: SINGLE VS BATCHED OPERATIONS BENCHMARK      \n";
+        cout << "=========================================================================\n";
 
         int testSizes[] = {1000, 10000, 100000};
 
-        std::cout << std::left << std::setw(12) << "Item Count"
+        cout << std::left << std::setw(12) << "Item Count"
                   << std::setw(18) << "Single Push (us)"
                   << std::setw(18) << "Batch Push (us)"
                   << std::setw(18) << "Single AddQ (us)"
                   << std::setw(18) << "Batch AddQ (us)"
                   << "Speedup\n";
-        std::cout << "-----------------------------------------------------------------------------------------\n";
+        cout << "-----------------------------------------------------------------------------------------\n";
 
         for (int N : testSizes) {
             int* data = new int[N];
@@ -60,7 +62,7 @@ public:
 
             double pushSpeedup = singlePushUs / (batchPushUs > 0.001 ? batchPushUs : 0.001);
 
-            std::cout << std::left << std::setw(12) << N
+            cout << std::left << std::setw(12) << N
                       << std::setw(18) << std::fixed << std::setprecision(1) << singlePushUs
                       << std::setw(18) << batchPushUs
                       << std::setw(18) << singleQUs
@@ -68,6 +70,6 @@ public:
                       << std::fixed << std::setprecision(2) << pushSpeedup << "x\n";
         }
 
-        std::cout << "=========================================================================================\n\n";
+        cout << "=========================================================================================\n\n";
     }
 };
