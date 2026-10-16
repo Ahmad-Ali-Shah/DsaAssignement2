@@ -9,6 +9,7 @@
 #include "../src/pipeline/job.h"
 #include "../src/pipeline/pipeline.h"
 #include "../src/benchmarks.h"
+#include "../src/coreImageFunctions/greyScale/applyGreyScale.h"
 
 using namespace std;
 
@@ -238,6 +239,92 @@ void testWorkloadBenchmark() {
     cout << "  [PASS] 30-Job Workload executed in both FIFO and Priority modes\n";
 }
 
+// --------------------------------------------------------------------------
+// SUITE 6: SEQUENTIAL MULTI-OPERATION RESTORATION (SECTION 7.1 & 7.2)
+// --------------------------------------------------------------------------
+void testMultiOperationRestoration() {
+    cout << "\n--- TEST SUITE 6: MULTI-OPERATION SEQUENTIAL RESTORATION ---\n";
+    HistoryManager hm(50 * 1024 * 1024);
+    int w = 4, h = 4;
+    
+    // Create patterned test image with distinct RGB values
+    Pixel** img = new Pixel*[h];
+    Pixel** baseline = new Pixel*[h];
+    for (int y = 0; y < h; y++) {
+        img[y] = new Pixel[w];
+        baseline[y] = new Pixel[w];
+        for (int x = 0; x < w; x++) {
+            img[y][x] = Pixel((x * 60 + 30) % 256, (y * 50 + 40) % 256, ((x + y) * 45 + 50) % 256);
+            baseline[y][x] = img[y][x];
+        }
+    }
+
+    // 1. Extreme Brightness Clamp (-255 -> 0 clamp)
+    hm.recordBrightness(-255.0, img, w, h);
+    MyBrightness::applyBrightness(img, w, h, -255.0);
+    for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+            assert(img[y][x].r == 0 && img[y][x].g == 0 && img[y][x].b == 0);
+        }
+    }
+    bool undoOk = hm.undo(img, w, h);
+    assert(undoOk);
+    assert(gridsEqual(img, baseline, w, h));
+    cout << "  [PASS] Extreme brightness clamp (-255 -> 0) and rollback perfectly restored original image\n";
+
+    // 2. Grayscale Operation and Restoration
+    hm.recordGridOperation("Grayscale", HistoryOpType::grayscale, img, w, h);
+    MygreyScale::applyGrayscale(img, w, h);
+    undoOk = hm.undo(img, w, h);
+    assert(undoOk);
+    assert(gridsEqual(img, baseline, w, h));
+    cout << "  [PASS] Grayscale operation rollback perfectly restored original color channels\n";
+
+    // 3. Multi-Step Interleaved Sequence:
+    // Original -> Brightness(+40) -> Grayscale -> Brightness(-70) -> Grayscale
+    hm.recordBrightness(40.0, img, w, h);
+    MyBrightness::applyBrightness(img, w, h, 40.0);
+
+    hm.recordGridOperation("Grayscale 1", HistoryOpType::grayscale, img, w, h);
+    MygreyScale::applyGrayscale(img, w, h);
+
+    hm.recordBrightness(-70.0, img, w, h);
+    MyBrightness::applyBrightness(img, w, h, -70.0);
+
+    hm.recordGridOperation("Grayscale 2", HistoryOpType::grayscale, img, w, h);
+    MygreyScale::applyGrayscale(img, w, h);
+
+    assert(hm.getUndoSize() == 4);
+
+    // Successively undo all 4 operations
+    for (int step = 4; step >= 1; step--) {
+        undoOk = hm.undo(img, w, h);
+        assert(undoOk);
+    }
+
+    assert(hm.getUndoSize() == 0);
+    assert(gridsEqual(img, baseline, w, h));
+    cout << "  [PASS] Multi-step interleaved sequence (Brightness + Grayscale) fully restored to original\n";
+
+    // 4. Full Redo and Undo Cycle
+    for (int step = 1; step <= 4; step++) {
+        bool redoOk = hm.redo(img, w, h);
+        assert(redoOk);
+    }
+    assert(hm.getRedoSize() == 0);
+    assert(hm.getUndoSize() == 4);
+
+    for (int step = 4; step >= 1; step--) {
+        undoOk = hm.undo(img, w, h);
+        assert(undoOk);
+    }
+    assert(gridsEqual(img, baseline, w, h));
+    cout << "  [PASS] Full Redo and Undo cycle preserves bit-for-bit fidelity\n";
+
+    freeTestGrid(img, h);
+    freeTestGrid(baseline, h);
+}
+
 int main() {
     cout << "=========================================================================\n";
     cout << "           RUNNING AUTOMATED TEST SUITE: PHASE 2 (SECTION 7.7)           \n";
@@ -248,8 +335,9 @@ int main() {
     testCommandCoalescing();
     testBatchedOperations();
     testWorkloadBenchmark();
+    testMultiOperationRestoration();
 
-    cout << "=========================================================================\n";
+    cout << "\n=========================================================================\n";
     cout << "                 ALL PHASE 2 TESTS COMPLETED SUCCESSFULLY!                \n";
     cout << "=========================================================================\n";
 
