@@ -1,5 +1,5 @@
-\documentclass[9.5pt,a4paper]{article}
-\usepackage[margin=1.2cm,headheight=1.2cm,headsep=6pt,footskip=14pt]{geometry}
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=1.2cm,headheight=1.4cm,headsep=6pt,footskip=12pt]{geometry}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{booktabs}
@@ -7,223 +7,215 @@
 \usepackage{array}
 \usepackage{amsmath,amssymb}
 \usepackage{microtype}
-\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{enumitem}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=black,
-    urlcolor=black,
-    citecolor=black
-}
-
-% Header / Footer
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{%
-  \begin{tabular}{@{}c@{\hspace{5pt}}l@{}}
-    \includegraphics[width=0.9cm]{fast_logo.png} & \textbf{FAST NUCES, Islamabad Campus}\\
-    & {\scriptsize Department of Computer Science, Fall 2026}
+  \begin{tabular}{@{}c@{\hspace{6pt}}l@{}}
+    \multirow{2}{*}{\includegraphics[width=0.9cm]{fast_logo.png}} & \textbf{FAST NUCES, Islamabad Campus}\\
+    & {\footnotesize Department of Computer Science}
   \end{tabular}%
 }
 \fancyhead[R]{%
   \begin{tabular}{@{}r@{}}
-    \textbf{CS2001: Data Structures}\\
-    \textbf{Assignment 2: ImageLab (Phase 1)}\\
-    Ahmad Ali \textbar{} 25-i0817 \textbar{} Section E
+    \textbf{CS2001 Data Structures \textbar{} Assignment 2 Phase 1}\\
+    \textbf{Ahmad Ali} \textbar{} \textbf{25i-0817} \textbar{} \textbf{BS CS E}
   \end{tabular}%
 }
-\fancyfoot[L]{\scriptsize FAST NUCES Islamabad}
-\fancyfoot[C]{\scriptsize CS2001 Data Structures}
-\fancyfoot[R]{\scriptsize Page \thepage\ of 3}
+\fancyfoot[L]{\footnotesize FAST NUCES Islamabad}
+\fancyfoot[C]{\footnotesize CS2001 Data Structures Phase 1 Report}
+\fancyfoot[R]{\footnotesize Page \thepage\ of 3}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
 \begin{document}
 
 % =========================================================================
-% PAGE 1: COVER AND OVERVIEW
+% PAGE 1: COVER AND SELECTED ARCHITECTURE (I SELECT / WHY)
 % =========================================================================
 \thispagestyle{empty}
-\vspace*{1.0cm}
 
 \begin{center}
-    \includegraphics[width=3.0cm]{fast_logo.png}\\[12pt]
-    {\LARGE \textbf{National University of Computer and Emerging Sciences}}\\[4pt]
-    {\large \textbf{Islamabad Campus \textbar{} Department of Computer Science}}\\[12pt]
-    \rule{0.88\textwidth}{0.8pt}\\[10pt]
-    {\huge \textbf{CS2001: Data Structures}}\\[6pt]
-    {\Large \textbf{Assignment 2: ImageLab (Phase 1 Technical Report)}}\\[10pt]
-    \rule{0.88\textwidth}{0.8pt}\\[20pt]
+    \includegraphics[width=1.8cm]{fast_logo.png}\\[4pt]
+    {\LARGE \textbf{National University of Computer and Emerging Sciences}}\\[2pt]
+    {\large \textbf{Islamabad Campus \textbar{} Department of Computer Science}}\\[5pt]
+    \rule{0.94\textwidth}{0.8pt}\\[5pt]
+    {\huge \textbf{CS2001 Data Structures}}\\[3pt]
+    {\Large \textbf{Assignment 2: ImageLab (Phase 1 Technical Report)}}\\[5pt]
+    \rule{0.94\textwidth}{0.8pt}\\[8pt]
 
-    \vspace{0.4cm}
-    \begin{tabular}{|p{0.78\textwidth}|}
+    \begin{tabular}{|p{0.84\textwidth}|}
         \hline
         \centering
-        \vspace{4pt}
-        {\Large \textbf{Student Information}}\\[6pt]
+        \vspace{2pt}
+        {\large \textbf{Student Information}}\\[3pt]
         \begin{tabular}{ll}
-            \textbf{Student Name:} & Ahmad Ali \\[4pt]
-            \textbf{Roll Number:}  & 25-i0817 \\[4pt]
-            \textbf{Section:}      & BS CS E \\[4pt]
-            \textbf{Course:}       & CS2001 Data Structures \\[4pt]
-            \textbf{Deliverable:}  & Phase 1 Final Submission (16/10/2026) \\[4pt]
+            \textbf{Student Name:} & \textbf{Ahmad Ali} \\[2pt]
+            \textbf{Roll Number:}  & \textbf{25i-0817} \\[2pt]
+            \textbf{Section:}      & \textbf{BS CS E} \\[2pt]
+            \textbf{Course:}       & \textbf{CS2001 Data Structures} \\[2pt]
+            \textbf{Submission:}   & \textbf{Phase 1 Submission} \\[2pt]
         \end{tabular}
-        \vspace{4pt}
+        \vspace{2pt}
         \tabularnewline
         \hline
     \end{tabular}
 \end{center}
 
-\vspace{0.6cm}
-\section*{Phase 1 Project Summary and Rubric Overview}
-This report explains the implementation of Phase 1 of ImageLab. Every component is written from scratch without forbidden library containers or templates. All requirements match the marks distribution in Section 8 of the assignment rubric:
+\vspace{0.1cm}
+\subsection*{Data Structure Decisions and Design Justifications}
+Every data structure is built from scratch using raw pointers and arrays. Below are the structural choices following the exact required format:
 
-\begin{itemize}
-    \item \textbf{Section 6.1 (8 Marks):} Hand written core image operations on raw pixel grids.
-    \item \textbf{Section 6.2 (7 Marks):} Custom dynamic array stack implementation.
-    \item \textbf{Section 6.3 (9 Marks):} Undo and redo engine using two stacks.
-    \item \textbf{Section 6.4 (7 Marks):} Custom circular queue implementation.
-    \item \textbf{Section 6.5 (6 Marks):} Job processing pipeline with bounded capacity.
-    \item \textbf{Section 6.6 (8 Marks):} Stack based and queue based bucket fill algorithms.
-    \item \textbf{Section 6.7 and 6.8 (5 Marks):} Data structure inspector and full test coverage.
-\end{itemize}
+\begin{itemize}[noitemsep,topsep=2pt,parsep=1pt,partopsep=0pt]
+    \item \textbf{Stack Representation (Section 6.2):}
+    \begin{itemize}[noitemsep,topsep=1pt,parsep=0pt]
+        \item \textbf{I select:} Dynamic array representation.
+        \item \textbf{Why:} It stores elements in continuous memory, gives O(1) push and pop, avoids node pointer overhead, and works directly with our bounded undo limit.
+    \end{itemize}
 
-\section{Section 6.1: Core Image Operations Implemented by Hand (8 Marks)}
-\begin{itemize}
-    \item \textbf{Raw Pixel Grid:} Images are stored as a 2D dynamic array of pixels using \texttt{Pixel**} allocated on the heap.
-    \item \textbf{Crop:} Extracts any valid rectangular subregion from coordinate $(x_1, y_1)$ to $(x_2, y_2)$ into a new grid.
-    \item \textbf{Rotation:} Supports clockwise rotation for 90, 180, and 270 degrees. Rotation by 180 degrees is done in place by swapping opposite pixels.
-    \item \textbf{Flip:} Horizontal flip swaps opposite columns across each row. Vertical flip swaps row pointers directly in $\mathcal{O}(H)$ time without touching pixels.
-    \item \textbf{Brightness:} Adds a positive or negative intensity value to every pixel. Clamps all values between 0 and 255 to prevent overflow.
-    \item \textbf{Grayscale:} Converts colors to shades of gray using standard luminance weights: $0.299 \times R + 0.587 \times G + 0.114 \times B$.
-    \item \textbf{Bilinear Resize:} Computes four point weighted average interpolation to scale images up or down smoothly.
-    \item \textbf{Box Blur:} Applies a $3 \times 3$ averaging box filter across neighbor pixels using a separate scratch grid.
+    \item \textbf{Queue Representation (Section 6.4):}
+    \begin{itemize}[noitemsep,topsep=1pt,parsep=0pt]
+        \item \textbf{I select:} Circular array representation.
+        \item \textbf{Why:} It avoids moving elements on deleteQueue, runs in O(1) time, uses fixed memory, and connects front and rear using modulo arithmetic.
+    \end{itemize}
+
+    \item \textbf{Empty Queue versus Full Queue Identification (Section 6.4):}
+    \begin{itemize}[noitemsep,topsep=1pt,parsep=0pt]
+        \item \textbf{I select:} Dedicated integer count variable.
+        \item \textbf{Why:} It tracks active element count directly, distinguishing empty from full without wasting a reserved array slot.
+    \end{itemize}
+
+    \item \textbf{Bounded Processing Pipeline Policy (Section 6.5):}
+    \begin{itemize}[noitemsep,topsep=1pt,parsep=0pt]
+        \item \textbf{I select:} Reject incoming jobs when capacity is reached.
+        \item \textbf{Why:} When the queue reaches maximum capacity, incoming jobs are rejected and the user is prompted to process pending jobs first, preventing memory overflow.
+    \end{itemize}
+
+    \item \textbf{Pipeline Job Cancellation Policy (Section 6.5):}
+    \begin{itemize}[noitemsep,topsep=1pt,parsep=0pt]
+        \item \textbf{I select:} In place cancellation marker flag.
+        \item \textbf{Why:} It sets a cancelled flag on the job without shifting elements, and the pipeline skips the job safely upon dequeue.
+    \end{itemize}
+
+    \item \textbf{Pending Jobs with Undo and Redo Policy (Section 6.5):}
+    \begin{itemize}[noitemsep,topsep=1pt,parsep=0pt]
+        \item \textbf{I select:} Direct execution when pipeline is empty, and queued job execution when pipeline is active.
+        \item \textbf{Why:} It preserves exact chronological order so an undo action applies only after preceding queued edits have completed.
+    \end{itemize}
+
+    \item \textbf{Bucket Fill Algorithm Traversal (Section 6.6):}
+    \begin{itemize}[noitemsep,topsep=1pt,parsep=0pt]
+        \item \textbf{I select:} Dual traversal implementation with an explicit Stack and an explicit Queue.
+        \item \textbf{Why:} It demonstrates both depth exploration and radial layer expansion without recursion, avoiding system call stack overflow on large image files.
+    \end{itemize}
+
+    \item \textbf{History Management Engine (Section 6.3):}
+    \begin{itemize}[noitemsep,topsep=1pt,parsep=0pt]
+        \item \textbf{I select:} Two independent stacks with deep copy snapshots.
+        \item \textbf{Why:} It isolates past undo states and future redo states cleanly, emptying redo on fresh edits and guaranteeing bit for bit image recovery.
+    \end{itemize}
 \end{itemize}
 
 \clearpage
 
 % =========================================================================
-% PAGE 2: DATA STRUCTURES AND PIPELINE
+% PAGE 2: COMPLEXITY TABLE WITH ONE-LINE REASONS ("I USE ...")
 % =========================================================================
 
-\section{Section 6.2: Stack Implementation stackType (7 Marks)}
-\begin{itemize}
-    \item \textbf{Array Based Storage:} Implemented as a template class \texttt{stackType<Type>} using dynamic heap memory.
-    \item \textbf{Constant Time Operations:} Push, pop, and top run in strict $\mathcal{O}(1)$ time using an integer index \texttt{stackTop}.
-    \item \textbf{Automatic Capacity Expansion:} Stack doubles in capacity dynamically if full, ensuring no push fails during operation.
-    \item \textbf{Boundary Safety:} Pop and top on an empty stack are safely intercepted with clear error messages without program crashes.
-    \item \textbf{Deep Copy Support:} Custom copy constructor and assignment operator create deep copies of all heap memory.
-    \item \textbf{Stack Reset:} The function \texttt{initializeStack()} safely resets the stack to empty in $\mathcal{O}(1)$ time.
-\end{itemize}
+\subsection*{Section 6.8: Operation Complexity and Analysis}
+Every image edit and data structure operation is analyzed below with time complexity, auxiliary space complexity, and a specific one line reason:
 
-\section{Section 6.3: Undo and Redo with Two Stacks (9 Marks)}
-\begin{itemize}
-    \item \textbf{Dual Stack Engine:} Uses an \texttt{undoStack} for past states and a \texttt{redoStack} for future states.
-    \item \textbf{Independent Deep Copy Snapshots:} Each undo record stores a deep copy of the image grid so modifying the current image never damages saved history.
-    \item \textbf{New Edit Invariant:} When the user performs a new edit, the previous state is pushed to \texttt{undoStack} and \texttt{redoStack} is completely emptied.
-    \item \textbf{Undo Execution:} Pops the previous state from \texttt{undoStack}, pushes the current state to \texttt{redoStack}, and restores the canvas.
-    \item \textbf{Redo Execution:} Pops the forward state from \texttt{redoStack}, pushes the current state to \texttt{undoStack}, and reapplies the edit.
-    \item \textbf{Consecutive Stability:} Multiple undos followed by multiple redos restore images bit for bit with zero memory leaks.
-\end{itemize}
-
-\section{Section 6.4: Circular Queue Implementation queueType (7 Marks)}
-\begin{itemize}
-    \item \textbf{Bounded Ring Buffer:} Implemented as a template class \texttt{queueType<Type>} with fixed maximum capacity.
-    \item \textbf{Zero Element Shifting:} Front and rear pointers advance using modular arithmetic: $(index + 1) \pmod{capacity}$.
-    \item \textbf{Constant Time Guarantees:} \texttt{addQueue()} and \texttt{deleteQueue()} both operate in strict $\mathcal{O}(1)$ time.
-    \item \textbf{Capacity Checking:} \texttt{isEmptyQueue()} and \texttt{isFullQueue()} track element count accurately.
-    \item \textbf{Safe Memory Management:} Destructor, copy constructor, and assignment operator handle dynamic arrays properly.
-\end{itemize}
-
-\section{Section 6.5: Processing Pipeline (6 Marks)}
-\begin{itemize}
-    \item \textbf{Add Job:} Adds an image edit task to the pipeline queue; safely rejects incoming jobs when the bounded queue is full.
-    \item \textbf{List Jobs:} Displays all pending jobs from front to rear with arrival numbers and status indicators.
-    \item \textbf{Process Next Job:} Dequeues the front job, applies the edit, and automatically saves an undo snapshot.
-    \item \textbf{Process All Jobs:} Loops until the queue is completely drained, executing all queued edits in arrival order.
-    \item \textbf{Cancel Job:} Locates a task by job ID and sets a cancellation flag; the task is safely discarded upon dequeue without shifting elements.
-    \item \textbf{Clear Queue:} Discards all waiting jobs instantly and resets the queue size counter to zero.
-\end{itemize}
-
-\section{Section 6.6: Bucket Fill Stack and Queue Versions (8 Marks)}
-\begin{itemize}
-    \item \textbf{Stack Based Fill (DFS):} Explores four directional neighbors depth first using an explicit coordinate stack.
-    \item \textbf{Queue Based Fill (BFS):} Explores neighbors in level order concentric waves using a circular queue.
-    \item \textbf{Identical Output Proof:} Both algorithms produce bit for bit identical filled pixel regions on identical inputs.
-    \item \textbf{Same Color Guard:} Immediately exits if the replacement color matches the seed pixel color, avoiding infinite recursion or loops.
-\end{itemize}
-
-\begin{center}
-    \includegraphics[width=0.82\textwidth,height=3.4cm,keepaspectratio]{bucket_fill_comparison.png}
-\end{center}
-
-\clearpage
-
-% =========================================================================
-% PAGE 3: COMPLEXITY, INSPECTOR AND TEST EVIDENCE
-% =========================================================================
-
-\section{Section 6.7: Data Structure Inspector (Section 6.7 and 6.8)}
-\begin{itemize}
-    \item \textbf{Stack Metrics:} Reports active undo count, redo count, total push operations, and total pop operations.
-    \item \textbf{Queue Metrics:} Reports current queue size, peak queue size recorded, total adds, and total deletes.
-    \item \textbf{Read Only Contents:} Displays undo stack items from top to bottom and queue jobs from front to rear without popping or dequeuing.
-\end{itemize}
-
-\section{Section 6.8: Algorithmic Complexity Table}
+\vspace{0.1cm}
 \begin{table}[h!]
 \centering
-\fontsize{7.5pt}{9.2pt}\selectfont
+\fontsize{7.5pt}{9.4pt}\selectfont
 \begin{tabularx}{\textwidth}{l c c X}
 \toprule
-\textbf{Operation} & \textbf{Time} & \textbf{Aux Space} & \textbf{Simple Explanation} \\
+\textbf{Operation Name} & \textbf{Time} & \textbf{Space} & \textbf{Reason} \\
 \midrule
-Stack Push / Pop / Top & $\mathcal{O}(1)$ & $\mathcal{O}(1)$ & Direct array access at top index without traversal. \\
-Queue Add / Delete / Front & $\mathcal{O}(1)$ & $\mathcal{O}(1)$ & Modulo index advancement without shifting elements. \\
-Load / Save PPM Image & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & Sequential read or write across binary file bytes. \\
-Horizontal Flip & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In place column swapping across each row. \\
-Vertical Flip & $\mathcal{O}(H)$ & $\mathcal{O}(1)$ & Swaps row pointers directly without touching individual pixels. \\
-Rotate 90 / 270 deg & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Transposes dimensions and copies to newly allocated grid. \\
-Rotate 180 deg & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In place symmetric pixel swapping across canvas center. \\
-Crop $(x_1, y_1, x_2, y_2)$ & $\mathcal{O}(W' \times H')$ & $\mathcal{O}(W' \times H')$ & Allocates and copies only the bounded rectangle. \\
-Brightness Adjustment & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In place linear intensity change with clamping. \\
-Grayscale Conversion & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & In place luminance calculation on each pixel. \\
-Bilinear Resize & $\mathcal{O}(W' \times H')$ & $\mathcal{O}(W' \times H')$ & Four point weighted interpolation for each target pixel. \\
-Box Blur ($3 \times 3$) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Eight neighbor local averages computed into scratch grid. \\
-Bucket Fill Stack DFS & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Visits each connected target pixel once using stack. \\
-Bucket Fill Queue BFS & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & Visits each connected target pixel once using circular queue. \\
-Undo / Redo Operation & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H \times S)$ & Restores deep copy pixel matrix snapshot from stack. \\
+Load Image & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & I use binary stream reading to parse image header and stream pixels directly into grid. \\
+\addlinespace[1pt]
+Crop Image & $\mathcal{O}(W' \times H')$ & $\mathcal{O}(W' \times H')$ & I use nested loops to copy pixels strictly within the selected crop bounding box. \\
+\addlinespace[1pt]
+Rotate 90 and 270 deg & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & I use coordinate transposition which maps source rows into target columns. \\
+\addlinespace[1pt]
+Rotate 180 deg & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & I use symmetric in place pointer swapping between opposite halves of the image grid. \\
+\addlinespace[1pt]
+Horizontal Flip & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & I use in place swapping of symmetric column pixels along each row. \\
+\addlinespace[1pt]
+Vertical Flip & $\mathcal{O}(H)$ & $\mathcal{O}(1)$ & I use direct row pointer swaps which avoids touching individual pixel data. \\
+\addlinespace[1pt]
+Brightness Adjustment & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & I use direct arithmetic addition and clamp every value between 0 and 255. \\
+\addlinespace[1pt]
+Grayscale Conversion & $\mathcal{O}(W \times H)$ & $\mathcal{O}(1)$ & I use fixed point luminance weighting to compute average intensity per pixel. \\
+\addlinespace[1pt]
+Bilinear Resize & $\mathcal{O}(W' \times H')$ & $\mathcal{O}(W' \times H')$ & I use four point weighted interpolation for each target dimension pixel. \\
+\addlinespace[1pt]
+Box Blur ($3 \times 3$) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & I use standard matrix kernel where 9 neighbor sums take O(1) time per pixel. \\
+\addlinespace[1pt]
+Bucket Fill (Stack) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & I use an explicit stack to visit every connected matching pixel once. \\
+\addlinespace[1pt]
+Bucket Fill (Queue) & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & I use a circular queue to expand outward layer by layer in level order. \\
+\addlinespace[1pt]
+Stack Push, Pop, Top & $\mathcal{O}(1)$ & $\mathcal{O}(1)$ & I use direct indexing at the stack top position without moving elements. \\
+\addlinespace[1pt]
+Queue Add, Delete, Front & $\mathcal{O}(1)$ & $\mathcal{O}(1)$ & I use circular modulo arithmetic to advance front and rear pointers instantly. \\
+\addlinespace[1pt]
+Undo and Redo Operation & $\mathcal{O}(W \times H)$ & $\mathcal{O}(W \times H)$ & I use deep copy restoration to pop snapshot state from stack to canvas. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\vspace{-4pt}
-\section{Section 6.8: Testing Evidence and Minimum Test Results (5 Marks)}
-All data structures and algorithms passed 100 percent of automated test cases in \texttt{tests/test.cpp}, \texttt{tests/stackTest.cpp}, and \texttt{tests/queueTest.cpp}:
+\vspace{0.1cm}
+\subsection*{Core Operational Guarantees}
+\begin{itemize}[noitemsep,topsep=2pt,parsep=1pt]
+    \item \textbf{Strict Zero Shifting:} The circular queue never shifts elements upon \texttt{deleteQueue()}. Pointers advance via $(rear + 1) \pmod{capacity}$ and $(front + 1) \pmod{capacity}$.
+    \item \textbf{Stack Safety and Growth:} The stack dynamically doubles memory when full, ensuring no push fails, and checks empty status to prevent underflow crashes.
+    \item \textbf{Four Connectivity Rule:} Bucket fill inspects only up, down, left, and right neighbors. Diagonal pixels are never accessed.
+    \item \textbf{Identical Output Proof:} Both Stack fill and Queue fill produce bit for bit identical output images for identical seed coordinates and replacement colors.
+\end{itemize}
 
+\clearpage
+
+% =========================================================================
+% PAGE 3: TEST SUITE RESULTS AND VISUAL PROOF
+% =========================================================================
+
+\subsection*{Section 6.8: Testing Evidence and Verification Results}
+All components underwent automated testing in \texttt{tests/stackTest.cpp}, \texttt{tests/queueTest.cpp}, and \texttt{tests/test.cpp}. Every test case passed with zero errors:
+
+\vspace{0.1cm}
 \begin{table}[h!]
 \centering
 \fontsize{7.5pt}{9.2pt}\selectfont
 \begin{tabularx}{\textwidth}{l X c}
 \toprule
-\textbf{Component} & \textbf{Tested Cases} & \textbf{Result} \\
+\textbf{Component Tested} & \textbf{Cases Verified} & \textbf{Result} \\
 \midrule
-\textbf{Stack (stackType)} & Pop and top on empty stack handled safely; 1000 item capacity; repeated push pop cycles; stack reset; deep copy constructor and assignment. & \textbf{PASS} \\
-\midrule
-\textbf{Queue (queueType)} & Delete and front on empty queue handled safely; full queue rejection; circular wrap around; drain and re add; deep copy constructor. & \textbf{PASS} \\
-\midrule
-\textbf{Undo and Redo} & Multiple consecutive undos; multiple consecutive redos; clearing redo stack after new action; bit for bit image recovery. & \textbf{PASS} \\
-\midrule
-\textbf{Bucket Fill} & Single pixel fill; full image fill; irregular boundary fill; disconnected regions; identical Stack DFS and Queue BFS output; same color immediate exit. & \textbf{PASS} \\
-\midrule
-\textbf{Pipeline Queue} & Bounded queue rejection; process next and all jobs; in place job cancellation without shifting; clear queue. & \textbf{PASS} \\
+\textbf{Stack (stackType)} & Pop and top on empty stack; 1000 item capacity; repeated push pop cycles; stack reset; deep copy constructor and assignment. & \textbf{PASS} \\
+\addlinespace[1pt]
+\textbf{Queue (queueType)} & Delete and front on empty queue; full queue rejection; circular wrap around; drain and re add; deep copy constructor. & \textbf{PASS} \\
+\addlinespace[1pt]
+\textbf{Undo and Redo Engine} & Multiple consecutive undos; multiple consecutive redos; clearing redo stack after new action; bit for bit image recovery. & \textbf{PASS} \\
+\addlinespace[1pt]
+\textbf{Bucket Fill Engine} & Single pixel fill; full image fill; irregular boundary fill; disconnected regions; identical Stack and Queue outputs; same color immediate exit. & \textbf{PASS} \\
+\addlinespace[1pt]
+\textbf{Processing Pipeline} & Bounded queue rejection; process next and all jobs; in place job cancellation without shifting; queue clearing. & \textbf{PASS} \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\vspace{-4pt}
+\vspace{0.1cm}
+\subsection*{Visual Verification: Bucket Fill Comparison and Test Suite Execution}
+The images below confirm runtime verification: the side by side identical output of Stack versus Queue bucket fill, and the automated test suite console execution.
+
 \begin{center}
-    \includegraphics[width=0.74\textwidth,height=5.2cm,keepaspectratio]{test_results.png}
+    \includegraphics[width=0.88\textwidth,height=3.0cm,keepaspectratio]{bucket_fill_comparison.png}\\[3pt]
+    {\footnotesize \textbf{Figure 1:} Side by side visual proof: Stack fill (left) and Queue fill (right) yield identical results.}\\[6pt]
+    \includegraphics[width=0.88\textwidth,height=4.4cm,keepaspectratio]{test_results_trimmed.png}\\[3pt]
+    {\footnotesize \textbf{Figure 2:} Automated test suite output verifying 100 percent pass across all required edge cases.}
 \end{center}
 
 \end{document}
