@@ -3,10 +3,10 @@
 #include <string>
 #include "../circularQueue.h"
 #include "../history/history.h"
-#include "../coreImageFunctions/resize.h"
-#include "../coreImageFunctions/blur.h"
-#include "../coreImageFunctions/bucketFillStructBased.h"
-#include "../coreImageFunctions/bucketFillQueueBased.h"
+#include "../coreImageFunctions/resize/applyResize.h"
+#include "../coreImageFunctions/blur/applyBlur.h"
+#include "../coreImageFunctions/bucketFill/bucketFillStructBased.h"
+#include "../coreImageFunctions/bucketFill/bucketFillQueueBased.h"
 #include "../read/write.h"
 #include "job.h"
 

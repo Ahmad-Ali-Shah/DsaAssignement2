@@ -4,8 +4,8 @@
 #include "../src/image.h"
 #include "../src/stack.h"
 #include "../src/circularQueue.h"
-#include "../src/coreImageFunctions/bucketFillStructBased.h"
-#include "../src/coreImageFunctions/bucketFillQueueBased.h"
+#include "../src/coreImageFunctions/bucketFill/bucketFillStructBased.h"
+#include "../src/coreImageFunctions/bucketFill/bucketFillQueueBased.h"
 #include "../src/history/history.h"
 #include "../src/pipeline/pipeline.h"
 
