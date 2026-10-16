@@ -128,7 +128,7 @@ public:
         generateStandard30JobWorkload(workload);
 
         cout << "\n=========================================================================\n";
-        cout << "        SECTION 7.3 & 7.5: 30-JOB WORKLOAD SCHEDULER COMPARISON          \n";
+        cout << "        30-JOB WORKLOAD SCHEDULER COMPARISON          \n";
         cout << "=========================================================================\n";
 
         ExecutionStats fifoStats = simulateWorkload(workload, 30, SchedulerMode::fifo);
