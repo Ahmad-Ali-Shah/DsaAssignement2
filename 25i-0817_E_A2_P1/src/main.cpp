@@ -61,20 +61,6 @@ int main() {
     cout << "========================================================\n";
     cout << "                    WELCOME TO IMAGELAB                 \n";
     cout << "========================================================\n";
-    cout << " Please choose how you want to run ImageLab:\n";
-    cout << " [1] Text Menu (Run right here in this black box terminal)\n";
-    cout << " [2] Graphical Window (Open interactive graphics window)\n";
-    cout << "========================================================\n";
-    cout << "Enter 1 or 2: ";
-    int startMode = 1;
-    if (cin >> startMode && startMode == 2) {
-        cout << "[ImageLab] Launching Graphical Window...\n";
-        GraphicsApp::runGraphics1(activeImage, width, height, history, pipeline);
-        if (activeImage) ReadPath::freeImage(activeImage, height);
-        return 0;
-    }
-
-    cout << "\nWelcome to ImageLab (Phase 1 Image Studio)\n";
 
     int choice = -1;
     while (choice != 0) {
