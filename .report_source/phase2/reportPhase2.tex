@@ -11,7 +11,9 @@
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
-\usepackage{tcolorbox}
+
+\setlength{\fboxsep}{4pt}
+\setlength{\fboxrule}{0.6pt}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -75,32 +77,10 @@
     \end{enumerate}
 \end{itemize}
 
-\vspace{0.25cm}
+\vspace{0.2cm}
 \begin{figure}[h!]
 \centering
-\begin{tikzpicture}[
-    box/.style={draw=black, rounded corners=2pt, minimum width=6.6cm, minimum height=0.62cm, align=left, font=\scriptsize, inner sep=4pt},
-    headerbox/.style={draw=black, fill=gray!20, font=\footnotesize\bfseries, minimum width=6.8cm, minimum height=0.72cm, align=center}
-]
-    % Left Panel: History Stack & Eviction
-    \node[headerbox] (lefthead) at (0, 3.4) {Memory Aware Stack and Eviction\\[-2pt]{\tiny\normalfont\color{gray!80!black}Configured Limit: 2 KB (or 5 MB in production)}};
-    
-    \node[box, fill=green!15] (toprec) at (0, 2.25) {\textbf{Top Record (Latest):} Brightness $+20$ (4 clipped pixels)};
-    \node[box, fill=gray!10] (rec2) at (0, 1.45) {\textbf{Record 2:} Bucket Fill (Queue based, 48 modified coords)};
-    \node[box, fill=gray!10] (rec1) at (0, 0.65) {\textbf{Record 1:} Rotation 90 degrees (Symmetric inverse tag)};
-    \node[box, fill=red!15] (botrec) at (0, -0.15) {\textbf{Bottom Record (Oldest):} Evicted via \texttt{removeBottom()}};
-    
-    \draw[-{Latex[length=2mm]}, thick] (0.8, -0.55) -- (0.8, -0.85) node[right, font=\tiny] {Discarded upon budget saturation};
-
-    % Right Panel: Command Coalescing
-    \node[headerbox] (righthead) at (7.8, 3.4) {Command Coalescing with Saturation\\[-2pt]{\tiny\normalfont\color{gray!80!black}Lossless restoration across $[0, 255]$ boundary clipping}};
-    
-    \node[box, fill=purple!10] (act1) at (7.8, 2.25) {\textbf{Action 1:} Brightness $+25$ (2 boundary pixels clipped at $255$)};
-    \node[box, fill=purple!10] (act2) at (7.8, 1.45) {\textbf{Action 2:} Brightness $-5$ (Merged in place into top record)};
-    \node[box, fill=blue!10] (coal) at (7.8, 0.65) {\textbf{Coalesced Result:} Combined Delta $= +20$ (Single Undo entry)};
-    \node[box, fill=green!15] (undo) at (7.8, -0.15) {\textbf{Undo Rollback:} Subtract $20$, restore 2 clipped original colors};
-
-\end{tikzpicture}
+\fbox{\includegraphics[width=0.96\textwidth,height=5.5cm,keepaspectratio]{p2_history_coalescing_bw.png}}
 \caption{Architecture of memory aware history stack eviction and command coalescing with saturation tracking.}
 \end{figure}
 
@@ -299,12 +279,13 @@ Average Completion Time & 609.00 ms & 567.50 ms & 6.81\% Faster & Faster overall
 
 \begin{figure}[h!]
 \centering
+\fbox{%
 \begin{tikzpicture}
 \begin{axis}[
     ybar=4pt,
     bar width=13pt,
-    width=0.88\textwidth,
-    height=4.8cm,
+    width=0.86\textwidth,
+    height=4.6cm,
     enlarge x limits=0.25,
     legend style={at={(0.5,1.18)}, anchor=north, legend columns=-1, /tikz/every even column/.append style={column sep=0.5cm}},
     legend image code/.code={\draw[#1] (0cm,-0.1cm) rectangle (0.35cm,0.2cm);},
@@ -318,11 +299,12 @@ Average Completion Time & 609.00 ms & 567.50 ms & 6.81\% Faster & Faster overall
     grid=major,
     grid style={dashed,gray!30}
 ]
-\addplot[fill=gray!40,draw=black] coordinates {(Avg Wait Time, 568.33) (Avg Completion Time, 609.00) (Priority 1 Wait, 549.17)};
-\addplot[fill=black!85,draw=black] coordinates {(Avg Wait Time, 526.83) (Avg Completion Time, 567.50) (Priority 1 Wait, 415.83)};
+\addplot[fill=white,draw=black] coordinates {(Avg Wait Time, 568.33) (Avg Completion Time, 609.00) (Priority 1 Wait, 549.17)};
+\addplot[fill=black!75,draw=black] coordinates {(Avg Wait Time, 526.83) (Avg Completion Time, 567.50) (Priority 1 Wait, 415.83)};
 \legend{FIFO Mode, Priority Mode}
 \end{axis}
-\end{tikzpicture}
+\end{tikzpicture}%
+}
 \caption{Scheduler performance comparison showing waiting times and the 24.28 percent interactive latency reduction.}
 \end{figure}
 
@@ -376,12 +358,13 @@ Average Completion Time & 609.00 ms & 567.50 ms & 6.81\% Faster & Faster overall
 
 \begin{figure}[h!]
 \centering
+\fbox{%
 \begin{tikzpicture}
 \begin{axis}[
     ybar,
     bar width=16pt,
-    width=0.88\textwidth,
-    height=4.8cm,
+    width=0.86\textwidth,
+    height=4.6cm,
     enlarge x limits=0.18,
     ylabel={Speedup Multiplier ($\times$)},
     symbolic x coords={Push 1K, Push 10K, Push 100K, Queue Dequeue, Stack Pop},
@@ -393,7 +376,7 @@ Average Completion Time & 609.00 ms & 567.50 ms & 6.81\% Faster & Faster overall
     grid=major,
     grid style={dashed,gray!30}
 ]
-\addplot[fill=black!70,draw=black] coordinates {
+\addplot[fill=gray!50,draw=black] coordinates {
     (Push 1K, 10.20)
     (Push 10K, 12.35)
     (Push 100K, 13.10)
@@ -401,7 +384,8 @@ Average Completion Time & 609.00 ms & 567.50 ms & 6.81\% Faster & Faster overall
     (Stack Pop, 51.20)
 };
 \end{axis}
-\end{tikzpicture}
+\end{tikzpicture}%
+}
 \caption{Performance acceleration achieved by batched primitives over single call loops.}
 \end{figure}
 
@@ -495,34 +479,14 @@ Batched Primitives & Push and pop batches; ring buffer wrap around addition; rej
 \caption{Automated test suite verification across all Phase 2 requirements (100 percent pass rate).}
 \end{table}
 
-\begin{tcolorbox}[colback=black,coltext=white,colframe=black!85,arc=2pt,left=5pt,right=5pt,top=3pt,bottom=3pt,boxrule=0.6pt]
-\tiny\ttfamily
-\textcolor{green!70!white}{ahmad-ali@fast-nuces:\textasciitilde/Desktop/DSA Assignment 2/25i-0817\_E\_A2\_P2\$ ./tests/test}\\
-=========================================================================\\
-\phantom{ } \phantom{ } RUNNING AUTOMATED TEST SUITE: PHASE 2 (SECTION 7.7)\\
-=========================================================================\\
---- TEST SUITE 1: PRIORITY QUEUE \& SCHEDULER ---\\
-\phantom{ } [PASS] Same priority jobs served in arrival order (FIFO tie handling)\\
-\phantom{ } [PASS] Mixed priorities correctly scheduled by priority rank\\
-\phantom{ } [PASS] Finalization barrier rule enforced (jobs cannot overtake barrier)\\
---- TEST SUITE 2: MEMORY AWARE HISTORY \& EVICTION ---\\
-\phantom{ } [PASS] Memory budget reached (2 KB); discarded 14 oldest steps via removeBottom()\\
-\phantom{ } [PASS] Undo after cleanup operates safely without memory fault\\
---- TEST SUITE 3: COMMAND COALESCING ---\\
-\phantom{ } [PASS] Repeated brightness operations coalesced into a single record\\
-\phantom{ } [PASS] Clipping correctness preserved during coalesced brightness undo\\
---- TEST SUITE 4: BATCHED OPERATIONS ---\\
-\phantom{ } [PASS] Stack pushBatch, popBatch, and popBatch with n > size\\
-\phantom{ } [PASS] Queue addQueueBatch across circular wrap around\\
-\phantom{ } [PASS] Batch larger than free space safely rejected by bounded queue\\
---- TEST SUITE 5: 30 JOB BENCHMARK EXECUTION ---\\
-\phantom{ } [PASS] 30 Job Workload executed in both FIFO and Priority modes\\
-=========================================================================\\
-\textcolor{green!70!white}{ALL PHASE 2 TESTS COMPLETED SUCCESSFULLY (100\% PASS RATE)}\\
-=========================================================================
-\end{tcolorbox}
+\vspace{0.15cm}
+\begin{figure}[h!]
+\centering
+\fbox{\includegraphics[width=0.88\textwidth,height=4.8cm,keepaspectratio]{p2_terminal_actual.png}}
+\caption{Automated test runner output captured directly from the workstation terminal.}
+\end{figure}
 
-\vspace{0.2cm}
+\vspace{0.15cm}
 \begin{center}
     {\Large \textbf{Section 7: Known Limitations and Architectural Tradeoffs}}
 \end{center}

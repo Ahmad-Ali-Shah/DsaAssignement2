@@ -179,6 +179,22 @@ How to Build and Run (From 25i-0817_E_A2_P1 folder):
 4. Run the automated test suite:
    ./tests/test
 
+
+Building and Running in Code::Blocks (FAST Lab IDE):
+----------------------------------------------------
+1. Open Code::Blocks -> File -> New -> Project -> Console Application -> C++.
+2. Set Project Title (e.g., ImageLab) and specify the directory.
+3. In Project Build Options (Right-click project -> Build Options...):
+   - Selected Target: Debug / Release (or top-level project name).
+   - 'Compiler Settings' -> 'Compiler Flags': Check 'Have g++ follow the C++17 ISO C++ standard [-std=c++17]'.
+   - 'Search directories' -> 'Compiler': Add 'src' (relative path to src folder).
+   - 'Linker settings' -> 'Other linker options': Add:
+       -lsfml-graphics -lsfml-window -lsfml-system
+4. In Management pane (left):
+   - Add all source and header files under 'src/' to the project.
+   - For running automated tests, add 'tests/test.cpp' (with main.cpp excluded from build, or as a separate target).
+5. Press F9 (Build and Run).
+
 Key Architectural Namespaces:
 -----------------------------
 - stackType           : Template LIFO stack (Section 5 Malik interface)
