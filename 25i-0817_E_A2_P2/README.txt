@@ -10,40 +10,30 @@ Directory Structure (C++ Headers & Source Files):
 │   ├── benchmarks.h
 │   ├── circularQueue.h
 │   ├── coreImageFunctions
+│   │   ├── Crop
+│   │   │   ├── applyCrop.h
+│   │   │   └── crop.h
 │   │   ├── blur
 │   │   │   ├── applyBlur.h
 │   │   │   └── blur.h
-│   │   ├── blur.h
 │   │   ├── brightness
 │   │   │   ├── applyBrightness.h
 │   │   │   └── brightness.h
-│   │   ├── brightness.h
 │   │   ├── bucketFill
 │   │   │   ├── bucketFillQueueBased.h
 │   │   │   └── bucketFillStructBased.h
-│   │   ├── bucketFill.h
-│   │   ├── bucketFillQueueBased.h
-│   │   ├── bucketFillStructBased.h
-│   │   ├── crop
-│   │   │   ├── applyCrop.h
-│   │   │   └── crop.h
-│   │   ├── crop.h
 │   │   ├── flip
 │   │   │   ├── applyFlip.h
 │   │   │   └── flip.h
-│   │   ├── flip.h
 │   │   ├── greyScale
 │   │   │   ├── applyGreyScale.h
 │   │   │   └── greyScale.h
-│   │   ├── greyScale.h
 │   │   ├── resize
 │   │   │   ├── applyResize.h
 │   │   │   └── resize.h
-│   │   ├── resize.h
-│   │   ├── rotation
-│   │   │   ├── applyRotation.h
-│   │   │   └── rotation.h
-│   │   └── rotation.h
+│   │   └── rotation
+│   │       ├── applyRotation.h
+│   │       └── rotation.h
 │   ├── Graphics 2
 │   │   ├── app
 │   │   │   ├── handleToolExecution2.h
