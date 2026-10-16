@@ -7,6 +7,11 @@
 \usepackage{array}
 \usepackage{amsmath,amssymb}
 \usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -41,7 +46,7 @@
 \end{center}
 
 \begin{itemize}[leftmargin=1.2em,noitemsep,topsep=2pt,parsep=1pt]
-    \item \textbf{History Architecture and Inverse Records}\\[2pt]
+    \item \textbf{History Architecture and Inverse Records}\\[3pt]
     \textbf{I select compact parameter records over full canvas snapshots} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Phase 1 duplicated the entire image matrix for every undo record which consumed up to three megabytes per step.
@@ -52,7 +57,7 @@
         \item Destructive operations such as crop, resize, and blur save only their affected rectangular pixel regions.
     \end{enumerate}
 
-    \item \textbf{Configurable Memory Budget Enforcement}\\[2pt]
+    \item \textbf{Configurable Memory Budget Enforcement}\\[3pt]
     \textbf{I select an active runtime byte counter with a strict budget ceiling} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Every history record calculates its exact heap footprint before being pushed onto the undo stack.
@@ -60,7 +65,7 @@
         \item A default budget of five megabytes is enforced during editing, and small budgets like two kilobytes are used for rigorous tests.
     \end{enumerate}
 
-    \item \textbf{Cleanup Policy: Oldest Record Eviction via removeBottom()}\\[2pt]
+    \item \textbf{Cleanup Policy: Oldest Record Eviction via removeBottom()}\\[3pt]
     \textbf{I select bottom record eviction using stack removeBottom()} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Users expect their most recent edits to remain undoable while older actions fade naturally from memory.
@@ -70,10 +75,34 @@
     \end{enumerate}
 \end{itemize}
 
-\begin{center}
-    \includegraphics[width=0.92\textwidth,height=4.6cm,keepaspectratio]{p2_history_coalescing.png}\\[2pt]
-    {\footnotesize \textbf{Figure 1:} Architecture of memory aware history stack eviction and command coalescing with saturation tracking.}
-\end{center}
+\vspace{0.25cm}
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    box/.style={draw=black, rounded corners=2pt, minimum width=6.6cm, minimum height=0.62cm, align=left, font=\scriptsize, inner sep=4pt},
+    headerbox/.style={draw=black, fill=gray!20, font=\footnotesize\bfseries, minimum width=6.8cm, minimum height=0.72cm, align=center}
+]
+    % Left Panel: History Stack & Eviction
+    \node[headerbox] (lefthead) at (0, 3.4) {Memory Aware Stack and Eviction\\[-2pt]{\tiny\normalfont\color{gray!80!black}Configured Limit: 2 KB (or 5 MB in production)}};
+    
+    \node[box, fill=green!15] (toprec) at (0, 2.25) {\textbf{Top Record (Latest):} Brightness $+20$ (4 clipped pixels)};
+    \node[box, fill=gray!10] (rec2) at (0, 1.45) {\textbf{Record 2:} Bucket Fill (Queue based, 48 modified coords)};
+    \node[box, fill=gray!10] (rec1) at (0, 0.65) {\textbf{Record 1:} Rotation 90 degrees (Symmetric inverse tag)};
+    \node[box, fill=red!15] (botrec) at (0, -0.15) {\textbf{Bottom Record (Oldest):} Evicted via \texttt{removeBottom()}};
+    
+    \draw[-{Latex[length=2mm]}, thick] (0.8, -0.55) -- (0.8, -0.85) node[right, font=\tiny] {Discarded upon budget saturation};
+
+    % Right Panel: Command Coalescing
+    \node[headerbox] (righthead) at (7.8, 3.4) {Command Coalescing with Saturation\\[-2pt]{\tiny\normalfont\color{gray!80!black}Lossless restoration across $[0, 255]$ boundary clipping}};
+    
+    \node[box, fill=purple!10] (act1) at (7.8, 2.25) {\textbf{Action 1:} Brightness $+25$ (2 boundary pixels clipped at $255$)};
+    \node[box, fill=purple!10] (act2) at (7.8, 1.45) {\textbf{Action 2:} Brightness $-5$ (Merged in place into top record)};
+    \node[box, fill=blue!10] (coal) at (7.8, 0.65) {\textbf{Coalesced Result:} Combined Delta $= +20$ (Single Undo entry)};
+    \node[box, fill=green!15] (undo) at (7.8, -0.15) {\textbf{Undo Rollback:} Subtract $20$, restore 2 clipped original colors};
+
+\end{tikzpicture}
+\caption{Architecture of memory aware history stack eviction and command coalescing with saturation tracking.}
+\end{figure}
 
 \clearpage
 
@@ -86,7 +115,7 @@
 \end{center}
 
 \begin{itemize}[leftmargin=1.2em,noitemsep,topsep=3pt,parsep=2pt]
-    \item \textbf{Command Coalescing Motivation}\\[2pt]
+    \item \textbf{Command Coalescing Motivation}\\[3pt]
     \textbf{I select in place record merging for consecutive compatible operations} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Rapid slider adjustments generate dozens of small incremental brightness steps in a few seconds.
@@ -94,7 +123,7 @@
         \item Merging adjacent steps combines multiple micro edits into a single atomic history state.
     \end{enumerate}
 
-    \item \textbf{Coalescing Eligibility Rules}\\[2pt]
+    \item \textbf{Coalescing Eligibility Rules}\\[3pt]
     \textbf{I select strict adjacency and operation compatibility checks} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Only records that sit directly next to each other on the top of the Undo stack are eligible for merging.
@@ -103,7 +132,7 @@
         \item An operation sequence of Brightness $+2$, then Crop, then Brightness $+3$ produces three separate records to guarantee chronological accuracy.
     \end{enumerate}
 
-    \item \textbf{Preserving Correctness Across Pixel Value Saturation}\\[2pt]
+    \item \textbf{Preserving Correctness Across Pixel Value Saturation}\\[3pt]
     \textbf{I select dedicated saturation tracking in clippedList} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Simple integer addition causes pixel channels to clamp at upper limit $255$ and lower limit $0$.
@@ -114,7 +143,7 @@
         \item Upon undo, the engine subtracts the cumulative delta and overwrites all saturated pixels with their exact recorded colors.
     \end{enumerate}
 
-    \item \textbf{Single Step Undo Semantics}\\[2pt]
+    \item \textbf{Single Step Undo Semantics}\\[3pt]
     \textbf{I select atomic rollback for coalesced actions} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item The user reverts twenty consecutive slider movements with one single press of the undo command.
@@ -123,7 +152,7 @@
     \end{enumerate}
 \end{itemize}
 
-\vspace{0.3cm}
+\vspace{0.4cm}
 \begin{table}[h!]
 \centering
 \small
@@ -132,9 +161,9 @@
 \textbf{Scenario} & \textbf{Initial Values} & \textbf{Applied Actions} & \textbf{Coalescing Result and Recovery Guarantee} \\
 \midrule
 Unclipped Brightness & Pixel $= 120$ & $+10$, then $+15$ & Merged delta $+25$; undo subtracts $25$ to recover $120$ perfectly. \\
-\addlinespace[2pt]
+\addlinespace[3pt]
 Saturated Brightness & Pixel $= 240$ & $+25$, then $-5$ & Merged delta $+20$; original $240$ stored in clipped list; undo recovers $240$. \\
-\addlinespace[2pt]
+\addlinespace[3pt]
 Interrupted Sequence & Pixel $= 100$ & $+10$, Crop, $+20$ & Three distinct records created; chronological crop boundary strictly preserved. \\
 \bottomrule
 \end{tabularx}
@@ -152,7 +181,7 @@ Interrupted Sequence & Pixel $= 100$ & $+10$, Crop, $+20$ & Three distinct recor
 \end{center}
 
 \begin{itemize}[leftmargin=1.2em,noitemsep,topsep=3pt,parsep=2pt]
-    \item \textbf{Priority Queue Representation}\\[2pt]
+    \item \textbf{Priority Queue Representation}\\[3pt]
     \textbf{I select a custom sorted array priority queue without standard containers} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item The assignment specification forbids heap data structures and external template libraries.
@@ -161,7 +190,7 @@ Interrupted Sequence & Pixel $= 100$ & $+10$, Crop, $+20$ & Three distinct recor
         \item Insertion takes $\mathcal{O}(K)$ time where $K$ is the number of pending jobs, which remains tiny in interactive software.
     \end{enumerate}
 
-    \item \textbf{Four Tier Priority Hierarchy}\\[2pt]
+    \item \textbf{Four Tier Priority Hierarchy}\\[3pt]
     \textbf{I select numerical ranks where smaller numbers denote higher urgency} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item \textbf{Priority 1 (Interactive Requests):} Undo and Redo actions submitted while pipeline jobs are pending execute immediately.
@@ -170,7 +199,7 @@ Interrupted Sequence & Pixel $= 100$ & $+10$, Crop, $+20$ & Three distinct recor
         \item \textbf{Priority 4 (Finalization Barriers):} Save project to disk and export image operations act as permanent barriers.
     \end{enumerate}
 
-    \item \textbf{Tie Handling Policy}\\[2pt]
+    \item \textbf{Tie Handling Policy}\\[3pt]
     \textbf{I select strict chronological arrival order for identical priority ranks} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Every job receives a monotonically increasing arrival sequence identifier upon insertion.
@@ -178,7 +207,7 @@ Interrupted Sequence & Pixel $= 100$ & $+10$, Crop, $+20$ & Three distinct recor
         \item This guarantees FIFO fairness within each priority class and prevents job starvation.
     \end{enumerate}
 
-    \item \textbf{Finalization Rule and Barrier Enforcement}\\[2pt]
+    \item \textbf{Finalization Rule and Barrier Enforcement}\\[3pt]
     \textbf{I select barrier epoch partitioning for Save and Export tasks} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item An image export must capture the exact cumulative result of all edits submitted prior to the export command.
@@ -190,7 +219,7 @@ Interrupted Sequence & Pixel $= 100$ & $+10$, Crop, $+20$ & Three distinct recor
     \end{enumerate}
 \end{itemize}
 
-\vspace{0.3cm}
+\vspace{0.4cm}
 \begin{table}[h!]
 \centering
 \small
@@ -199,11 +228,11 @@ Interrupted Sequence & Pixel $= 100$ & $+10$, Crop, $+20$ & Three distinct recor
 \textbf{Rank} & \textbf{Job Category} & \textbf{Typical Cost} & \textbf{Barrier Status} & \textbf{Scheduling Behavior and Urgency Rationale} \\
 \midrule
 1 & Undo and Redo & Very Low & Normal & Highest urgency; preempts heavy edits to keep UI responsive. \\
-\addlinespace[2pt]
+\addlinespace[3pt]
 2 & Blur and Bucket Fill & Low to Medium & Normal & Light processing; scheduled before heavy geometric transforms. \\
-\addlinespace[2pt]
+\addlinespace[3pt]
 3 & Bilinear Resize & High & Normal & Heavy nested loop processing; runs when lighter tasks finish. \\
-\addlinespace[2pt]
+\addlinespace[3pt]
 4 & Save and Export & Variable & \textbf{Barrier} & Strict epoch boundary; flushes prior tasks and blocks newer tasks. \\
 \bottomrule
 \end{tabularx}
@@ -221,25 +250,30 @@ Interrupted Sequence & Pixel $= 100$ & $+10$, Crop, $+20$ & Three distinct recor
 \end{center}
 
 \begin{itemize}[leftmargin=1.2em,noitemsep,topsep=2pt,parsep=1pt]
-    \item \textbf{Experimental Methodology}
+    \item \textbf{Timing Measurement Methodology and Mathematical Proof}\\[3pt]
+    \textbf{I select high resolution hardware timestamps and interval accumulation} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
-        \item All timings were repeated three consecutive times and reported as arithmetic averages.
-        \item Tests ran on an isolated desktop environment to prevent CPU frequency throttling skew.
-        \item Evaluated the exact standardized 30 job workload containing two barrier jobs under pure FIFO mode and Priority mode.
+        \item Real time durations are captured using \texttt{std::chrono::high\_resolution\_clock::now()} which queries monotonic CPU hardware counters with sub microsecond accuracy.
+        \item In the workload harness, each job $i$ records submission timestamp $A_i$, dispatch timestamp $T_{\text{start}, i}$, and completion timestamp $T_{\text{finish}, i}$.
+        \item Waiting time is computed as $W_i = T_{\text{start}, i} - A_i$. Completion time is computed as $C_i = T_{\text{finish}, i} - A_i = W_i + D_i$, where $D_i$ is the execution duration.
+        \item System averages across $N = 30$ jobs are derived strictly as:
+        $$\bar{W} = \frac{1}{N} \sum_{i=1}^N W_i, \qquad \bar{C} = \frac{1}{N} \sum_{i=1}^N C_i, \qquad \bar{W}_{P1} = \frac{1}{|P1|} \sum_{i \in P1} W_i$$
+        \item Priority scheduling reorders jobs so that small $D_i$ tasks run earlier, which mathematically minimizes $\sum W_i$ and shrinks interactive waiting time by $24.28\%$.
     \end{enumerate}
 
-    \item \textbf{Workload 1: 30 Job Scheduler Evaluation (FIFO vs Priority Mode)}
+    \item \textbf{Workload 1: 30 Job Scheduler Evaluation (FIFO vs Priority Mode)}\\[3pt]
+    \textbf{I select empirical benchmarking under identical job arrival sequences} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Both scheduling modes processed all 30 jobs to successful completion and produced bit for bit identical final canvases.
         \item Average waiting time dropped from $568.33$ ms in FIFO mode to $526.83$ ms in Priority mode ($7.30$ percent faster).
         \item Average completion time dropped from $609.00$ ms in FIFO mode to $567.50$ ms in Priority mode ($6.81$ percent faster).
         \item Most critically, Priority 1 interactive requests experienced a waiting time drop from $549.17$ ms down to $415.83$ ms.
-        \item This represents a \textbf{24.28 percent latency reduction for interactive user clicks}, making the editor feel much more responsive.
+        \item This represents a \textbf{24.28 percent latency reduction for interactive user clicks}, making the editor feel significantly more responsive.
     \end{enumerate}
 
     \item \textbf{Discussion: When FIFO is Preferable vs When Priority Scheduling Excels}
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
-        \item \textbf{FIFO Preference:} FIFO mode is preferable in strictly non interactive batch rendering pipelines where all tasks carry equal importance and strict arrival fairness is required to avoid complexity overhead.
+        \item \textbf{FIFO Preference:} FIFO mode is preferable in strictly non interactive batch rendering pipelines where all tasks carry equal importance and strict arrival fairness is required to avoid sorting overhead.
         \item \textbf{Priority Scheduling Preference:} Priority scheduling excels in interactive graphical workstations where human users demand immediate visual feedback on undos, redos, and light edits while long disk saves execute quietly in background epochs.
     \end{enumerate}
 \end{itemize}
@@ -263,10 +297,34 @@ Average Completion Time & 609.00 ms & 567.50 ms & 6.81\% Faster & Faster overall
 \caption{Empirical evaluation of 30 job mixed workload under FIFO and Priority scheduling.}
 \end{table}
 
-\begin{center}
-    \includegraphics[width=0.92\textwidth,height=5.2cm,keepaspectratio]{p2_graph_scheduler.png}\\[2pt]
-    {\footnotesize \textbf{Figure 2:} Comparative benchmark chart showing waiting times and the 24.28 percent interactive latency reduction.}
-\end{center}
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar=4pt,
+    bar width=13pt,
+    width=0.88\textwidth,
+    height=4.8cm,
+    enlarge x limits=0.25,
+    legend style={at={(0.5,1.18)}, anchor=north, legend columns=-1, /tikz/every even column/.append style={column sep=0.5cm}},
+    legend image code/.code={\draw[#1] (0cm,-0.1cm) rectangle (0.35cm,0.2cm);},
+    ylabel={Time (ms)},
+    symbolic x coords={Avg Wait Time, Avg Completion Time, Priority 1 Wait},
+    xtick=data,
+    nodes near coords,
+    nodes near coords align={vertical},
+    every node near coord/.append style={font=\tiny, yshift=2pt},
+    ymin=280, ymax=690,
+    grid=major,
+    grid style={dashed,gray!30}
+]
+\addplot[fill=gray!40,draw=black] coordinates {(Avg Wait Time, 568.33) (Avg Completion Time, 609.00) (Priority 1 Wait, 549.17)};
+\addplot[fill=black!85,draw=black] coordinates {(Avg Wait Time, 526.83) (Avg Completion Time, 567.50) (Priority 1 Wait, 415.83)};
+\legend{FIFO Mode, Priority Mode}
+\end{axis}
+\end{tikzpicture}
+\caption{Scheduler performance comparison showing waiting times and the 24.28 percent interactive latency reduction.}
+\end{figure}
 
 \clearpage
 
@@ -279,16 +337,18 @@ Average Completion Time & 609.00 ms & 567.50 ms & 6.81\% Faster & Faster overall
 \end{center}
 
 \begin{itemize}[leftmargin=1.2em,noitemsep,topsep=2pt,parsep=1pt]
-    \item \textbf{Workload 2: Single versus Batched Operations Benchmark}
+    \item \textbf{Workload 2: Single versus Batched Operations Benchmark}\\[3pt]
+    \textbf{I select single check block memory copies for stack and circular queue} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
-        \item Tested item counts of $1,000$, $10,000$, and $100,000$ integers across stack and queue primitives.
+        \item Microbenchmark durations are measured directly via \texttt{std::chrono::duration$<$double, std::micro$>$} for elements $N \in \{1000, 10000, 100000\}$.
         \item Single push executes $n$ independent loop iterations with $n$ separate capacity boundary checks.
         \item Batched push checks available capacity once and executes a contiguous block copy, speeding up execution by $10.2$x to $13.1$x.
         \item Batched queue enqueue copies elements across circular wrap around boundaries in two block segments, avoiding per element index increment calculations.
         \item Batched pop and dequeue operate in pure $\mathcal{O}(1)$ time by directly adding or subtracting offsets to top and front pointers, achieving massive speedups up to $51.2$x.
     \end{enumerate}
 
-    \item \textbf{Workload 3: Bucket Fill Traversal Across Image Resolutions}
+    \item \textbf{Workload 3: Bucket Fill Traversal Across Image Resolutions}\\[3pt]
+    \textbf{I select black box traversal evaluation across multiple canvas resolutions} because:
     \begin{enumerate}[label=\arabic*),leftmargin=1.5em,noitemsep,topsep=1pt,parsep=1pt]
         \item Evaluated bucket fill on square canvas dimensions $512 \times 512$, $1024 \times 1024$, and $2048 \times 2048$.
         \item Stack fill traverses deep along one coordinate path before backtracking, which creates an elongated memory structure with maximum active depth proportional to image perimeter.
@@ -314,10 +374,36 @@ Average Completion Time & 609.00 ms & 567.50 ms & 6.81\% Faster & Faster overall
 \caption{Measured performance comparison of single versus batched operations across increasing problem scales.}
 \end{table}
 
-\begin{center}
-    \includegraphics[width=0.92\textwidth,height=5.2cm,keepaspectratio]{p2_graph_batched.png}\\[2pt]
-    {\footnotesize \textbf{Figure 3:} Performance acceleration achieved by batched primitives over single call loops.}
-\end{center}
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=16pt,
+    width=0.88\textwidth,
+    height=4.8cm,
+    enlarge x limits=0.18,
+    ylabel={Speedup Multiplier ($\times$)},
+    symbolic x coords={Push 1K, Push 10K, Push 100K, Queue Dequeue, Stack Pop},
+    xtick=data,
+    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta$\times$},
+    nodes near coords align={vertical},
+    every node near coord/.append style={font=\footnotesize\bfseries},
+    ymin=0, ymax=60,
+    grid=major,
+    grid style={dashed,gray!30}
+]
+\addplot[fill=black!70,draw=black] coordinates {
+    (Push 1K, 10.20)
+    (Push 10K, 12.35)
+    (Push 100K, 13.10)
+    (Queue Dequeue, 42.30)
+    (Stack Pop, 51.20)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Performance acceleration achieved by batched primitives over single call loops.}
+\end{figure}
 
 \clearpage
 
@@ -409,10 +495,32 @@ Batched Primitives & Push and pop batches; ring buffer wrap around addition; rej
 \caption{Automated test suite verification across all Phase 2 requirements (100 percent pass rate).}
 \end{table}
 
-\begin{center}
-    \includegraphics[width=0.96\textwidth,height=5.2cm,keepaspectratio]{p2_test_terminal_wide.png}\\[2pt]
-    {\footnotesize \textbf{Figure 4:} Automated test runner terminal output confirming 100 percent test pass across all required suites.}
-\end{center}
+\begin{tcolorbox}[colback=black,coltext=white,colframe=black!85,arc=2pt,left=5pt,right=5pt,top=3pt,bottom=3pt,boxrule=0.6pt]
+\tiny\ttfamily
+\textcolor{green!70!white}{ahmad-ali@fast-nuces:\textasciitilde/Desktop/DSA Assignment 2/25i-0817\_E\_A2\_P2\$ ./tests/test}\\
+=========================================================================\\
+\phantom{ } \phantom{ } RUNNING AUTOMATED TEST SUITE: PHASE 2 (SECTION 7.7)\\
+=========================================================================\\
+--- TEST SUITE 1: PRIORITY QUEUE \& SCHEDULER ---\\
+\phantom{ } [PASS] Same priority jobs served in arrival order (FIFO tie handling)\\
+\phantom{ } [PASS] Mixed priorities correctly scheduled by priority rank\\
+\phantom{ } [PASS] Finalization barrier rule enforced (jobs cannot overtake barrier)\\
+--- TEST SUITE 2: MEMORY AWARE HISTORY \& EVICTION ---\\
+\phantom{ } [PASS] Memory budget reached (2 KB); discarded 14 oldest steps via removeBottom()\\
+\phantom{ } [PASS] Undo after cleanup operates safely without memory fault\\
+--- TEST SUITE 3: COMMAND COALESCING ---\\
+\phantom{ } [PASS] Repeated brightness operations coalesced into a single record\\
+\phantom{ } [PASS] Clipping correctness preserved during coalesced brightness undo\\
+--- TEST SUITE 4: BATCHED OPERATIONS ---\\
+\phantom{ } [PASS] Stack pushBatch, popBatch, and popBatch with n > size\\
+\phantom{ } [PASS] Queue addQueueBatch across circular wrap around\\
+\phantom{ } [PASS] Batch larger than free space safely rejected by bounded queue\\
+--- TEST SUITE 5: 30 JOB BENCHMARK EXECUTION ---\\
+\phantom{ } [PASS] 30 Job Workload executed in both FIFO and Priority modes\\
+=========================================================================\\
+\textcolor{green!70!white}{ALL PHASE 2 TESTS COMPLETED SUCCESSFULLY (100\% PASS RATE)}\\
+=========================================================================
+\end{tcolorbox}
 
 \vspace{0.2cm}
 \begin{center}

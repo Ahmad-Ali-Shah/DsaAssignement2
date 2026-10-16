@@ -8,6 +8,43 @@
 using namespace std;
 
 class BenchmarkRunner {
+private:
+    static double measureSinglePush(const int* data, int n) {
+        stackType<int> s(n);
+        std::chrono::high_resolution_clock::time_point startTime = std::chrono::high_resolution_clock::now();
+        for (int i = 0; i < n; i++) {
+            s.push(data[i]);
+        }
+        std::chrono::high_resolution_clock::time_point endTime = std::chrono::high_resolution_clock::now();
+        return std::chrono::duration<double, std::micro>(endTime - startTime).count();
+    }
+
+    static double measureBatchPush(const int* data, int n) {
+        stackType<int> s(n);
+        std::chrono::high_resolution_clock::time_point startTime = std::chrono::high_resolution_clock::now();
+        s.pushBatch(data, n);
+        std::chrono::high_resolution_clock::time_point endTime = std::chrono::high_resolution_clock::now();
+        return std::chrono::duration<double, std::micro>(endTime - startTime).count();
+    }
+
+    static double measureSingleQueue(const int* data, int n) {
+        queueType<int> q(n);
+        std::chrono::high_resolution_clock::time_point startTime = std::chrono::high_resolution_clock::now();
+        for (int i = 0; i < n; i++) {
+            q.addQueue(data[i]);
+        }
+        std::chrono::high_resolution_clock::time_point endTime = std::chrono::high_resolution_clock::now();
+        return std::chrono::duration<double, std::micro>(endTime - startTime).count();
+    }
+
+    static double measureBatchQueue(const int* data, int n) {
+        queueType<int> q(n);
+        std::chrono::high_resolution_clock::time_point startTime = std::chrono::high_resolution_clock::now();
+        q.addQueueBatch(data, n);
+        std::chrono::high_resolution_clock::time_point endTime = std::chrono::high_resolution_clock::now();
+        return std::chrono::duration<double, std::micro>(endTime - startTime).count();
+    }
+
 public:
     static void runBatchBenchmarks() {
         cout << "\n=========================================================================\n";
@@ -24,45 +61,22 @@ public:
                   << "Speedup\n";
         cout << "-----------------------------------------------------------------------------------------\n";
 
-        for (int N : testSizes) {
-            int* data = new int[N];
-            for (int i = 0; i < N; i++) data[i] = 42;
+        for (int n : testSizes) {
+            int* data = new int[n];
+            for (int i = 0; i < n; i++) {
+                data[i] = 42;
+            }
 
-            typedef std::chrono::high_resolution_clock::time_point TimePoint;
-
-            // 1. Stack Single Push
-            TimePoint t0 = std::chrono::high_resolution_clock::now();
-            stackType<int> s1(N);
-            for (int i = 0; i < N; i++) s1.push(data[i]);
-            TimePoint t1 = std::chrono::high_resolution_clock::now();
-            double singlePushUs = std::chrono::duration<double, std::micro>(t1 - t0).count();
-
-            // 2. Stack Batch Push
-            TimePoint t2 = std::chrono::high_resolution_clock::now();
-            stackType<int> s2(N);
-            s2.pushBatch(data, N);
-            TimePoint t3 = std::chrono::high_resolution_clock::now();
-            double batchPushUs = std::chrono::duration<double, std::micro>(t3 - t2).count();
-
-            // 3. Queue Single Enqueue
-            TimePoint t4 = std::chrono::high_resolution_clock::now();
-            queueType<int> q1(N);
-            for (int i = 0; i < N; i++) q1.addQueue(data[i]);
-            TimePoint t5 = std::chrono::high_resolution_clock::now();
-            double singleQUs = std::chrono::duration<double, std::micro>(t5 - t4).count();
-
-            // 4. Queue Batch Enqueue
-            TimePoint t6 = std::chrono::high_resolution_clock::now();
-            queueType<int> q2(N);
-            q2.addQueueBatch(data, N);
-            TimePoint t7 = std::chrono::high_resolution_clock::now();
-            double batchQUs = std::chrono::duration<double, std::micro>(t7 - t6).count();
+            double singlePushUs = measureSinglePush(data, n);
+            double batchPushUs  = measureBatchPush(data, n);
+            double singleQUs    = measureSingleQueue(data, n);
+            double batchQUs     = measureBatchQueue(data, n);
 
             delete[] data;
 
             double pushSpeedup = singlePushUs / (batchPushUs > 0.001 ? batchPushUs : 0.001);
 
-            cout << std::left << std::setw(12) << N
+            cout << std::left << std::setw(12) << n
                       << std::setw(18) << std::fixed << std::setprecision(1) << singlePushUs
                       << std::setw(18) << batchPushUs
                       << std::setw(18) << singleQUs
