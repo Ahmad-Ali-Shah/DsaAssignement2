@@ -42,7 +42,7 @@ public:
 
     void setMode(int m) {
         mode = m;
-        cout << "[Pipeline] Scheduler mode set to: " << (mode == SchedulerMode::fifo ? "FIFO (Phase 1)" : "PRIORITY (Phase 2)") << "\n";
+        cout << "[Pipeline] Scheduler mode set to: " << (mode == SchedulerMode::fifo ? "FIFO" : "PRIORITY") << "\n";
     }
 
     int getMode() const {
@@ -237,7 +237,7 @@ public:
             case JobType::saveProject:
             case JobType::exportImage:
                 ReadPath::Write(currentJob.filePath, img, w, h, true);
-                cout << "[Pipeline Barrier] Image written to: " << currentJob.filePath << "\n";
+                cout << "[Pipeline] Image written to: " << currentJob.filePath << "\n";
                 break;
         }
 

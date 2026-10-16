@@ -36,7 +36,7 @@ void printMenu() {
     cout << "=======================================================\n";
     cout << " [1]  Load Image (PPM / Binary)\n";
     cout << " [2]  Save Image\n";
-    cout << " [3]  Adjust Brightness (Auto-Coalesced, Clipped Aware)\n";
+    cout << " [3]  Adjust Brightness\n";
     cout << " [4]  Convert to Grayscale\n";
     cout << " [5]  Flip Image (Horizontal / Vertical)\n";
     cout << " [6]  Rotate Image (90 / 180 / 270 deg)\n";
@@ -45,7 +45,7 @@ void printMenu() {
     cout << " [9]  Apply Blur Filter\n";
     cout << " [10] Bucket Fill (Stack)\n";
     cout << " [11] Bucket Fill (Queue)\n";
-    cout << " [12] Undo Last Action (Compact Delta)\n";
+    cout << " [12] Undo Last Action\n";
     cout << " [13] Redo Action\n";
     cout << " [14] Pipeline: Add Job to Scheduler\n";
     cout << " [15] Pipeline: List Pending Jobs\n";
@@ -118,7 +118,7 @@ int main() {
             }
             case 3: {
                 if (!currentImage) { cout << "No image loaded!\n"; break; }
-                cout << "Enter brightness delta (-255 to 255): ";
+                cout << "Enter brightness change (-255 to 255): ";
                 double delta;
                 cin >> delta;
                 history.recordBrightness(delta, currentImage, width, height);
@@ -203,7 +203,7 @@ int main() {
                     }
                     history.recordBucketFill(orig, target, changed, changedCount, width, height);
                     delete[] changed;
-                    cout << "[Success] Stack-based Bucket Fill applied! (" << changedCount << " pixels filled)\n";
+                    cout << "[Success] Bucket Fill (Stack) applied! (" << changedCount << " pixels filled)\n";
                 }
                 break;
             }
@@ -228,7 +228,7 @@ int main() {
                     }
                     history.recordBucketFill(orig, target, changed, changedCount, width, height);
                     delete[] changed;
-                    cout << "[Success] Queue-based Bucket Fill applied! (" << changedCount << " pixels filled)\n";
+                    cout << "[Success] Bucket Fill (Queue) applied! (" << changedCount << " pixels filled)\n";
                 }
                 break;
             }
@@ -249,7 +249,7 @@ int main() {
                 break;
             }
             case 14: {
-                cout << "Job Type: [1] Undo/Redo(Pri:1), [2] Blur(Pri:2), [3] Resize(Pri:3), [4] Export Barrier(Pri:4): ";
+                cout << "Job Type: [1] Undo/Redo (Pri:1), [2] Blur (Pri:2), [3] Resize (Pri:3), [4] Export (Pri:4): ";
                 int jt; cin >> jt;
                 if (jt == 1) {
                     pipeline.addJob(Job(0, JobType::undoRedo, "Undo Job", 1));
@@ -265,7 +265,7 @@ int main() {
                 } else if (jt == 4) {
                     cout << "Enter export file path: ";
                     string fp; cin >> fp;
-                    Job j(0, JobType::exportImage, "Export Barrier", 4);
+                    Job j(0, JobType::exportImage, "Export Image", 4);
                     j.filePath = fp;
                     pipeline.addJob(j);
                 }
@@ -295,7 +295,7 @@ int main() {
                 BenchmarkRunner::runBatchBenchmarks();
                 break;
             case 21: {
-                cout << "Enter new memory budget in KB (e.g., 5120 for 5MB, 50 for 50KB to test eviction): ";
+                cout << "Enter memory limit in KB (e.g. 5120 for 5 MB, 50 for 50 KB): ";
                 int kb; cin >> kb;
                 history.setMemoryBudget(kb * 1024);
                 cout << "[Success] Memory budget updated to " << kb << " KB\n";

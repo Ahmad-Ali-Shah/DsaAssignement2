@@ -37,7 +37,7 @@ private:
                                       ? (currentMemoryUsageBytes - oldest.estimatedMemoryBytes) : 0;
             oldest.freeSavedGrid();
             discardedRecordsCount++;
-            cout << "[Memory-Aware History] Budget exceeded (" << memoryBudgetBytes / 1024 << " KB). Discarded oldest record: "
+            cout << "[History] Memory limit reached (" << memoryBudgetBytes / 1024 << " KB). Discarded oldest step: "
                       << oldest.opName << " (Total discarded: " << discardedRecordsCount << ")\n";
         }
     }
@@ -160,7 +160,7 @@ public:
             evictOldestRecords(topRec.estimatedMemoryBytes);
             undoStack.push(topRec);
             currentMemoryUsageBytes += topRec.estimatedMemoryBytes;
-            cout << "[Command Coalescing] Merged brightness adjustment: New total delta = "
+            cout << "[History] Merged consecutive brightness adjustment: Total change = "
                       << topRec.brightnessDelta << "\n";
             return;
         }

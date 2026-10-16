@@ -40,8 +40,8 @@ namespace GraphicsToolbar {
         curY += 18.0f;
         renderToolButton(win, font, btnX, curY, btnW, btnH, "Queue Resize (320x320)", mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH, sf::Color(38, 52, 68)); curY += 30.0f;
         renderToolButton(win, font, btnX, curY, btnW, btnH, "Queue Blur (Radius 2)", mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH, sf::Color(38, 52, 68)); curY += 30.0f;
-        renderToolButton(win, font, btnX, curY, btnW, btnH, "Queue Fill (Stack DFS)", mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH, sf::Color(38, 52, 68)); curY += 30.0f;
-        renderToolButton(win, font, btnX, curY, btnW, btnH, "Queue Fill (Queue BFS)", mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH, sf::Color(38, 52, 68)); curY += 36.0f;
+        renderToolButton(win, font, btnX, curY, btnW, btnH, "Queue Fill (Stack)", mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH, sf::Color(38, 52, 68)); curY += 30.0f;
+        renderToolButton(win, font, btnX, curY, btnW, btnH, "Queue Fill (Queue)", mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= curY && mouseY <= curY + btnH, sf::Color(38, 52, 68)); curY += 36.0f;
 
         // Pipeline Execution Controls
         GraphicsTheme::drawText(win, font, "-- PIPELINE CONTROLS --", btnX, curY, 11, sf::Color(150, 160, 175));

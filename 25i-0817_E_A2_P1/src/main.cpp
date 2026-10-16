@@ -31,7 +31,7 @@ void printMenu() {
     cout << "--------------------------------------------------------\n";
     cout << " [7]  Queue Resize (Queued)\n";
     cout << " [8]  Queue Blur (Queued)\n";
-    cout << " [9]  Queue Bucket Fill (Queued: Stack or Queue)\n";
+    cout << " [9]  Queue Bucket Fill (Queued)\n";
     cout << " [10] Queue Save Project (Queued)\n";
     cout << " [11] Queue Export (Queued)\n";
     cout << "--------------------------------------------------------\n";
@@ -238,7 +238,7 @@ int main() {
                 }
                 double delta;
 
-                cout << "Enter brightness adjustment delta (-255 to +255): ";
+                cout << "Enter brightness change (-255 to +255): ";
 
                 cin >> delta;
 
@@ -378,7 +378,7 @@ int main() {
                 } else if (history.undo(activeImage, width, height)) {
                     cout << "[Success] Undone! Current dimensions: " << width << "x" << height << "\n";
                 } else {
-                    cout << "[Undo Stack Empty] Nothing to undo.\n";
+                    cout << "[Undo] Nothing to undo.\n";
                 }
                 break;
             }
@@ -389,7 +389,7 @@ int main() {
                 } else if (history.redo(activeImage, width, height)) {
                     cout << "[Success] Redone! Current dimensions: " << width << "x" << height << "\n";
                 } else {
-                    cout << "[Redo Stack Empty] Nothing to redo.\n";
+                    cout << "[Redo] Nothing to redo.\n";
                 }
                 break;
             }

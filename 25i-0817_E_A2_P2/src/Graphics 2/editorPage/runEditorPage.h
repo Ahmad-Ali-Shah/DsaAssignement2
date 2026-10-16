@@ -213,7 +213,7 @@ namespace EditorPage {
                     } else if (leftRects.brightBtn.contains(mouseX, mouseY)) {
                         modal.active = true;
                         modal.title = "ADJUST BRIGHTNESS";
-                        modal.label1 = "Enter Delta (-255 to 255)";
+                        modal.label1 = "Enter Change (-255 to 255)";
                         modal.label2 = "";
                         modal.val1 = "40";
                         modal.val2 = "";

@@ -75,7 +75,7 @@ public:
 
         }
 
-        cout << "\n--- Pending Jobs (FRONT to REAR) ---\n";
+        cout << "\n--- Pending Jobs ---\n";
 
         for (int i = 0; i < jobQueue.size(); i++) {
 
@@ -149,7 +149,7 @@ public:
 
             }
         }
-        cout << "[Pipeline] Job #" << jobId << " not found in queue.\n";
+        cout << "[Pipeline] Job #" << jobId << " not found in pending jobs.\n";
 
         return false;
 

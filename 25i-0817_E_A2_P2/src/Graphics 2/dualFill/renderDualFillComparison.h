@@ -32,13 +32,13 @@ namespace GraphicsDualFill {
 
         sf::Text leftLabel;
         leftLabel.setFont(font);
-        leftLabel.setString("STACK-BASED (DFS Deep Traversal)");
+        leftLabel.setString("STACK-BASED (Deep Fill)");
         leftLabel.setCharacterSize(12);
         leftLabel.setFillColor(sf::Color(255, 140, 80));
         leftLabel.setPosition(x + 20.0f, y + 46.0f);
         win.draw(leftLabel);
 
-        // Right: Queue-based BFS
+        // Right: Queue-based
         sf::RectangleShape rightBox(sf::Vector2f(halfW, canvasH));
         rightBox.setPosition(x + 25.0f + halfW, y + 40.0f);
         rightBox.setFillColor(sf::Color(25, 28, 35));
@@ -48,7 +48,7 @@ namespace GraphicsDualFill {
 
         sf::Text rightLabel;
         rightLabel.setFont(font);
-        rightLabel.setString("QUEUE-BASED (BFS Radial Waves)");
+        rightLabel.setString("QUEUE-BASED (Radial Fill)");
         rightLabel.setCharacterSize(12);
         rightLabel.setFillColor(sf::Color(100, 200, 255));
         rightLabel.setPosition(x + 30.0f + halfW, y + 46.0f);

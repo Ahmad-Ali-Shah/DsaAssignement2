@@ -101,10 +101,10 @@ int main() {
     hm.recordBucketFill(stackOrig, stackTarget, stackPts, stackPtCount, w, h);
     delete[] stackPts;
     ReadPath::Write("images/outBucketStack.ppm", img, w, h, true);
-    cout << "[OK] Bucket Fill (Stack DFS) applied (" << stackPtCount << " pixels) -> images/outBucketStack.ppm\n";
+    cout << "[OK] Bucket Fill (Stack) applied (" << stackPtCount << " pixels) -> images/outBucketStack.ppm\n";
     hm.undo(img, w, h);
 
-    // 9. Bucket Fill Queue (BFS)
+    // 9. Bucket Fill Queue
     Pixel queueOrig = img[260][260];
     Pixel queueTarget{0, 255, 255}; // Cyan
     Point* queuePts = new Point[w * h];
@@ -118,7 +118,7 @@ int main() {
     hm.recordBucketFill(queueOrig, queueTarget, queuePts, queuePtCount, w, h);
     delete[] queuePts;
     ReadPath::Write("images/outBucketQueue.ppm", img, w, h, true);
-    cout << "[OK] Bucket Fill (Queue BFS) applied (" << queuePtCount << " pixels) -> images/outBucketQueue.ppm\n";
+    cout << "[OK] Bucket Fill (Queue) applied (" << queuePtCount << " pixels) -> images/outBucketQueue.ppm\n";
     hm.undo(img, w, h);
 
     // 10. Display Inspector

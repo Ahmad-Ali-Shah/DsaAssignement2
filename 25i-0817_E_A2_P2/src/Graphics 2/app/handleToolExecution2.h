@@ -89,7 +89,7 @@ namespace GraphicsApp2 {
             lastAction = "Enqueued Priority-2 Blur";
         }
         else if (toolId == GraphicsTool2::enqueueBucketStack) {
-            Job j(0, JobType::bucketFillStack, "Bucket Fill (Stack DFS)", 2, 0, 25.0);
+            Job j(0, JobType::bucketFillStack, "Bucket Fill (Stack)", 2, 0, 25.0);
             j.startX = width / 2;
             j.startY = height / 2;
             j.r = 255; j.g = 120; j.b = 50;
@@ -97,7 +97,7 @@ namespace GraphicsApp2 {
             lastAction = "Enqueued Priority-2 Fill (Stack)";
         }
         else if (toolId == GraphicsTool2::enqueueBucketQueue) {
-            Job j(0, JobType::bucketFillQueue, "Bucket Fill (Queue BFS)", 2, 0, 25.0);
+            Job j(0, JobType::bucketFillQueue, "Bucket Fill (Queue)", 2, 0, 25.0);
             j.startX = width / 2;
             j.startY = height / 2;
             j.r = 50; j.g = 180; j.b = 255;

@@ -89,7 +89,7 @@ namespace GraphicsApp {
             lastAction = "Enqueued Blur";
         }
         else if (toolId == GraphicsTool::enqueueBucketStack) {
-            Job j(0, JobType::bucketFillStack, "Fill (Stack DFS)");
+            Job j(0, JobType::bucketFillStack, "Fill (Stack)");
             j.startX = width / 2;
             j.startY = height / 2;
             j.r = 255; j.g = 100; j.b = 50;
@@ -97,7 +97,7 @@ namespace GraphicsApp {
             lastAction = "Enqueued Stack Fill";
         }
         else if (toolId == GraphicsTool::enqueueBucketQueue) {
-            Job j(0, JobType::bucketFillQueue, "Fill (Queue BFS)");
+            Job j(0, JobType::bucketFillQueue, "Fill (Queue)");
             j.startX = width / 2;
             j.startY = height / 2;
             j.r = 50; j.g = 150; j.b = 255;
