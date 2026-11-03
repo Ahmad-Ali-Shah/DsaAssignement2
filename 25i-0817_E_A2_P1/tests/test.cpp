@@ -169,21 +169,28 @@ void testUndoRedo() {
 
     Pixel** img = createTestGrid(w, h, white);
 
-    hist.recordAction("Initial", img, w, h);
-    img[0][0] = red;
+    // In Phase 1, recordAction stores the BEFORE state of an operation:
+    // Before Edit 1 (Paint Red): record white state
     hist.recordAction("Paint Red", img, w, h);
-    img[0][0] = blue;
-    hist.recordAction("Paint Blue", img, w, h);
+    img[0][0] = red;
 
+    // Before Edit 2 (Paint Blue): record red state
+    hist.recordAction("Paint Blue", img, w, h);
+    img[0][0] = blue;
+
+    // Undo 1: Reverts Edit 2 (Paint Blue), restoring red state
     bool undo1 = hist.undo(img, w, h);
     assertTest("Undo 1 restores previous action", undo1 && (img[0][0] == red));
 
+    // Undo 2: Reverts Edit 1 (Paint Red), restoring initial white state
     bool undo2 = hist.undo(img, w, h);
     assertTest("Undo 2 restores original state", undo2 && (img[0][0] == white));
 
+    // Redo 1: Re-applies Edit 1 (Paint Red), restoring red state
     bool redo1 = hist.redo(img, w, h);
     assertTest("Redo 1 reapplies action", redo1 && (img[0][0] == red));
 
+    // Redo 2: Re-applies Edit 2 (Paint Blue), restoring blue state
     bool redo2 = hist.redo(img, w, h);
     assertTest("Redo 2 reapplies latest action", redo2 && (img[0][0] == blue));
 
